@@ -8,6 +8,8 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db import IntegrityError
 from django.db.models import Q
+
+from apps.scoping import scoped_info, scoped_infos
 from .models import Info
 
 MIN_AGE = 1
@@ -164,7 +166,5 @@ def info_save_ajax(request):
 def info_delete_ajax(request, pk):
     """Delete the specified signed-in user's info record and confirm as JSON."""
     info = scoped_info(request.user, pk)
-    info_name = info.name
     info.delete()
-    messages.success(request, f'Record "{info_name}" has been deleted successfully.')
     return JsonResponse({'status': 'deleted'})
