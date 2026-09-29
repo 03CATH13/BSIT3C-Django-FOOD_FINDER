@@ -35,7 +35,7 @@
 
   <div class="toast-container position-fixed top-0 end-0 p-3" id="infoToastContainer" aria-live="polite" aria-atomic="true">
     {% for message in messages %}
-    <div class="toast toast-success" role="status" aria-atomic="true" data-bs-delay="4000">
+    <div class="toast bg-info-lt" role="status" aria-atomic="true" data-bs-delay="4000" style="--tblr-toast-color: #000;">
       <div class="d-flex">
         <div class="toast-body">{{ message }}</div>
         <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
