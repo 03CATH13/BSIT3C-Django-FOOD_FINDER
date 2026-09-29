@@ -33,6 +33,17 @@
     </button>
   </div>
 
+  <div class="toast-container position-fixed top-0 end-0 p-3" id="infoToastContainer" aria-live="polite" aria-atomic="true">
+    {% for message in messages %}
+    <div class="toast toast-success" role="status" aria-atomic="true" data-bs-delay="4000">
+      <div class="d-flex">
+        <div class="toast-body">{{ message }}</div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
   <div id="infoAlert" class="alert alert-danger d-none" role="alert"></div>
 
   <div class="card">
@@ -69,9 +80,6 @@
                 <button type="button" class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="modal" data-bs-target="#infoModal" data-mode="edit" data-id="{{ info.id }}" data-name="{{ info.name }}" data-age="{{ info.age }}" data-address="{{ info.address }}" data-email="{{ info.email }}" title="Edit">
                   <i class="fas fa-edit text-primary"></i>
                 </button>
-                <a href="{% url 'info:info_get_ajax' info.id %}" class="btn btn-ghost-secondary btn-icon btn-sm" title="View Details">
-                  <i class="fas fa-circle-info text-secondary"></i>
-                </a>
                 <button type="button" class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="modal" data-bs-target="#deleteInfoModal" data-id="{{ info.id }}" data-name="{{ info.name }}" title="Delete">
                   <i class="fas fa-trash-alt text-danger"></i>
                 </button>
@@ -204,6 +212,10 @@
   const deleteBtn = document.getElementById('confirmDeleteInfoBtn');
   const deleteName = document.getElementById('deleteInfoName');
   let currentInfoId = null;
+
+  document.querySelectorAll('#infoToastContainer .toast').forEach(function(toastEl) {
+    bootstrap.Toast.getOrCreateInstance(toastEl).show();
+  });
 
   function resetForm() {
     form.reset();

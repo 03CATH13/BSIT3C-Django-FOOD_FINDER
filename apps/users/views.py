@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_POST
@@ -91,8 +92,10 @@ def user_save_ajax(request):
 
     if user_id:
         user = get_object_or_404(User, pk=user_id)
+        is_update = True
     else:
         user = User()
+        is_update = False
 
     username = request.POST.get("username", "").strip()
     email = request.POST.get("email", "").strip()
@@ -126,6 +129,11 @@ def user_save_ajax(request):
     except IntegrityError:
         return JsonResponse({"error": "Could not save user due to a conflict (duplicate username/email)."}, status=400)
 
+    messages.success(
+        request,
+        f'User "{user.username}" has been {"updated" if is_update else "saved"} successfully.'
+    )
+
     return JsonResponse({
         "status": "success",
         "id": user.id,
@@ -146,5 +154,9 @@ def user_delete_ajax(request, pk):
     user = get_object_or_404(User, pk=pk)
     if request.user == user:
         return JsonResponse({"error": "You cannot delete yourself"}, status=400)
+    username = user.username
     user.delete()
-    return JsonResponse({"status": "deleted"})
+    return JsonResponse({
+        "status": "deleted",
+        "message": f'User "{username}" has been deleted successfully.',
+    })

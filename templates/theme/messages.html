@@ -1,0 +1,12 @@
+{% if messages %}
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+  <i class="fas fa-circle-check alert-icon" aria-hidden="true"></i>
+  <div>
+    <h4 class="alert-heading">Success</h4>
+    <div class="alert-description">
+      {% for message in messages %}{{ message }}{% endfor %}
+    </div>
+  </div>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}

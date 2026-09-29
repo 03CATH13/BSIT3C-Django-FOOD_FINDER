@@ -1,3 +1,5 @@
+"""Defines the personal information (name, age, address, and email) the app stores."""
+
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
