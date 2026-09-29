@@ -166,5 +166,7 @@ def info_save_ajax(request):
 def info_delete_ajax(request, pk):
     """Delete the specified signed-in user's info record and confirm as JSON."""
     info = scoped_info(request.user, pk)
+    info_name = info.name
     info.delete()
+    messages.success(request, f'Record "{info_name}" has been deleted successfully.')
     return JsonResponse({'status': 'deleted'})
