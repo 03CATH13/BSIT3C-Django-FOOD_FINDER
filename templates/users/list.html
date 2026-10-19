@@ -57,7 +57,16 @@
     </div>
 </form>
 
-<div id="userAlert" class="alert alert-danger d-none" role="alert"></div>
+<div id="userAlert" class="alert alert-info alert-dismissible fade {% if not messages %}d-none{% endif %}{% if messages %}show{% endif %}" role="alert">
+    <i class="fas fa-circle-check alert-icon" aria-hidden="true"></i>
+    <div>
+        <h4 class="alert-heading">Success</h4>
+        <div class="alert-description" id="userAlertText">
+            {% for message in messages %}{{ message }}{% endfor %}
+        </div>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 
     <div class="card">
         <div class="card-header">
@@ -305,6 +314,13 @@
         editFormError.classList.add('d-none');
     }
 
+    function showSuccessAlert(msg) {
+        const box = document.getElementById('userAlert');
+        document.getElementById('userAlertText').textContent = msg;
+        box.classList.remove('d-none');
+        box.classList.add('show');
+    }
+
     // Populate edit/create modal on open
     editModal.addEventListener('show.bs.modal', function (e) {
         clearFormError();
@@ -394,10 +410,11 @@
             }
             return data;
         })
-        .then(() => {
+        .then((data) => {
             bootstrap.Modal.getInstance(document.getElementById('deleteUserModal')).hide();
             const row = document.querySelector(`tr[data-row-id="${deleteTargetId}"]`);
             if (row) row.remove();
+            showSuccessAlert(data.message || 'User deleted successfully.');
         })
         .catch((err) => {
             alert(err.message);

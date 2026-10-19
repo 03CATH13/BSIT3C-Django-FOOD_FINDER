@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
@@ -16,6 +17,7 @@ MAX_AGE = 150
 
 
 def _parse_age(raw_age):
+    """Convert an age value to an integer, returning None when it is invalid."""
     try:
         return int(raw_age)
     except (TypeError, ValueError):
@@ -24,6 +26,7 @@ def _parse_age(raw_age):
 
 @login_required(login_url='login')
 def info_list_page(request):
+    """Render the searchable, paginated info list for the signed-in user."""
     query = request.GET.get('q', '').strip()
 
     infos_list = scoped_infos(request.user).order_by('name')
@@ -47,6 +50,7 @@ def info_list_page(request):
 
 @login_required(login_url='login')
 def info_list_ajax(request):
+    """Return the signed-in user's filtered info records as paginated JSON."""
     query = request.GET.get('q', '').strip()
 
     infos_list = scoped_infos(request.user).order_by('name')
@@ -74,6 +78,7 @@ def info_list_ajax(request):
 
 @login_required(login_url='login')
 def info_get_ajax(request, pk):
+    """Return one of the signed-in user's info records as JSON."""
     info = scoped_info(request.user, pk)
     return JsonResponse({
         'id': info.id,
@@ -87,12 +92,15 @@ def info_get_ajax(request, pk):
 @login_required(login_url='login')
 @require_POST
 def info_save_ajax(request):
+    """Validate and create or update an info record, returning its data as JSON."""
     info_id = request.POST.get('id')
 
     if info_id:
         info = scoped_info(request.user, info_id)
+        is_update = True
     else:
         info = Info()
+        is_update = False
 
     name = request.POST.get('name', '').strip()
     age = request.POST.get('age', '').strip()
@@ -138,6 +146,11 @@ def info_save_ajax(request):
             status=400
         )
 
+    messages.success(
+        request,
+        f'Record "{info.name}" has been {"updated" if is_update else "saved"} successfully.'
+    )
+
     return JsonResponse({
         'status': 'success',
         'id': info.id,
@@ -151,6 +164,9 @@ def info_save_ajax(request):
 @login_required(login_url='login')
 @require_POST
 def info_delete_ajax(request, pk):
+    """Delete the specified signed-in user's info record and confirm as JSON."""
     info = scoped_info(request.user, pk)
+    info_name = info.name
     info.delete()
+    messages.success(request, f'Record "{info_name}" has been deleted successfully.')
     return JsonResponse({'status': 'deleted'})

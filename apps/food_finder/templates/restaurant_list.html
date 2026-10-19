@@ -1,0 +1,111 @@
+{% extends 'theme/base.html' %}
+
+{% block content %}
+<div class="container-xl px-4 py-4">
+    
+    <!-- Aesthetic Header -->
+    <div class="page-header d-print-none mb-4">
+        <div class="row align-items-center">
+            <div class="col">
+                <h2 class="page-title text-dark" style="font-weight: 700; font-size: 1.75rem;">
+                    <span style="font-size: 2rem;">🍔</span> Food Finder
+                </h2>
+                <div class="text-muted mt-1">Discover the best restaurants around you.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Bar (Aesthetic Card) -->
+    <div class="card mb-4 shadow-sm border-0" style="border-radius: 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="card-body p-4">
+            <form method="get" class="row g-3 align-items-center">
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" name="q" class="form-control border-start-0 ps-0" placeholder="Search restaurant by name or city..." value="{{ query }}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select name="cuisine" class="form-select">
+                        <option value="">All Cuisines</option>
+                        {% for value, label in cuisine_choices %}
+                            <option value="{{ value }}" {% if cuisine == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; font-weight: 600;">
+                        Search Now
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Restaurant List -->
+    <div class="row row-cards">
+        {% for r in restaurants %}
+        <div class="col-md-6 col-lg-4">
+            <!-- Aesthetic Card -->
+            <div class="card card-link card-link-pop border-0 shadow-sm h-100" style="border-radius: 16px; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden;">
+                <!-- Colorful Top Border -->
+                <div style="height: 6px; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);"></div>
+                
+                <div class="card-body p-4">
+                    <h3 class="card-title mb-1" style="font-weight: 700;">
+                        <a href="{% url 'finder:restaurant_detail' r.pk %}" class="text-decoration-none text-dark stretched-link">
+                            {{ r.name }}
+                        </a>
+                    </h3>
+                    
+                    <div class="text-muted mb-3 d-flex align-items-center gap-2">
+                        <span class="badge bg-blue-lt">{{ r.cuisine_type|title }}</span>
+                        <span><i class="fas fa-map-marker-alt text-danger me-1"></i> {{ r.city }}</span>
+                    </div>
+                    
+                    <!-- Rating Badge -->
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning text-white rounded-pill px-3 py-1 fw-bold" style="font-size: 0.85rem;">
+                            <i class="fas fa-star"></i> 
+                            {% if r.avg_rating %}
+                                {{ r.avg_rating }}
+                            {% else %}
+                                New
+                            {% endif %}
+                        </div>
+                        <span class="text-muted ms-2" style="font-size: 0.85rem;">Average Rating</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Empty State -->
+        <div class="col-12">
+            <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+                <div class="card-body text-center py-5">
+                    <div class="mb-3">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-utensils fa-2x text-muted"></i>
+                        </div>
+                    </div>
+                    <h3 class="fw-bold">No restaurants found</h3>
+                    <p class="text-muted">Try adjusting your search or add a new restaurant in the Admin panel.</p>
+                    <a href="/admin/finder/restaurant/add/" class="btn btn-primary mt-2" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                        + Add Restaurant
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<!-- Custom CSS for hover effects -->
+<style>
+    .card-link:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    }
+</style>
+{% endblock %}

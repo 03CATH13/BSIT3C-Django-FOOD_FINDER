@@ -32,6 +32,7 @@
             Menu
           </span>
         </li>
+        
         <li class="nav-item mb-1">
           <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
             <span class="nav-link-icon d-md-none d-lg-inline-block">
@@ -58,6 +59,17 @@
             <span class="nav-link-title">Info</span>
           </a>
         </li>
+
+        
+        <li class="nav-item">
+          <a class="nav-link {% if request.resolver_match.app_name == 'finder' %}active{% endif %}" href="/finder/">
+            <span class="nav-link-icon d-md-none d-lg-inline-block">
+              <i class="nav-icon fas fa-utensils"></i>
+            </span>
+            <span class="nav-link-title">Food Finder</span>
+          </a>
+        </li>
+        <!-- KUTOB SA DIRI ANG GIDUGANG -->
 
         {% if user.is_authenticated %}
         <li class="nav-item d-lg-none">
