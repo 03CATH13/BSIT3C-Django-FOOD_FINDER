@@ -1,0 +1,46 @@
+{% extends 'theme/base.html' %}
+
+{% block content %}
+<div class="container-xl px-4 py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            
+            <!-- Back Button -->
+            <a href="{% url 'food_finder:restaurant_list' %}" class="btn btn-outline-secondary btn-sm mb-3">
+                <i class="fas fa-arrow-left me-1"></i> Back to List
+            </a>
+
+            <div class="card border-0 shadow-sm" style="border-radius: 16px; overflow: hidden;">
+                <div style="height: 6px; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);"></div>
+                
+                <div class="card-body p-4 p-md-5">
+                    <h2 class="fw-bold mb-1">➕ Add New Restaurant</h2>
+                    <p class="text-muted mb-4">Share a great place to eat in Kabankalan!</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                            <a href="{% url 'food_finder:restaurant_list' %}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; font-weight: 600;">
+                                <i class="fas fa-save me-1"></i> Save Restaurant
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

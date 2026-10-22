@@ -1,111 +1,187 @@
 {% extends 'theme/base.html' %}
 
 {% block content %}
-<div class="container-xl px-4 py-4">
+<style>
+    .kf-body {
+        background-color: #1a1b26;
+        min-height: 100vh;
+        padding: 0;
+        margin: -1.5rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .kf-navbar {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 1.5rem 3rem; border-bottom: 1px solid #2e3144; background-color: #1a1b26;
+    }
+    .kf-brand { display: flex; align-items: center; gap: 12px; color: white; font-weight: 800; font-size: 1.4rem; }
+    .kf-brand-icon { background: linear-gradient(135deg, #ff8c00, #ff5e00); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; }
+    .kf-brand-sub { font-size: 0.75rem; color: #a0a0b0; font-weight: normal; margin-top: -2px; }
+    .kf-location-badge { border: 1px solid #ff8c00; color: #ff8c00; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+
+    .kf-hero { text-align: center; padding: 4rem 1rem 3rem 1rem; background: radial-gradient(circle at top, #232533 0%, #1a1b26 80%); }
+    .kf-hero-badge { background: rgba(255, 140, 0, 0.1); color: #ff8c00; border: 1px solid rgba(255, 140, 0, 0.3); padding: 6px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 1.5rem; }
+    .kf-hero h1 { color: white; font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
+    .kf-hero p { color: #a0a0b0; font-size: 1rem; max-width: 600px; margin: 0 auto 2rem auto; }
+
+    .kf-search-container { max-width: 700px; margin: 0 auto; position: relative; }
+    .kf-search-input { width: 100%; background: #232533; border: 1px solid #2e3144; color: white; padding: 15px 20px; border-radius: 12px; font-size: 1rem; padding-right: 50px; }
+    .kf-search-input:focus { outline: none; border-color: #ff8c00; background: #2a2c3d; }
+
+    .kf-pills { display: flex; justify-content: center; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap; }
+    .kf-pill { background: #232533; border: 1px solid #2e3144; color: #d1d1d6; padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+    .kf-pill:hover, .kf-pill.active { background: #ff8c00; color: white; border-color: #ff8c00; }
+
+    .kf-grid { padding: 2rem 4rem 4rem 4rem; }
     
-    <!-- Aesthetic Header -->
-    <div class="page-header d-print-none mb-4">
-        <div class="row align-items-center">
-            <div class="col">
-                <h2 class="page-title text-dark" style="font-weight: 700; font-size: 1.75rem;">
-                    <span style="font-size: 2rem;">🍔</span> Food Finder
-                </h2>
-                <div class="text-muted mt-1">Discover the best restaurants around you.</div>
+    /* BAGONG CARD DESIGN NA MAY LARAWAN */
+    .kf-card { 
+        background-color: #232533; 
+        border: 1px solid #2e3144; 
+        border-radius: 16px; 
+        height: 100%; 
+        transition: transform 0.2s, border-color 0.2s; 
+        display: flex; 
+        flex-direction: column; 
+        overflow: hidden; 
+        text-decoration: none; 
+    }
+    .kf-card:hover { transform: translateY(-5px); border-color: #ff8c00; }
+    
+    .kf-card-img { 
+        width: 100%; 
+        height: 180px; 
+        object-fit: cover; 
+        border-bottom: 1px solid #2e3144; 
+    }
+
+    .kf-card-body { padding: 1.5rem; flex-grow: 1; }
+    .kf-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .kf-badge-cuisine { background: rgba(255, 140, 0, 0.1); color: #ff8c00; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-weight: 700; text-transform: uppercase; }
+    .kf-time { background-color: #1e202e; color: #a0a0b0; font-size: 0.75rem; padding: 4px 10px; border-radius: 5px; }
+    .kf-card-title { color: white; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; text-decoration: none; }
+    
+    .kf-location { color: #a0a0b0; font-size: 0.85rem; display: flex; align-items: flex-start; gap: 5px; margin-bottom: 1rem; }
+    .kf-location i { color: #ff8c00; margin-top: 3px; }
+
+    .kf-card-footer { background-color: #1e202e; border-top: 1px solid #2e3144; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .kf-tags { color: #a0a0b0; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%; }
+    
+    .kf-btn-map { color: #ff8c00; text-decoration: none; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 4px; background: rgba(255,140,0,0.1); border: 1px solid #ff8c00; padding: 5px 10px; border-radius: 8px; transition: all 0.2s; z-index: 2; position: relative; }
+    .kf-btn-map:hover { background: #ff8c00; color: white; }
+
+    .kf-btn-arrow { background-color: #2e3144; color: #ff8c00; border: none; width: 35px; height: 35px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; text-decoration: none; flex-shrink: 0; }
+    .kf-btn-arrow:hover { background-color: #ff8c00; color: white; }
+
+    /* STYLE PARA SA MALAKING MAPA SA IBABA */
+    .map-section { padding: 2rem 4rem 4rem 4rem; background-color: #1a1b26; }
+    .map-container { border-radius: 16px; overflow: hidden; border: 1px solid #2e3144; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .map-header { background-color: #232533; padding: 1.5rem; border-bottom: 1px solid #2e3144; }
+    .map-header h3 { color: white; font-weight: 700; margin: 0; }
+</style>
+
+<div class="kf-body">
+    
+    <!-- Navbar -->
+    <nav class="kf-navbar">
+        <div class="kf-brand">
+            <div class="kf-brand-icon"><i class="fas fa-utensils"></i></div>
+            <div>
+                KabankalanEats
+                <div class="kf-brand-sub">Find your next food trip</div>
             </div>
         </div>
-    </div>
+        <div class="kf-location-badge">
+            <i class="fas fa-map-marker-alt"></i> Kabankalan City
+        </div>
+    </nav>
 
-    <!-- Search Bar (Aesthetic Card) -->
-    <div class="card mb-4 shadow-sm border-0" style="border-radius: 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
-        <div class="card-body p-4">
-            <form method="get" class="row g-3 align-items-center">
-                <div class="col-md-5">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" name="q" class="form-control border-start-0 ps-0" placeholder="Search restaurant by name or city..." value="{{ query }}">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <select name="cuisine" class="form-select">
-                        <option value="">All Cuisines</option>
-                        {% for value, label in cuisine_choices %}
-                            <option value="{{ value }}" {% if cuisine == value %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary w-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; font-weight: 600;">
-                        Search Now
-                    </button>
-                </div>
+    <!-- HERO SECTION -->
+    <div class="kf-hero">
+        <div class="kf-hero-badge">
+            <i class="fas fa-fire"></i> HOT CRAVINGS SPOT
+        </div>
+        <h1>Diin mo gusto magkaon<br>subong?</h1>
+        <p>Pangitaa ang paborito mo nga fast food, cansi, kape, ukon ulam sa bilog nga Kabankalan.</p>
+
+        <div class="kf-search-container">
+            <form method="get">
+                <input type="text" name="q" class="kf-search-input" placeholder="Search Jollibee, McDo, Cansi..." value="{{ query }}">
+                <button type="submit" class="kf-search-btn" style="position: absolute; right: 15px; top: 15px; background: transparent; border: none; color: #a0a0b0; font-size: 1.2rem;">
+                    <i class="fas fa-search"></i>
+                </button>
             </form>
         </div>
+
+        <div class="kf-pills">
+            <a href="{% url 'food_finder:restaurant_list' %}" class="kf-pill {% if not current_cuisine %}active{% endif %}">Tanang Kalan-an</a>
+            <a href="?cuisine=Fast+Food" class="kf-pill {% if current_cuisine == 'Fast Food' %}active{% endif %}"><i class="fas fa-burger"></i> Fast Food</a>
+            <a href="?cuisine=Local+%26+Cansi" class="kf-pill {% if current_cuisine == 'Local & Cansi' %}active{% endif %}"><i class="fas fa-bowl-food"></i> Local & Cansi</a>
+            <a href="?cuisine=Cafe+%26+Snacks" class="kf-pill {% if current_cuisine == 'Cafe & Snacks' %}active{% endif %}"><i class="fas fa-mug-hot"></i> Cafe & Snacks</a>
+        </div>
     </div>
 
-    <!-- Restaurant List -->
-    <div class="row row-cards">
-        {% for r in restaurants %}
-        <div class="col-md-6 col-lg-4">
-            <!-- Aesthetic Card -->
-            <div class="card card-link card-link-pop border-0 shadow-sm h-100" style="border-radius: 16px; transition: transform 0.2s, box-shadow 0.2s; overflow: hidden;">
-                <!-- Colorful Top Border -->
-                <div style="height: 6px; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);"></div>
-                
-                <div class="card-body p-4">
-                    <h3 class="card-title mb-1" style="font-weight: 700;">
-                        <a href="{% url 'finder:restaurant_detail' r.pk %}" class="text-decoration-none text-dark stretched-link">
-                            {{ r.name }}
-                        </a>
-                    </h3>
-                    
-                    <div class="text-muted mb-3 d-flex align-items-center gap-2">
-                        <span class="badge bg-blue-lt">{{ r.cuisine_type|title }}</span>
-                        <span><i class="fas fa-map-marker-alt text-danger me-1"></i> {{ r.city }}</span>
-                    </div>
-                    
-                    <!-- Rating Badge -->
-                    <div class="d-flex align-items-center">
-                        <div class="bg-warning text-white rounded-pill px-3 py-1 fw-bold" style="font-size: 0.85rem;">
-                            <i class="fas fa-star"></i> 
-                            {% if r.avg_rating %}
-                                {{ r.avg_rating }}
-                            {% else %}
-                                New
-                            {% endif %}
+    <!-- RESTAURANTS LIST -->
+    <div class="kf-grid">
+        <div class="row g-4">
+            {% for r in restaurants %}
+            <div class="col-md-6 col-lg-4">
+                <!-- DITO ANG BAGONG LINK NA PAPUNTA SA DETAILS PAGE -->
+                <a href="{% url 'food_finder:restaurant_detail' r.id %}" class="text-decoration-none">
+                    <div class="kf-card">
+                        <img src="{{ r.image }}" alt="{{ r.name }}" class="kf-card-img">
+                        <div class="kf-card-body">
+                            <div class="kf-card-header">
+                                <span class="kf-badge-cuisine">{{ r.cuisine_type }}</span>
+                                <span class="kf-time">{{ r.opening_hours }}</span>
+                            </div>
+                            <div class="kf-card-title">{{ r.name }}</div>
+                            <div class="kf-location">
+                                <i class="fas fa-map-marker-alt"></i> <span>{{ r.address }}</span>
+                            </div>
                         </div>
-                        <span class="text-muted ms-2" style="font-size: 0.85rem;">Average Rating</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <!-- Empty State -->
-        <div class="col-12">
-            <div class="card border-0 shadow-sm" style="border-radius: 16px;">
-                <div class="card-body text-center py-5">
-                    <div class="mb-3">
-                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                            <i class="fas fa-utensils fa-2x text-muted"></i>
+                        
+                        <div class="kf-card-footer">
+                            <div class="kf-tags">
+                                <i class="fas fa-grip-lines-vertical"></i> 
+                                {{ r.description|truncatechars:15 }}
+                            </div>
+                            
+                            <div class="d-flex align-items-center gap-2">
+                                <!-- ITO ANG LINK PAPUNTANG GOOGLE MAPS -->
+                                <a href="https://www.google.com/maps/search/?api=1&query={{ r.name }}+{{ r.address }}" target="_blank" class="kf-btn-map">
+                                    <i class="fas fa-map"></i> Map
+                                </a>
+                                
+                                <span class="kf-btn-arrow">
+                                    <i class="fas fa-arrow-right"></i>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <h3 class="fw-bold">No restaurants found</h3>
-                    <p class="text-muted">Try adjusting your search or add a new restaurant in the Admin panel.</p>
-                    <a href="/admin/finder/restaurant/add/" class="btn btn-primary mt-2" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
-                        + Add Restaurant
-                    </a>
-                </div>
+                </a>
             </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <h3 class="text-white">Wala pa sang restaurant</h3>
+                <p class="text-muted">Pangitaa liwat.</p>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+    </div>
+
+    <!-- MALAKING MAPA SA PINAKABABA -->
+    <div class="map-section" id="mapa">
+        <div class="map-container">
+            <div class="map-header d-flex justify-content-between align-items-center">
+                <h3><i class="fas fa-map-marked-alt text-warning"></i> Kabankalan City Map</h3>
+                <span class="badge bg-warning text-dark">Interactive Map</span>
+            </div>
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.713614219271!2d122.8136753147904!3d9.988732992178518!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33af9e77d6f1bbbb%3A0x8b6b5e2b3b5f4c1a!2sKabankalan%20City!5e0!3m2!1sen!2sph!4v1634000000000!5m2!1sen!2sph" 
+                width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy">
+            </iframe>
+        </div>
     </div>
 
 </div>
-
-<!-- Custom CSS for hover effects -->
-<style>
-    .card-link:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-    }
-</style>
 {% endblock %}

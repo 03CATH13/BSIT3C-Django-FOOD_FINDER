@@ -6,14 +6,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Restaurant(models.Model):
     """A restaurant listed in the food finder."""
     CUISINE_CHOICES = [
-        ('filipino', 'Filipino'),
-        ('chinese', 'Chinese'),
-        ('italian', 'Italian'),
-        ('japanese', 'Japanese'),
-        ('korean', 'Korean'),
-        ('american', 'American'),
+        ('filipino', 'Local & Cansi'),
         ('fast_food', 'Fast Food'),
-        ('cafe', 'Café'),
+        ('cafe', 'Cafe & Snacks'),
         ('other', 'Other'),
     ]
 
@@ -24,6 +19,8 @@ class Restaurant(models.Model):
     cuisine_type = models.CharField(max_length=20, choices=CUISINE_CHOICES, default='other')
     contact_number = models.CharField(max_length=20, blank=True)
     opening_hours = models.CharField(max_length=100, blank=True, help_text="e.g., 9:00 AM - 10:00 PM")
+    # image = models.ImageField(upload_to='restaurants/', blank=True, null=True)  <-- Naka-comment dahil wala pang Pillow
+    
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -91,7 +88,6 @@ class Review(models.Model):
     class Meta:
         db_table = 'tbl_review'
         ordering = ['-created_at']
-        # A user can only review a restaurant once
         unique_together = ('restaurant', 'user')
 
     def __str__(self):
@@ -114,7 +110,7 @@ class Favorite(models.Model):
 
     class Meta:
         db_table = 'tbl_favorite'
-        unique_together = ('user', 'restaurant')  # No duplicates
+        unique_together = ('user', 'restaurant')
 
     def __str__(self):
         return f"{self.user.username} ♥ {self.restaurant.name}"
