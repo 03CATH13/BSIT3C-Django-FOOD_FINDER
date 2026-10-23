@@ -21,7 +21,7 @@ RESTAURANTS_DATA = [
         ]
     },
     {
-        'id': 2, 'name': 'Mang Inasal (CityMall)', 'cuisine_type': 'Local & Cansi',
+        'id': 2, 'name': 'Mang Inasal (CityMall)', 'cuisine_type': 'Fast Food',
         'address': 'Level 1, CityMall Kabankalan, Justice Perez Highway',
         'opening_hours': '8AM - 10PM',
         'image': 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=80',
