@@ -108,7 +108,7 @@ RESTAURANTS_DATA = [
         'id': 9, 'name': "Mang Inasal (Gaisano)", 'cuisine_type': 'Fast Food',
         'address': 'Gaisano Grand Mall Kabankalan, Brgy. 1',
         'opening_hours': '10AM - 9PM',
-        'image': 'https://images.unsplash.com/photo-1598514982205-f36b96d1e8dd?w=500&q=80',
+        'image': 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=80',
         'description': 'Chicken Inasal near Gaisano Mall.',
         'lat': '9.9875', 'lng': '122.8120',
         'menu': [

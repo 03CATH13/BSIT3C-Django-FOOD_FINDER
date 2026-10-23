@@ -106,10 +106,9 @@
             <i class="fas fa-arrow-left"></i> Back to List
         </a>
         <h2><i class="fas fa-map-marked-alt text-warning"></i> Kabankalan Food Map</h2>
-        <p style="color: #a0a0b0; font-size: 0.8rem; margin-bottom: 1rem;">Pumili ng restaurant para makita ang exact location sa mapa.</p>
+        <p style="color: #a0a0b0; font-size: 0.8rem; margin-bottom: 1rem;">Select the restaurant to see the exact location of the Map.</p>
 
         {% for r in restaurants %}
-        <!-- KAPAG PININDOT ITO, MAGBABAGO ANG MAPA -->
         <div class="map-card" onclick="changeMap('{{ r.lat }}', '{{ r.lng }}', '{{ r.name }}');">
             <img src="{{ r.image }}" alt="{{ r.name }}">
             <div class="map-card-body">
@@ -125,8 +124,6 @@
         </div>
         {% endfor %}
     </div>
-
-    <!-- MALAKING MAPA -->
     <div class="map-main">
         <iframe id="google-map" 
                 src="https://maps.google.com/maps?q=9.9899,122.8146&t=&z=14&ie=UTF8&iwloc=&output=embed" 
@@ -137,10 +134,9 @@
 </div>
 
 <script>
-    // Function para magpalit ng location sa mapa
     function changeMap(lat, lng, name) {
         var mapIframe = document.getElementById('google-map');
-        // Gagamitin ang exact coordinates para eksaktong tutok sa restaurant
+       
         mapIframe.src = "https://maps.google.com/maps?q=" + lat + "," + lng + "&t=&z=17&ie=UTF8&iwloc=&output=embed";
     }
 </script>

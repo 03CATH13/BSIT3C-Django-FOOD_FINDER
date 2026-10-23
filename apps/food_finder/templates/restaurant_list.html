@@ -1,187 +1,601 @@
+```django
 {% extends 'theme/base.html' %}
 
 {% block content %}
 <style>
     .kf-body {
-        background-color: #1a1b26;
+        background: #1a1b26;
         min-height: 100vh;
-        padding: 0;
         margin: -1.5rem;
+        color: white;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     .kf-navbar {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 1.5rem 3rem; border-bottom: 1px solid #2e3144; background-color: #1a1b26;
-    }
-    .kf-brand { display: flex; align-items: center; gap: 12px; color: white; font-weight: 800; font-size: 1.4rem; }
-    .kf-brand-icon { background: linear-gradient(135deg, #ff8c00, #ff5e00); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; }
-    .kf-brand-sub { font-size: 0.75rem; color: #a0a0b0; font-weight: normal; margin-top: -2px; }
-    .kf-location-badge { border: 1px solid #ff8c00; color: #ff8c00; padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-
-    .kf-hero { text-align: center; padding: 4rem 1rem 3rem 1rem; background: radial-gradient(circle at top, #232533 0%, #1a1b26 80%); }
-    .kf-hero-badge { background: rgba(255, 140, 0, 0.1); color: #ff8c00; border: 1px solid rgba(255, 140, 0, 0.3); padding: 6px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 1.5rem; }
-    .kf-hero h1 { color: white; font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
-    .kf-hero p { color: #a0a0b0; font-size: 1rem; max-width: 600px; margin: 0 auto 2rem auto; }
-
-    .kf-search-container { max-width: 700px; margin: 0 auto; position: relative; }
-    .kf-search-input { width: 100%; background: #232533; border: 1px solid #2e3144; color: white; padding: 15px 20px; border-radius: 12px; font-size: 1rem; padding-right: 50px; }
-    .kf-search-input:focus { outline: none; border-color: #ff8c00; background: #2a2c3d; }
-
-    .kf-pills { display: flex; justify-content: center; gap: 10px; margin-top: 1.5rem; flex-wrap: wrap; }
-    .kf-pill { background: #232533; border: 1px solid #2e3144; color: #d1d1d6; padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; text-decoration: none; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
-    .kf-pill:hover, .kf-pill.active { background: #ff8c00; color: white; border-color: #ff8c00; }
-
-    .kf-grid { padding: 2rem 4rem 4rem 4rem; }
-    
-    /* BAGONG CARD DESIGN NA MAY LARAWAN */
-    .kf-card { 
-        background-color: #232533; 
-        border: 1px solid #2e3144; 
-        border-radius: 16px; 
-        height: 100%; 
-        transition: transform 0.2s, border-color 0.2s; 
-        display: flex; 
-        flex-direction: column; 
-        overflow: hidden; 
-        text-decoration: none; 
-    }
-    .kf-card:hover { transform: translateY(-5px); border-color: #ff8c00; }
-    
-    .kf-card-img { 
-        width: 100%; 
-        height: 180px; 
-        object-fit: cover; 
-        border-bottom: 1px solid #2e3144; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 3rem;
+        border-bottom: 1px solid #2e3144;
+        flex-wrap: wrap;
+        gap: 15px;
     }
 
-    .kf-card-body { padding: 1.5rem; flex-grow: 1; }
-    .kf-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .kf-badge-cuisine { background: rgba(255, 140, 0, 0.1); color: #ff8c00; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-weight: 700; text-transform: uppercase; }
-    .kf-time { background-color: #1e202e; color: #a0a0b0; font-size: 0.75rem; padding: 4px 10px; border-radius: 5px; }
-    .kf-card-title { color: white; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; text-decoration: none; }
-    
-    .kf-location { color: #a0a0b0; font-size: 0.85rem; display: flex; align-items: flex-start; gap: 5px; margin-bottom: 1rem; }
-    .kf-location i { color: #ff8c00; margin-top: 3px; }
+    .kf-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.4rem;
+        font-weight: 800;
+    }
 
-    .kf-card-footer { background-color: #1e202e; border-top: 1px solid #2e3144; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
-    .kf-tags { color: #a0a0b0; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%; }
-    
-    .kf-btn-map { color: #ff8c00; text-decoration: none; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 4px; background: rgba(255,140,0,0.1); border: 1px solid #ff8c00; padding: 5px 10px; border-radius: 8px; transition: all 0.2s; z-index: 2; position: relative; }
-    .kf-btn-map:hover { background: #ff8c00; color: white; }
+    .kf-brand-icon {
+        background: linear-gradient(135deg, #ff8c00, #ff5e00);
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-    .kf-btn-arrow { background-color: #2e3144; color: #ff8c00; border: none; width: 35px; height: 35px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; text-decoration: none; flex-shrink: 0; }
-    .kf-btn-arrow:hover { background-color: #ff8c00; color: white; }
+    .kf-brand-sub {
+        font-size: .75rem;
+        color: #a0a0b0;
+        font-weight: normal;
+    }
 
-    /* STYLE PARA SA MALAKING MAPA SA IBABA */
-    .map-section { padding: 2rem 4rem 4rem 4rem; background-color: #1a1b26; }
-    .map-container { border-radius: 16px; overflow: hidden; border: 1px solid #2e3144; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-    .map-header { background-color: #232533; padding: 1.5rem; border-bottom: 1px solid #2e3144; }
-    .map-header h3 { color: white; font-weight: 700; margin: 0; }
+    .kf-location-badge {
+        border: 1px solid #ff8c00;
+        color: #ff8c00;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: .85rem;
+    }
+
+    .kf-hero {
+        text-align: center;
+        padding: 3rem 1rem;
+        background: radial-gradient(circle at top, #292b3d, #1a1b26 80%);
+    }
+
+    .kf-hero-badge {
+        display: inline-block;
+        padding: 7px 15px;
+        margin-bottom: 18px;
+        border-radius: 20px;
+        color: #ff8c00;
+        background: #302719;
+        font-size: .75rem;
+        font-weight: 700;
+    }
+
+    .kf-hero h1 {
+        font-size: 2.5rem;
+        line-height: 1.2;
+        font-weight: 800;
+        margin-bottom: 15px;
+    }
+
+    .kf-hero p {
+        color: #a0a0b0;
+        line-height: 1.7;
+    }
+
+    .kf-search-container {
+        max-width: 650px;
+        margin: 25px auto;
+    }
+
+    .kf-search-input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 15px 20px;
+        border-radius: 12px;
+        background: #232533;
+        border: 1px solid #3a3c50;
+        color: white;
+        outline: none;
+    }
+
+    .kf-search-input:focus {
+        border-color: #ff8c00;
+    }
+
+    .kf-pills {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .kf-pill {
+        color: #ddd;
+        background: #232533;
+        border: 1px solid #3a3c50;
+        border-radius: 30px;
+        padding: 9px 17px;
+        text-decoration: none;
+        font-size: .85rem;
+    }
+
+    .kf-pill:hover,
+    .kf-pill.active {
+        color: white;
+        background: #ff8c00;
+        border-color: #ff8c00;
+    }
+
+    .kf-grid {
+        padding: 2rem 4rem 4rem;
+    }
+
+    .kf-card {
+        height: 100%;
+        background: #232533;
+        border: 1px solid #34364a;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: .2s;
+    }
+
+    .kf-card:hover {
+        transform: translateY(-4px);
+        border-color: #ff8c00;
+    }
+
+    .kf-card-link {
+        display: block;
+        text-decoration: none;
+    }
+
+    .kf-card-img {
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
+        display: block;
+        background: #2e3144;
+    }
+
+    .kf-card-body {
+        padding: 20px;
+    }
+
+    .kf-card-header {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+
+    .kf-badge-cuisine {
+        color: #ff9d26;
+        background: #35291d;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: .7rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .kf-time {
+        color: #bbb;
+        background: #1e202e;
+        padding: 5px 9px;
+        border-radius: 6px;
+        font-size: .75rem;
+    }
+
+    .kf-card-title {
+        color: white;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .kf-location {
+        color: #a0a0b0;
+        font-size: .85rem;
+        margin-bottom: 10px;
+    }
+
+    .kf-location i {
+        color: #ff8c00;
+    }
+
+    .kf-card-footer {
+        padding: 15px 20px;
+        background: #1e202e;
+        border-top: 1px solid #34364a;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .kf-btn-map {
+        color: #ff9d26;
+        text-decoration: none;
+        font-size: .8rem;
+        font-weight: 600;
+        background: #35291d;
+        border: 1px solid #ff8c00;
+        padding: 8px 11px;
+        border-radius: 8px;
+    }
+
+    .kf-btn-map:hover {
+        color: white;
+        background: #ff8c00;
+    }
+
+    .kf-btn-arrow {
+        color: #ff8c00;
+        background: #303246;
+        padding: 9px 12px;
+        border-radius: 8px;
+        text-decoration: none;
+    }
+
+    .kf-menu {
+        padding: 18px;
+        border-top: 1px solid #34364a;
+    }
+
+    .kf-menu-title {
+        font-size: 1.05rem;
+        font-weight: 800;
+        margin-bottom: 14px;
+    }
+
+    .kf-menu-title i {
+        color: #ff8c00;
+    }
+
+    .kf-menu-subtitle {
+        color: #a0a0b0;
+        font-size: .78rem;
+        margin-top: -8px;
+        margin-bottom: 14px;
+    }
+
+    .kf-food-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #1e202e;
+        border: 1px solid #34364a;
+        border-radius: 10px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .kf-food-img {
+        width: 72px;
+        height: 65px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+        background: #34364a;
+    }
+
+    .kf-no-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #a0a0b0;
+        font-size: .7rem;
+        text-align: center;
+    }
+
+    .kf-food-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .kf-food-name {
+        color: white;
+        font-weight: 700;
+        font-size: .9rem;
+    }
+
+    .kf-food-description {
+        color: #a0a0b0;
+        font-size: .75rem;
+        margin-top: 4px;
+    }
+
+    .kf-food-price {
+        color: #ff9d26;
+        font-size: .85rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .kf-menu-note {
+        color: #a0a0b0;
+        font-size: .72rem;
+        margin-top: 10px;
+    }
+
+    .kf-empty {
+        color: #a0a0b0;
+        text-align: center;
+        padding: 3rem 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .kf-navbar {
+            padding: 1rem;
+        }
+
+        .kf-hero h1 {
+            font-size: 1.8rem;
+        }
+
+        .kf-grid {
+            padding: 1rem;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .kf-hero h1 {
+            font-size: 1.5rem;
+        }
+
+        .kf-food-img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .kf-food-price {
+            font-size: .75rem;
+        }
+    }
 </style>
 
 <div class="kf-body">
-    
-    <!-- Navbar -->
+
     <nav class="kf-navbar">
         <div class="kf-brand">
-            <div class="kf-brand-icon"><i class="fas fa-utensils"></i></div>
+            <div class="kf-brand-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+
             <div>
                 KabankalanEats
-                <div class="kf-brand-sub">Find your next food trip</div>
+                <div class="kf-brand-sub">
+                    Find your next food trip
+                </div>
             </div>
         </div>
+
         <div class="kf-location-badge">
-            <i class="fas fa-map-marker-alt"></i> Kabankalan City
+            <i class="fas fa-map-marker-alt"></i>
+            Kabankalan City
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <div class="kf-hero">
+    <section class="kf-hero">
         <div class="kf-hero-badge">
-            <i class="fas fa-fire"></i> HOT CRAVINGS SPOT
+            <i class="fas fa-fire"></i>
+            HOT CRAVINGS SPOT
         </div>
-        <h1>Diin mo gusto magkaon<br>subong?</h1>
-        <p>Pangitaa ang paborito mo nga fast food, cansi, kape, ukon ulam sa bilog nga Kabankalan.</p>
+
+        <h1>
+            Find Your Favorite Restaurant<br>
+            and Food!
+        </h1>
+
+        <p>
+            Explore restaurants, discover their dishes, and find your next
+            favorite meal in Kabankalan City.
+        </p>
 
         <div class="kf-search-container">
             <form method="get">
-                <input type="text" name="q" class="kf-search-input" placeholder="Search Jollibee, McDo, Cansi..." value="{{ query }}">
-                <button type="submit" class="kf-search-btn" style="position: absolute; right: 15px; top: 15px; background: transparent; border: none; color: #a0a0b0; font-size: 1.2rem;">
-                    <i class="fas fa-search"></i>
-                </button>
+                {% if current_cuisine %}
+                    <input
+                        type="hidden"
+                        name="cuisine"
+                        value="{{ current_cuisine }}"
+                    >
+                {% endif %}
+
+                <input
+                    type="text"
+                    name="q"
+                    class="kf-search-input"
+                    placeholder="Search restaurant, food, or cuisine..."
+                    value="{{ query|default:'' }}"
+                >
             </form>
         </div>
 
         <div class="kf-pills">
-            <a href="{% url 'food_finder:restaurant_list' %}" class="kf-pill {% if not current_cuisine %}active{% endif %}">Tanang Kalan-an</a>
-            <a href="?cuisine=Fast+Food" class="kf-pill {% if current_cuisine == 'Fast Food' %}active{% endif %}"><i class="fas fa-burger"></i> Fast Food</a>
-            <a href="?cuisine=Local+%26+Cansi" class="kf-pill {% if current_cuisine == 'Local & Cansi' %}active{% endif %}"><i class="fas fa-bowl-food"></i> Local & Cansi</a>
-            <a href="?cuisine=Cafe+%26+Snacks" class="kf-pill {% if current_cuisine == 'Cafe & Snacks' %}active{% endif %}"><i class="fas fa-mug-hot"></i> Cafe & Snacks</a>
-        </div>
-    </div>
+            <a
+                href="{% url 'food_finder:restaurant_list' %}"
+                class="kf-pill {% if not current_cuisine %}active{% endif %}"
+            >
+                All Dining Spots
+            </a>
 
-    <!-- RESTAURANTS LIST -->
-    <div class="kf-grid">
+            <a
+                href="?cuisine=Fast+Food"
+                class="kf-pill {% if current_cuisine == 'Fast Food' %}active{% endif %}"
+            >
+                <i class="fas fa-hamburger"></i> Fast Food
+            </a>
+
+            <a
+                href="?cuisine=Local+%26+Cansi"
+                class="kf-pill {% if current_cuisine == 'Local & Cansi' %}active{% endif %}"
+            >
+                <i class="fas fa-utensils"></i> Local &amp; Cansi
+            </a>
+
+            <a
+                href="?cuisine=Cafe+%26+Snacks"
+                class="kf-pill {% if current_cuisine == 'Cafe & Snacks' %}active{% endif %}"
+            >
+                <i class="fas fa-mug-hot"></i> Cafe &amp; Snacks
+            </a>
+        </div>
+    </section>
+
+    <section class="kf-grid">
         <div class="row g-4">
+
             {% for r in restaurants %}
             <div class="col-md-6 col-lg-4">
-                <!-- DITO ANG BAGONG LINK NA PAPUNTA SA DETAILS PAGE -->
-                <a href="{% url 'food_finder:restaurant_detail' r.id %}" class="text-decoration-none">
-                    <div class="kf-card">
-                        <img src="{{ r.image }}" alt="{{ r.name }}" class="kf-card-img">
+                <article class="kf-card">
+
+                    <a
+                        href="{% url 'food_finder:restaurant_detail' r.id %}"
+                        class="kf-card-link"
+                    >
+                        {% if r.image %}
+                            <img
+                                src="{{ r.image }}"
+                                alt="{{ r.name }}"
+                                class="kf-card-img"
+                                loading="lazy"
+                            >
+                        {% else %}
+                            <div class="kf-card-img kf-no-image">
+                                Restaurant image unavailable
+                            </div>
+                        {% endif %}
+
                         <div class="kf-card-body">
                             <div class="kf-card-header">
-                                <span class="kf-badge-cuisine">{{ r.cuisine_type }}</span>
-                                <span class="kf-time">{{ r.opening_hours }}</span>
-                            </div>
-                            <div class="kf-card-title">{{ r.name }}</div>
-                            <div class="kf-location">
-                                <i class="fas fa-map-marker-alt"></i> <span>{{ r.address }}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="kf-card-footer">
-                            <div class="kf-tags">
-                                <i class="fas fa-grip-lines-vertical"></i> 
-                                {{ r.description|truncatechars:15 }}
-                            </div>
-                            
-                            <div class="d-flex align-items-center gap-2">
-                                <!-- ITO ANG LINK PAPUNTANG GOOGLE MAPS -->
-                                <a href="https://www.google.com/maps/search/?api=1&query={{ r.name }}+{{ r.address }}" target="_blank" class="kf-btn-map">
-                                    <i class="fas fa-map"></i> Map
-                                </a>
-                                
-                                <span class="kf-btn-arrow">
-                                    <i class="fas fa-arrow-right"></i>
+                                <span class="kf-badge-cuisine">
+                                    {{ r.cuisine_type }}
+                                </span>
+
+                                <span class="kf-time">
+                                    {{ r.opening_hours }}
                                 </span>
                             </div>
+
+                            <div class="kf-card-title">
+                                {{ r.name }}
+                            </div>
+
+                            <div class="kf-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                {{ r.address }}
+                            </div>
+
+                            <div style="color:#a0a0b0;font-size:.85rem;">
+                                {{ r.description|truncatechars:100 }}
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="kf-menu">
+                        <div class="kf-menu-title">
+                            <i class="fas fa-utensils"></i>
+                            Menu at {{ r.name }}
+                        </div>
+
+                        <div class="kf-menu-subtitle">
+                            Food and prices for this restaurant
+                        </div>
+
+                        {% for item in r.menu_items %}
+                        <div class="kf-food-item">
+
+                            {% if item.image %}
+                                <img
+                                    class="kf-food-img"
+                                    src="{{ item.image }}"
+                                    alt="{{ item.name }}"
+                                    loading="lazy"
+                                >
+                            {% else %}
+                                <div class="kf-food-img kf-no-image">
+                                    No Image
+                                </div>
+                            {% endif %}
+
+                            <div class="kf-food-info">
+                                <div class="kf-food-name">
+                                    {{ item.name }}
+                                </div>
+
+                                {% if item.description %}
+                                    <div class="kf-food-description">
+                                        {{ item.description }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            {% if item.price %}
+                                <div class="kf-food-price">
+                                    ₱{{ item.price }}
+                                </div>
+                            {% endif %}
+
+                        </div>
+                        {% empty %}
+                        <div class="kf-food-item">
+                            <div class="kf-food-info">
+                                <div class="kf-food-name">
+                                    No menu added yet
+                                </div>
+
+                                <div class="kf-food-description">
+                                    Menu information is not available.
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <div class="kf-menu-note">
+                            Menu information should be verified with the restaurant.
                         </div>
                     </div>
-                </a>
+
+                    <div class="kf-card-footer">
+                        <a
+                            href="https://www.google.com/maps/search/?api=1&query={{ r.name|urlencode }}%2C%20{{ r.address|urlencode }}%2C%20Kabankalan%20City%2C%20Negros%20Occidental"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="kf-btn-map"
+                        >
+                            <i class="fas fa-map-marked-alt"></i>
+                            View Location
+                        </a>
+
+                        <a
+                            href="{% url 'food_finder:restaurant_detail' r.id %}"
+                            class="kf-btn-arrow"
+                            aria-label="View {{ r.name }} details"
+                            title="Restaurant details"
+                        >
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                </article>
             </div>
+
             {% empty %}
-            <div class="col-12 text-center py-5">
-                <h3 class="text-white">Wala pa sang restaurant</h3>
-                <p class="text-muted">Pangitaa liwat.</p>
+            <div class="col-12 kf-empty">
+                <h3>No restaurants found.</h3>
+                <p>
+                    Try another search or choose a different food category.
+                </p>
             </div>
             {% endfor %}
-        </div>
-    </div>
 
-    <!-- MALAKING MAPA SA PINAKABABA -->
-    <div class="map-section" id="mapa">
-        <div class="map-container">
-            <div class="map-header d-flex justify-content-between align-items-center">
-                <h3><i class="fas fa-map-marked-alt text-warning"></i> Kabankalan City Map</h3>
-                <span class="badge bg-warning text-dark">Interactive Map</span>
-            </div>
-            <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.713614219271!2d122.8136753147904!3d9.988732992178518!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33af9e77d6f1bbbb%3A0x8b6b5e2b3b5f4c1a!2sKabankalan%20City!5e0!3m2!1sen!2sph!4v1634000000000!5m2!1sen!2sph" 
-                width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy">
-            </iframe>
         </div>
-    </div>
+    </section>
 
 </div>
 {% endblock %}
+```
