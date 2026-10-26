@@ -1,13 +1,15 @@
 ```django
 {% extends 'theme/base.html' %}
+{% load static %}
 
 {% block content %}
+
 <style>
     .kf-body {
         background: #1a1b26;
         min-height: 100vh;
         margin: -1.5rem;
-        color: white;
+        color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
@@ -15,7 +17,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1.5rem 3rem;
+        padding: 1.2rem 3rem;
         border-bottom: 1px solid #2e3144;
         flex-wrap: wrap;
         gap: 15px;
@@ -37,6 +39,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        color: white;
     }
 
     .kf-brand-sub {
@@ -47,7 +50,7 @@
 
     .kf-location-badge {
         border: 1px solid #ff8c00;
-        color: #ff8c00;
+        color: #ff9d26;
         padding: 8px 16px;
         border-radius: 20px;
         font-size: .85rem;
@@ -55,7 +58,7 @@
 
     .kf-hero {
         text-align: center;
-        padding: 3rem 1rem;
+        padding: 3rem 1rem 2.5rem;
         background: radial-gradient(circle at top, #292b3d, #1a1b26 80%);
     }
 
@@ -71,26 +74,35 @@
     }
 
     .kf-hero h1 {
-        font-size: 2.5rem;
+        font-size: clamp(1.8rem, 4vw, 2.7rem);
         line-height: 1.2;
         font-weight: 800;
         margin-bottom: 15px;
+        color: #fff;
     }
 
     .kf-hero p {
         color: #a0a0b0;
         line-height: 1.7;
+        max-width: 650px;
+        margin: 0 auto;
     }
 
     .kf-search-container {
-        max-width: 650px;
-        margin: 25px auto;
+        max-width: 680px;
+        margin: 25px auto 0;
+        padding: 0 10px;
+    }
+
+    .kf-search-form {
+        display: flex;
+        gap: 10px;
     }
 
     .kf-search-input {
-        width: 100%;
-        box-sizing: border-box;
-        padding: 15px 20px;
+        flex: 1;
+        min-width: 0;
+        padding: 15px 18px;
         border-radius: 12px;
         background: #232533;
         border: 1px solid #3a3c50;
@@ -98,8 +110,26 @@
         outline: none;
     }
 
+    .kf-search-input::placeholder {
+        color: #888a9d;
+    }
+
     .kf-search-input:focus {
         border-color: #ff8c00;
+    }
+
+    .kf-search-btn {
+        border: 0;
+        background: linear-gradient(135deg, #ff8c00, #ff5e00);
+        color: #fff;
+        border-radius: 12px;
+        padding: 0 20px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .kf-search-btn:hover {
+        filter: brightness(1.1);
     }
 
     .kf-pills {
@@ -118,6 +148,7 @@
         padding: 9px 17px;
         text-decoration: none;
         font-size: .85rem;
+        transition: .2s;
     }
 
     .kf-pill:hover,
@@ -127,8 +158,29 @@
         border-color: #ff8c00;
     }
 
+    .kf-section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 22px;
+    }
+
+    .kf-section-heading h2 {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .kf-results-count {
+        color: #a0a0b0;
+        font-size: .85rem;
+    }
+
     .kf-grid {
-        padding: 2rem 4rem 4rem;
+        padding: 2rem 3rem 4rem;
     }
 
     .kf-card {
@@ -137,7 +189,9 @@
         border: 1px solid #34364a;
         border-radius: 16px;
         overflow: hidden;
-        transition: .2s;
+        transition: transform .2s, border-color .2s;
+        display: flex;
+        flex-direction: column;
     }
 
     .kf-card:hover {
@@ -158,13 +212,30 @@
         background: #2e3144;
     }
 
+    .kf-no-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 8px;
+        color: #a0a0b0;
+        text-align: center;
+        background: #2e3144;
+    }
+
+    .kf-no-image i {
+        font-size: 2rem;
+        color: #ff8c00;
+    }
+
     .kf-card-body {
-        padding: 20px;
+        padding: 18px;
     }
 
     .kf-card-header {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         flex-wrap: wrap;
         gap: 8px;
         margin-bottom: 14px;
@@ -185,28 +256,36 @@
         background: #1e202e;
         padding: 5px 9px;
         border-radius: 6px;
-        font-size: .75rem;
+        font-size: .72rem;
     }
 
     .kf-card-title {
         color: white;
-        font-size: 1.3rem;
+        font-size: 1.25rem;
         font-weight: 700;
         margin-bottom: 10px;
     }
 
     .kf-location {
         color: #a0a0b0;
-        font-size: .85rem;
+        font-size: .83rem;
+        line-height: 1.5;
         margin-bottom: 10px;
     }
 
     .kf-location i {
         color: #ff8c00;
+        margin-right: 4px;
+    }
+
+    .kf-description {
+        color: #a0a0b0;
+        font-size: .84rem;
+        line-height: 1.6;
     }
 
     .kf-card-footer {
-        padding: 15px 20px;
+        padding: 14px 18px;
         background: #1e202e;
         border-top: 1px solid #34364a;
         display: flex;
@@ -214,6 +293,7 @@
         align-items: center;
         gap: 10px;
         flex-wrap: wrap;
+        margin-top: auto;
     }
 
     .kf-btn-map {
@@ -225,6 +305,7 @@
         border: 1px solid #ff8c00;
         padding: 8px 11px;
         border-radius: 8px;
+        transition: .2s;
     }
 
     .kf-btn-map:hover {
@@ -232,7 +313,7 @@
         background: #ff8c00;
     }
 
-    .kf-btn-arrow {
+    .kf-btn-details {
         color: #ff8c00;
         background: #303246;
         padding: 9px 12px;
@@ -240,91 +321,41 @@
         text-decoration: none;
     }
 
-    .kf-menu {
-        padding: 18px;
-        border-top: 1px solid #34364a;
-    }
-
-    .kf-menu-title {
-        font-size: 1.05rem;
-        font-weight: 800;
-        margin-bottom: 14px;
-    }
-
-    .kf-menu-title i {
-        color: #ff8c00;
-    }
-
-    .kf-menu-subtitle {
-        color: #a0a0b0;
-        font-size: .78rem;
-        margin-top: -8px;
-        margin-bottom: 14px;
-    }
-
-    .kf-food-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: #1e202e;
-        border: 1px solid #34364a;
-        border-radius: 10px;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-
-    .kf-food-img {
-        width: 72px;
-        height: 65px;
-        object-fit: cover;
-        border-radius: 8px;
-        flex-shrink: 0;
-        background: #34364a;
-    }
-
-    .kf-no-image {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #a0a0b0;
-        font-size: .7rem;
-        text-align: center;
-    }
-
-    .kf-food-info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .kf-food-name {
+    .kf-btn-details:hover {
         color: white;
-        font-weight: 700;
-        font-size: .9rem;
-    }
-
-    .kf-food-description {
-        color: #a0a0b0;
-        font-size: .75rem;
-        margin-top: 4px;
-    }
-
-    .kf-food-price {
-        color: #ff9d26;
-        font-size: .85rem;
-        font-weight: 800;
-        white-space: nowrap;
-    }
-
-    .kf-menu-note {
-        color: #a0a0b0;
-        font-size: .72rem;
-        margin-top: 10px;
+        background: #ff8c00;
     }
 
     .kf-empty {
         color: #a0a0b0;
         text-align: center;
         padding: 3rem 1rem;
+        background: #232533;
+        border: 1px dashed #45475a;
+        border-radius: 16px;
+    }
+
+    .kf-empty i {
+        font-size: 2.5rem;
+        color: #ff8c00;
+        margin-bottom: 15px;
+    }
+
+    .kf-empty h3 {
+        color: white;
+    }
+
+    .kf-footer-note {
+        text-align: center;
+        color: #77798c;
+        padding: 0 1rem 25px;
+        font-size: .8rem;
+    }
+
+    @media (max-width: 992px) {
+        .kf-grid {
+            padding: 1.5rem;
+        }
     }
 
     @media (max-width: 768px) {
@@ -332,33 +363,46 @@
             padding: 1rem;
         }
 
-        .kf-hero h1 {
-            font-size: 1.8rem;
+        .kf-hero {
+            padding: 2rem .75rem;
         }
 
         .kf-grid {
             padding: 1rem;
         }
+
+        .kf-card-img {
+            height: 180px;
+        }
+
+        .kf-search-form {
+            flex-direction: column;
+        }
+
+        .kf-search-btn {
+            padding: 13px;
+        }
     }
 
     @media (max-width: 420px) {
+        .kf-brand {
+            font-size: 1.1rem;
+        }
+
+        .kf-brand-icon {
+            width: 40px;
+            height: 40px;
+        }
+
         .kf-hero h1 {
-            font-size: 1.5rem;
-        }
-
-        .kf-food-img {
-            width: 60px;
-            height: 60px;
-        }
-
-        .kf-food-price {
-            font-size: .75rem;
+            font-size: 1.6rem;
         }
     }
 </style>
 
 <div class="kf-body">
 
+    <!-- HEADER -->
     <nav class="kf-navbar">
         <div class="kf-brand">
             <div class="kf-brand-icon">
@@ -367,9 +411,7 @@
 
             <div>
                 KabankalanEats
-                <div class="kf-brand-sub">
-                    Find your next food trip
-                </div>
+                <div class="kf-brand-sub">Find your next food trip</div>
             </div>
         </div>
 
@@ -379,24 +421,23 @@
         </div>
     </nav>
 
+    <!-- HERO AND SEARCH -->
     <section class="kf-hero">
         <div class="kf-hero-badge">
             <i class="fas fa-fire"></i>
             HOT CRAVINGS SPOT
         </div>
 
-        <h1>
-            Find Your Favorite Restaurant<br>
-            and Food!
-        </h1>
+        <h1>Find Your Favorite Restaurant<br>and Food!</h1>
 
         <p>
-            Explore restaurants, discover their dishes, and find your next
+            Explore restaurants and find your next
             favorite meal in Kabankalan City.
         </p>
 
         <div class="kf-search-container">
-            <form method="get">
+            <form method="get" class="kf-search-form">
+
                 {% if current_cuisine %}
                     <input
                         type="hidden"
@@ -406,196 +447,202 @@
                 {% endif %}
 
                 <input
-                    type="text"
+                    type="search"
                     name="q"
                     class="kf-search-input"
-                    placeholder="Search restaurant, food, or cuisine..."
+                    placeholder="Search restaurant or cuisine..."
                     value="{{ query|default:'' }}"
+                    aria-label="Search restaurants"
                 >
+
+                <button type="submit" class="kf-search-btn">
+                    <i class="fas fa-search"></i>
+                    Search
+                </button>
             </form>
         </div>
 
+        <!-- CUISINE FILTERS -->
         <div class="kf-pills">
+
             <a
                 href="{% url 'food_finder:restaurant_list' %}"
                 class="kf-pill {% if not current_cuisine %}active{% endif %}"
             >
+                <i class="fas fa-utensils"></i>
                 All Dining Spots
             </a>
 
             <a
-                href="?cuisine=Fast+Food"
+                href="?cuisine={{ 'Fast Food'|urlencode }}"
                 class="kf-pill {% if current_cuisine == 'Fast Food' %}active{% endif %}"
             >
-                <i class="fas fa-hamburger"></i> Fast Food
+                <i class="fas fa-hamburger"></i>
+                Fast Food
             </a>
 
             <a
-                href="?cuisine=Local+%26+Cansi"
+                href="?cuisine={{ 'Local & Cansi'|urlencode }}"
                 class="kf-pill {% if current_cuisine == 'Local & Cansi' %}active{% endif %}"
             >
-                <i class="fas fa-utensils"></i> Local &amp; Cansi
+                <i class="fas fa-bowl-food"></i>
+                Local &amp; Cansi
             </a>
 
             <a
-                href="?cuisine=Cafe+%26+Snacks"
+                href="?cuisine={{ 'Cafe & Snacks'|urlencode }}"
                 class="kf-pill {% if current_cuisine == 'Cafe & Snacks' %}active{% endif %}"
             >
-                <i class="fas fa-mug-hot"></i> Cafe &amp; Snacks
+                <i class="fas fa-mug-hot"></i>
+                Cafe &amp; Snacks
             </a>
+
         </div>
     </section>
 
+    <!-- RESTAURANT LIST -->
     <section class="kf-grid">
+
+        <div class="kf-section-heading">
+            <h2>
+                <i class="fas fa-store" style="color:#ff8c00;"></i>
+                Recommended Restaurants
+            </h2>
+
+            <span class="kf-results-count">
+                {{ restaurants|length }}
+                restaurant{{ restaurants|length|pluralize }} found
+            </span>
+        </div>
+
         <div class="row g-4">
 
             {% for r in restaurants %}
-            <div class="col-md-6 col-lg-4">
-                <article class="kf-card">
 
-                    <a
-                        href="{% url 'food_finder:restaurant_detail' r.id %}"
-                        class="kf-card-link"
-                    >
-                        {% if r.image %}
-                            <img
-                                src="{{ r.image }}"
-                                alt="{{ r.name }}"
-                                class="kf-card-img"
-                                loading="lazy"
-                            >
-                        {% else %}
-                            <div class="kf-card-img kf-no-image">
-                                Restaurant image unavailable
-                            </div>
-                        {% endif %}
+                <div class="col-sm-12 col-md-6 col-xl-4">
 
-                        <div class="kf-card-body">
-                            <div class="kf-card-header">
-                                <span class="kf-badge-cuisine">
-                                    {{ r.cuisine_type }}
-                                </span>
+                    <article class="kf-card">
 
-                                <span class="kf-time">
-                                    {{ r.opening_hours }}
-                                </span>
-                            </div>
-
-                            <div class="kf-card-title">
-                                {{ r.name }}
-                            </div>
-
-                            <div class="kf-location">
-                                <i class="fas fa-map-marker-alt"></i>
-                                {{ r.address }}
-                            </div>
-
-                            <div style="color:#a0a0b0;font-size:.85rem;">
-                                {{ r.description|truncatechars:100 }}
-                            </div>
-                        </div>
-                    </a>
-
-                    <div class="kf-menu">
-                        <div class="kf-menu-title">
-                            <i class="fas fa-utensils"></i>
-                            Menu at {{ r.name }}
-                        </div>
-
-                        <div class="kf-menu-subtitle">
-                            Food and prices for this restaurant
-                        </div>
-
-                        {% for item in r.menu_items %}
-                        <div class="kf-food-item">
-
-                            {% if item.image %}
-                                <img
-                                    class="kf-food-img"
-                                    src="{{ item.image }}"
-                                    alt="{{ item.name }}"
-                                    loading="lazy"
-                                >
-                            {% else %}
-                                <div class="kf-food-img kf-no-image">
-                                    No Image
-                                </div>
-                            {% endif %}
-
-                            <div class="kf-food-info">
-                                <div class="kf-food-name">
-                                    {{ item.name }}
-                                </div>
-
-                                {% if item.description %}
-                                    <div class="kf-food-description">
-                                        {{ item.description }}
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                            {% if item.price %}
-                                <div class="kf-food-price">
-                                    ₱{{ item.price }}
-                                </div>
-                            {% endif %}
-
-                        </div>
-                        {% empty %}
-                        <div class="kf-food-item">
-                            <div class="kf-food-info">
-                                <div class="kf-food-name">
-                                    No menu added yet
-                                </div>
-
-                                <div class="kf-food-description">
-                                    Menu information is not available.
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-
-                        <div class="kf-menu-note">
-                            Menu information should be verified with the restaurant.
-                        </div>
-                    </div>
-
-                    <div class="kf-card-footer">
-                        <a
-                            href="https://www.google.com/maps/search/?api=1&query={{ r.name|urlencode }}%2C%20{{ r.address|urlencode }}%2C%20Kabankalan%20City%2C%20Negros%20Occidental"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="kf-btn-map"
-                        >
-                            <i class="fas fa-map-marked-alt"></i>
-                            View Location
-                        </a>
-
+                        <!-- RESTAURANT IMAGE AND INFORMATION -->
                         <a
                             href="{% url 'food_finder:restaurant_detail' r.id %}"
-                            class="kf-btn-arrow"
-                            aria-label="View {{ r.name }} details"
-                            title="Restaurant details"
+                            class="kf-card-link"
                         >
-                            <i class="fas fa-arrow-right"></i>
+
+                            {% if r.image %}
+
+                                <img
+                                    src="{{ r.image }}"
+                                    alt="{{ r.name }}"
+                                    class="kf-card-img"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <div class="kf-card-img kf-no-image">
+                                    <i class="fas fa-utensils"></i>
+                                    <span>Restaurant image unavailable</span>
+                                </div>
+
+                            {% endif %}
+
+                            <div class="kf-card-body">
+
+                                <div class="kf-card-header">
+
+                                    <span class="kf-badge-cuisine">
+                                        {{ r.cuisine_type }}
+                                    </span>
+
+                                    {% if r.opening_hours %}
+                                        <span class="kf-time">
+                                            <i class="far fa-clock"></i>
+                                            {{ r.opening_hours }}
+                                        </span>
+                                    {% endif %}
+
+                                </div>
+
+                                <div class="kf-card-title">
+                                    {{ r.name }}
+                                </div>
+
+                                <div class="kf-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    {{ r.address }}
+                                </div>
+
+                                <div class="kf-description">
+                                    {{ r.description|default:"Discover the food offered by this restaurant."|truncatechars:110 }}
+                                </div>
+
+                            </div>
+                        </a>
+
+                        <!-- RESTAURANT ACTIONS -->
+                        <div class="kf-card-footer">
+
+                            <a
+                                href="https://www.google.com/maps/search/?api=1&amp;query={{ r.name|urlencode }}%2C%20{{ r.address|urlencode }}%2C%20Kabankalan%20City%2C%20Negros%20Occidental"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="kf-btn-map"
+                            >
+                                <i class="fas fa-map-marked-alt"></i>
+                                View Location
+                            </a>
+
+                            <a
+                                href="{% url 'food_finder:restaurant_detail' r.id %}"
+                                class="kf-btn-details"
+                                aria-label="View {{ r.name }} details"
+                                title="Restaurant details"
+                            >
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            {% empty %}
+
+                <div class="col-12">
+
+                    <div class="kf-empty">
+                        <i class="fas fa-search"></i>
+
+                        <h3>No restaurants found</h3>
+
+                        <p>
+                            Try another search or choose a different food category.
+                        </p>
+
+                        <a
+                            href="{% url 'food_finder:restaurant_list' %}"
+                            class="kf-btn-map"
+                        >
+                            <i class="fas fa-undo"></i>
+                            Show All Restaurants
                         </a>
                     </div>
 
-                </article>
-            </div>
+                </div>
 
-            {% empty %}
-            <div class="col-12 kf-empty">
-                <h3>No restaurants found.</h3>
-                <p>
-                    Try another search or choose a different food category.
-                </p>
-            </div>
             {% endfor %}
 
         </div>
     </section>
 
+    <!-- FOOTER -->
+    <div class="kf-footer-note">
+        KabankalanEats &mdash; Discover food spots in Kabankalan City.
+    </div>
+
 </div>
+
 {% endblock %}
 ```

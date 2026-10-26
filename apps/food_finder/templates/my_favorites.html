@@ -1,24 +1,71 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Favorites</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites | KabankalanEats</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f8f8;
+            margin: 0;
+            padding: 30px;
+            color: #222;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            color: #ff7200;
+        }
+
+        a {
+            color: #ff7200;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>♥ My Favorite Restaurants</h1>
-    <a href="{% url 'finder:restaurant_list' %}">Back to Home</a>
-    <hr>
-    
-    <ul>
-    {% for fav in favorites %}
-        <li>
-            <a href="{% url 'finder:restaurant_detail' fav.restaurant.pk %}">
-                {{ fav.restaurant.name }}
-            </a> 
-            ({{ fav.restaurant.city }})
-        </li>
-    {% empty %}
-        <li>You haven't favorited any restaurants yet.</li>
-    {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>♥ My Favorite Restaurants</h1>
+
+        <a href="{% url 'food_finder:restaurant_list' %}">
+            ← Back to Home
+        </a>
+
+        <hr>
+
+        <ul>
+            {% for fav in favorites %}
+                <li>
+                    <a href="{% url 'food_finder:restaurant_detail' fav.restaurant.pk %}">
+                        {{ fav.restaurant.name }}
+                    </a>
+                    ({{ fav.restaurant.city }})
+                </li>
+            {% empty %}
+                <li>You haven't favorited any restaurants yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

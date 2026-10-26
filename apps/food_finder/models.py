@@ -1,10 +1,13 @@
+
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db.models import Avg
 
 
 class Restaurant(models.Model):
     """A restaurant listed in the food finder."""
+
     CUISINE_CHOICES = [
         ('filipino', 'Local & Cansi'),
         ('fast_food', 'Fast Food'),
@@ -16,17 +19,31 @@ class Restaurant(models.Model):
     description = models.TextField(blank=True)
     address = models.CharField(max_length=255)
     city = models.CharField(max_length=100)
-    cuisine_type = models.CharField(max_length=20, choices=CUISINE_CHOICES, default='other')
+    cuisine_type = models.CharField(
+        max_length=20,
+        choices=CUISINE_CHOICES,
+        default='other'
+    )
     contact_number = models.CharField(max_length=20, blank=True)
-    opening_hours = models.CharField(max_length=100, blank=True, help_text="e.g., 9:00 AM - 10:00 PM")
-    # image = models.ImageField(upload_to='restaurants/', blank=True, null=True)  <-- Naka-comment dahil wala pang Pillow
-    
+    opening_hours = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="e.g., 9:00 AM - 10:00 PM"
+    )
+
+    # Optional image field; Pillow is required to enable it.
+    # image = models.ImageField(
+    #     upload_to='restaurants/',
+    #     blank=True,
+    #     null=True
+    # )
+
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='restaurants_added'
+        related_name='restaurant_listadded'
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -39,14 +56,16 @@ class Restaurant(models.Model):
         return f"{self.name} ({self.city})"
 
     def average_rating(self):
-        reviews = self.reviews.all()
-        if not reviews:
-            return 0
-        return round(sum(r.rating for r in reviews) / len(reviews), 1)
+        result = self.reviews.aggregate(avg_rating=Avg('rating'))
+        return round(result['avg_rating'] or 0, 1)
+
+    def review_count(self):
+        return self.reviews.count()
 
 
 class MenuItem(models.Model):
     """A dish or drink offered by a restaurant."""
+
     restaurant = models.ForeignKey(
         Restaurant,
         related_name='menu_items',
@@ -68,7 +87,8 @@ class MenuItem(models.Model):
 
 
 class Review(models.Model):
-    """A user review of a restaurant."""
+    """A user's rating and review of a restaurant."""
+
     restaurant = models.ForeignKey(
         Restaurant,
         related_name='reviews',
@@ -80,7 +100,10 @@ class Review(models.Model):
         related_name='reviews'
     )
     rating = models.PositiveIntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5)
+        ]
     )
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -91,11 +114,15 @@ class Review(models.Model):
         unique_together = ('restaurant', 'user')
 
     def __str__(self):
-        return f"{self.user.username} → {self.restaurant.name} ({self.rating}★)"
+        return (
+            f"{self.user.username} → "
+            f"{self.restaurant.name} ({self.rating}★)"
+        )
 
 
 class Favorite(models.Model):
-    """Bookmarked restaurants by user."""
+    """A restaurant bookmarked by a user."""
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

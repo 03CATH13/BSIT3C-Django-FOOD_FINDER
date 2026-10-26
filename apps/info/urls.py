@@ -9,4 +9,6 @@ urlpatterns = [
     path('ajax/get/<int:pk>/', views.info_get_ajax, name='info_get_ajax'),
     path('ajax/save/', views.info_save_ajax, name='info_save_ajax'),
     path('ajax/delete/<int:pk>/', views.info_delete_ajax, name='info_delete_ajax'),
+    path('about/', views.about, name='about'),
+    path('restaurants/', views.all_restaurants, name='all_restaurants'),
 ]

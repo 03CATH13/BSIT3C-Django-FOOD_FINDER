@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib import messages
@@ -12,12 +13,16 @@ from django.db.models import Q
 from apps.scoping import scoped_info, scoped_infos
 from .models import Info
 
+# Import Restaurant model from food_finder app
+from apps.food_finder.models import Restaurant
+
+
 MIN_AGE = 1
 MAX_AGE = 150
 
 
 def _parse_age(raw_age):
-    """Convert an age value to an integer, returning None when it is invalid."""
+    """Convert an age value to an integer, returning None when invalid."""
     try:
         return int(raw_age)
     except (TypeError, ValueError):
@@ -65,7 +70,13 @@ def info_list_ajax(request):
     paginator = Paginator(infos_list, 10)
     page_number = request.GET.get('page', 1)
     infos = paginator.get_page(page_number)
-    data = list(infos.object_list.values('id', 'name', 'age', 'address', 'email'))
+
+    data = list(
+        infos.object_list.values(
+            'id', 'name', 'age', 'address', 'email'
+        )
+    )
+
     return JsonResponse({
         'data': data,
         'has_next': infos.has_next(),
@@ -80,6 +91,7 @@ def info_list_ajax(request):
 def info_get_ajax(request, pk):
     """Return one of the signed-in user's info records as JSON."""
     info = scoped_info(request.user, pk)
+
     return JsonResponse({
         'id': info.id,
         'name': info.name,
@@ -92,7 +104,7 @@ def info_get_ajax(request, pk):
 @login_required(login_url='login')
 @require_POST
 def info_save_ajax(request):
-    """Validate and create or update an info record, returning its data as JSON."""
+    """Validate and create or update an info record."""
     info_id = request.POST.get('id')
 
     if info_id:
@@ -108,27 +120,46 @@ def info_save_ajax(request):
     email = request.POST.get('email', '').strip()
 
     if not name:
-        return JsonResponse({'error': 'Name is required.'}, status=400)
+        return JsonResponse(
+            {'error': 'Name is required.'},
+            status=400
+        )
 
     if not age:
-        return JsonResponse({'error': 'Age is required.'}, status=400)
+        return JsonResponse(
+            {'error': 'Age is required.'},
+            status=400
+        )
 
     age_value = _parse_age(age)
 
-    if age_value is None or age_value < MIN_AGE or age_value > MAX_AGE:
+    if (
+        age_value is None
+        or age_value < MIN_AGE
+        or age_value > MAX_AGE
+    ):
         return JsonResponse(
-            {'error': f'Age must be a number between {MIN_AGE} and {MAX_AGE}.'},
+            {
+                'error':
+                f'Age must be a number between {MIN_AGE} and {MAX_AGE}.'
+            },
             status=400
         )
 
     if not address:
-        return JsonResponse({'error': 'Address is required.'}, status=400)
+        return JsonResponse(
+            {'error': 'Address is required.'},
+            status=400
+        )
 
     if email:
         try:
             validate_email(email)
         except ValidationError:
-            return JsonResponse({'error': 'Enter a valid email address.'}, status=400)
+            return JsonResponse(
+                {'error': 'Enter a valid email address.'},
+                status=400
+            )
 
     info.name = name
     info.age = age_value
@@ -148,7 +179,8 @@ def info_save_ajax(request):
 
     messages.success(
         request,
-        f'Record "{info.name}" has been {"updated" if is_update else "saved"} successfully.'
+        f'Record "{info.name}" has been '
+        f'{"updated" if is_update else "saved"} successfully.'
     )
 
     return JsonResponse({
@@ -161,12 +193,49 @@ def info_save_ajax(request):
     })
 
 
+def about(request):
+    """Display the About Food Finder page."""
+    return render(request, 'info/about.html')
+
+
+def all_restaurants(request):
+    """Display all restaurants, with optional search."""
+    query = request.GET.get('q', '').strip()
+
+    restaurants = Restaurant.objects.all()
+
+    if query:
+        restaurants = restaurants.filter(
+            Q(name__icontains=query) |
+            Q(address__icontains=query) |
+            Q(description__icontains=query) |
+            Q(city__icontains=query)
+        )
+
+    restaurants = restaurants.order_by('name')
+
+    return render(
+        request,
+        'food_finder/restaurants.html',
+        {
+            'restaurants': restaurants,
+            'total_restaurants': restaurants.count(),
+            'query': query,
+        }
+    )
+
+
 @login_required(login_url='login')
 @require_POST
 def info_delete_ajax(request, pk):
-    """Delete the specified signed-in user's info record and confirm as JSON."""
+    """Delete the signed-in user's info record."""
     info = scoped_info(request.user, pk)
     info_name = info.name
     info.delete()
-    messages.success(request, f'Record "{info_name}" has been deleted successfully.')
+
+    messages.success(
+        request,
+        f'Record "{info_name}" has been deleted successfully.'
+    )
+
     return JsonResponse({'status': 'deleted'})
