@@ -1,214 +1,223 @@
-{% extends 'theme/base.html' %}
-{% load static %}
+{% extends 'theme/base_dashboard.html' %}
 
 {% block content %}
 <style>
-    /* DARK AESTHETIC BACKGROUND */
-    .favorites-container {
-        background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+    /* --- FORCE FULL WIDTH DARK BACKGROUND --- */
+    html, body {
+        background-color: #0f0f13 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100%;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Inaalis ang puting gilid ng base template */
+    .favorites-wrapper {
+        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
+        width: 100vw; /* Sakop buong screen width */
         min-height: 100vh;
-        margin: -1.5rem;
-        padding: 3rem 2rem;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    /* Header */
-    .favorites-header {
-        text-align: center;
-        margin-bottom: 3rem;
-    }
-    .favorites-header h1 {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #ffffff;
-        margin-bottom: 0.5rem;
-    }
-    .favorites-header h1 i {
-        color: #ef4444; /* Red heart */
-    }
-    .favorites-header p {
-        color: #94a3b8;
-        font-size: 1rem;
-    }
-
-    /* Back Button */
-    .btn-back {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.1);
-        color: #e2e8f0;
-        padding: 8px 20px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-size: 0.9rem;
-        margin-bottom: 2rem;
-        transition: all 0.2s ease;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .btn-back:hover {
-        background: #ff8c00;
-        color: white;
-        border-color: #ff8c00;
-    }
-
-    /* Favorite Card */
-    .fav-card {
-        background: #ffffff;
-        border-radius: 16px;
-        overflow: hidden;
-        text-decoration: none !important;
         display: flex;
         flex-direction: column;
-        height: 100%;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        border: 2px solid transparent;
-    }
-    .fav-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 25px rgba(255, 140, 0, 0.2);
-        border-color: #ff8c00;
-    }
-    .fav-card img {
-        width: 100%;
-        height: 160px;
-        object-fit: cover;
-        border-bottom: 1px solid #e2e8f0;
-    }
-    .fav-card-body {
-        padding: 1.2rem;
-        flex-grow: 1;
-    }
-    .fav-card-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin-bottom: 0.3rem;
-    }
-    .fav-card-location {
-        color: #64748b;
-        font-size: 0.8rem;
-        margin-bottom: 1rem;
-    }
-    .fav-card-location i {
-        color: #ff8c00;
-        margin-right: 5px;
-    }
-    .fav-card-footer {
-        padding: 1rem 1.2rem;
-        background: #f8fafc;
-        border-top: 1px solid #e2e8f0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .badge-cuisine {
-        background: #fff7ed;
-        color: #ff8c00;
-        font-size: 0.7rem;
-        font-weight: 700;
-        padding: 4px 10px;
-        border-radius: 20px;
-        text-transform: uppercase;
+        padding: 2rem;
+        position: absolute; /* Pinuputol ang space sa gilid */
+        top: 0;
+        left: 0;
+        z-index: 10;
     }
 
-    /* Empty State */
-    .empty-state {
-        background: #ffffff;
-        border-radius: 16px;
-        padding: 4rem 2rem;
-        text-align: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    .favorites-container {
+        max-width: 900px; /* Pinaliit ang max-width para hindi masyadong stretched */
+        margin: 0 auto;
+        width: 100%;
+        flex: 1;
     }
-    .empty-icon-circle {
-        width: 80px;
-        height: 80px;
-        background: #fee2e2;
-        border-radius: 50%;
+
+    /* --- HEADER --- */
+    .back-btn {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        margin-bottom: 1.5rem;
-    }
-    .empty-icon-circle i {
-        font-size: 2rem;
-        color: #ef4444;
-    }
-    .empty-state h3 {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin-bottom: 0.5rem;
-    }
-    .empty-state p {
-        color: #64748b;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #d4d4d8;
+        padding: 0.5rem 1rem; /* Pinaliit */
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 0.8rem; /* Pinaliit */
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         margin-bottom: 2rem;
     }
+    .back-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        transform: translateX(-3px);
+    }
+
+    .favorites-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .favorites-header h1 {
+        font-size: 2rem; /* Pinaliit mula 2.5rem */
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 0.3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    .favorites-header h1 i {
+        color: #eb78bf;
+        text-shadow: 0 0 15px rgba(235, 120, 191, 0.5);
+        font-size: 1.8rem; /* Pinaliit ang icon */
+    }
+    .favorites-header p {
+        color: #a1a1aa;
+        font-size: 0.95rem; /* Pinaliit */
+    }
+
+    /* --- EMPTY STATE CARD (DARK MODE & MAS MALIIT) --- */
+    .empty-state-card {
+        background: rgba(30, 30, 38, 0.6);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 3rem 1.5rem; /* Binawasan ang padding */
+        text-align: center;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .empty-icon-wrapper {
+        width: 70px; /* Pinaliit mula 100px */
+        height: 70px;
+        background: rgba(235, 120, 191, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    .empty-icon-wrapper i {
+        font-size: 2rem; /* Pinaliit ang icon */
+        color: #eb78bf;
+        animation: heartbeat 1.5s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+        0% { transform: scale(1); }
+        15% { transform: scale(1.15); }
+        30% { transform: scale(1); }
+        45% { transform: scale(1.15); }
+        60% { transform: scale(1); }
+    }
+
+    .empty-state-card h2 {
+        color: #ffffff;
+        font-weight: 800;
+        font-size: 1.4rem; /* Pinaliit mula 1.8rem */
+        margin-bottom: 0.5rem;
+    }
+    .empty-state-card p {
+        color: #a1a1aa;
+        font-size: 0.85rem; /* Pinaliit */
+        max-width: 350px;
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+
     .btn-explore {
-        background: linear-gradient(135deg, #ff8c00, #ff5e00);
-        color: white;
-        padding: 10px 24px;
-        border-radius: 8px;
+        background: #eb78bf;
+        color: #0f0f13;
+        padding: 0.6rem 1.5rem; /* Pinaliit */
+        border-radius: 50px;
+        font-weight: 800;
+        font-size: 0.85rem; /* Pinaliit */
         text-decoration: none;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        border: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 6px 20px rgba(235, 120, 191, 0.3);
     }
     .btn-explore:hover {
-        transform: scale(1.05);
-        color: white;
-        box-shadow: 0 10px 20px rgba(255, 140, 0, 0.3);
+        background: #f08cc9;
+        color: #0f0f13;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(235, 120, 191, 0.5);
     }
+
+    /* --- FAVORITES GRID (Kung may laman) --- */
+    .favorites-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Pinaliit ang min-width */
+        gap: 1rem;
+    }
+    
+    .fav-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+    .fav-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(235, 120, 191, 0.3);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    .fav-card h3 { color: #fff; font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; }
+    .fav-card p { color: #a1a1aa; font-size: 0.75rem; margin-bottom: 0.8rem; }
 </style>
 
-<div class="favorites-container">
-    <div class="container-xl">
+<div class="favorites-wrapper">
+    <div class="favorites-container">
         
-        <!-- Back Button -->
-        <a href="{% url 'dashboard' %}" class="btn-back">
+        <!-- BACK BUTTON -->
+        <a href="{% url 'food_finder:restaurant_list' %}" class="back-btn">
             <i class="fas fa-arrow-left"></i> Back to Dashboard
         </a>
 
-        <!-- Header -->
+        <!-- HEADER -->
         <div class="favorites-header">
-            <h1><i class="fas fa-heart"></i> My Favorite Restaurants</h1>
+            <h1><i class="fas fa-heart"></i> My Favorites</h1>
             <p>Your saved places to eat in Kabankalan City.</p>
         </div>
 
-        <!-- Listahan ng Favorites -->
-        <div class="row g-4">
-            {% for fav in favorites %}
-            <div class="col-md-6 col-lg-4">
-                <a href="{% url 'food_finder:restaurant_detail' fav.restaurant.id %}" class="fav-card">
-                    <img src="{{ fav.restaurant.image }}" alt="{{ fav.restaurant.name }}">
-                    <div class="fav-card-body">
-                        <div class="fav-card-title">{{ fav.restaurant.name }}</div>
-                        <div class="fav-card-location">
-                            <i class="fas fa-map-marker-alt"></i> {{ fav.restaurant.address }}
-                        </div>
-                    </div>
-                    <div class="fav-card-footer">
-                        <span class="badge-cuisine">{{ fav.restaurant.cuisine_type }}</span>
-                        <span style="color: #ff8c00; font-size: 0.8rem; font-weight: 600;">View Details <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </a>
-            </div>
-            {% empty %}
-            
-            <!-- Empty State (Wala pang favorites) -->
-            <div class="col-12">
-                <div class="empty-state">
-                    <div class="empty-icon-circle">
-                        <i class="fas fa-heart-broken"></i>
-                    </div>
-                    <h3>No favorites yet</h3>
-                    <p>You haven't added any restaurants to your favorites. Start exploring and find your next favorite place!</p>
-                    <a href="{% url 'food_finder:restaurant_list' %}" class="btn-explore">
-                        <i class="fas fa-utensils"></i> Explore Restaurants
+        <!-- CONDITIONAL RENDER -->
+        {% if favorites %}
+            <!-- KUNG MAY FAVORITES -->
+            <div class="favorites-grid">
+                {% for restaurant in favorites %}
+                <div class="fav-card">
+                    <h3>{{ restaurant.name }}</h3>
+                    <p><i class="fas fa-map-marker-alt me-1"></i> {{ restaurant.address }}</p>
+                    <a href="{% url 'food_finder:restaurant_detail' restaurant.id %}" class="btn-explore" style="padding: 0.4rem 1rem; font-size: 0.75rem; align-self: flex-start; margin-top: auto;">
+                        View <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-        </div>
+        {% else %}
+            <!-- KUNG WALANG LAMAN (EMPTY STATE) -->
+            <div class="empty-state-card">
+                <div class="empty-icon-wrapper">
+                    <i class="fas fa-heart-broken"></i>
+                </div>
+                <h2>No favorites yet</h2>
+                <p>You haven't added any restaurants to your favorites. Start exploring and find your next favorite place!</p>
+                <a href="{% url 'food_finder:restaurant_list' %}" class="btn-explore">
+                    <i class="fas fa-utensils"></i> Explore
+                </a>
+            </div>
+        {% endif %}
 
     </div>
 </div>

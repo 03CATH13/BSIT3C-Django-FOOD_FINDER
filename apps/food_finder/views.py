@@ -429,7 +429,7 @@ RESTAURANT_LIST_DATA = [
 # RESTAURANT LIST, SEARCH, AND FILTER
 # ==========================================
 
-@login_required  # <--- IDINAGDAG PARA BAWAL PUMASOK KUNG HINDI NAKA-LOGIN
+@login_required
 def restaurant_list(request):
     restaurants = RESTAURANT_LIST_DATA.copy()
 
@@ -471,6 +471,9 @@ def restaurant_list(request):
             == cuisine_filter.casefold()
         ]
 
+    # --- INAYOS: Kunin ang totoong bilang ng favorites mula sa DB ---
+    total_favorites = Favorite.objects.filter(user=request.user).count() if request.user.is_authenticated else 0
+
     for restaurant in restaurants:
         restaurant['menu_items'] = restaurant.get('menu', [])
 
@@ -480,6 +483,7 @@ def restaurant_list(request):
         'query': query,
         'current_cuisine': cuisine_filter,
         'total_restaurants': len(restaurants),
+        'total_favorites': total_favorites,  # <--- IDINAGDAG
     })
 
 
@@ -487,7 +491,7 @@ def restaurant_list(request):
 # RESTAURANT DETAILS
 # ==========================================
 
-@login_required  # <--- IDINAGDAG
+@login_required
 def restaurant_detail(request, pk):
     restaurant = next(
         (
@@ -530,7 +534,7 @@ def restaurant_detail(request, pk):
 # RESTAURANT MAP
 # ==========================================
 
-@login_required  # <--- IDINAGDAG
+@login_required
 def restaurant_map(request):
     return render(request, 'map.html', {
         'restaurant_list': RESTAURANT_LIST_DATA,
@@ -547,15 +551,63 @@ def add_review(request, pk):
     return redirect('food_finder:restaurant_list')
 
 
+# --- INAYOS: Toggle Favorite Function ---
 @login_required
 def toggle_favorite(request, pk):
+    # Dahil hardcoded data tayo, kailangan muna nating i-save ang Restaurant sa DB
+    # para may ma-link ang Favorite model.
+    # Pero para hindi mag-error, ginawa nating try-except.
+    from .models import Restaurant
+    
+    try:
+        # Hanapin o gumawa ng restaurant record base sa ID
+        restaurant_data = next((r for r in RESTAURANT_LIST_DATA if r['id'] == pk), None)
+        
+        if restaurant_data:
+            # I-save o kunin ang Restaurant object
+            restaurant_obj, created = Restaurant.objects.get_or_create(
+                id=pk,
+                defaults={
+                    'name': restaurant_data['name'],
+                    'description': restaurant_data.get('description', ''),
+                    'address': restaurant_data['address'],
+                    'city': 'Kabankalan',
+                    'cuisine_type': 'other',
+                    'opening_hours': restaurant_data.get('opening_hours', ''),
+                }
+            )
+            
+            # Check kung naka-favorite na
+            favorite = Favorite.objects.filter(user=request.user, restaurant=restaurant_obj).first()
+            
+            if favorite:
+                favorite.delete()  # Unfavorite
+            else:
+                Favorite.objects.create(user=request.user, restaurant=restaurant_obj)  # Favorite
+                
+    except Exception as e:
+        print(f"Error in toggle_favorite: {e}")
+        
     return redirect('food_finder:restaurant_list')
 
 
+# --- INAYOS: My Favorites Function ---
 @login_required
 def my_favorites(request):
+    # Kunin lahat ng favorites ng user
+    favorites = Favorite.objects.filter(user=request.user)
+    
+    # Kunin ang IDs ng mga naka-favorite na restaurants
+    fav_ids = [fav.restaurant.id for fav in favorites if fav.restaurant]
+    
+    # I-filter ang RESTAURANT_LIST_DATA para makuha lang yung mga naka-favorite
+    favorite_restaurants = [
+        r for r in RESTAURANT_LIST_DATA 
+        if r['id'] in fav_ids
+    ]
+    
     return render(request, 'my_favorites.html', {
-        'favorites': [],
+        'favorites': favorite_restaurants,
     })
 
 
