@@ -1,0 +1,54 @@
+body {
+    background-color: #0f0f13 !important;
+    color: #e5e7eb !important;
+}
+#header {
+    background-color: #16161a !important;
+    color: #eb78bf !important;
+    border-bottom: 2px solid #eb78bf !important;
+}
+#branding h1, #branding h1 a:link, #branding h1 a:visited {
+    color: #eb78bf !important;
+}
+div.breadcrumbs {
+    background-color: #1e1e26 !important;
+    color: #a1a1aa !important;
+}
+.module {
+    background-color: #1e1e26 !important;
+    border: 1px solid #333 !important;
+}
+.module h2, .module caption {
+    background-color: #eb78bf !important;
+    color: #0f0f13 !important;
+}
+table {
+    background-color: #16161a !important;
+    color: #e5e7eb !important;
+}
+th {
+    background-color: #1e1e26 !important;
+    color: #eb78bf !important;
+}
+td, th {
+    border-bottom: 1px solid #333 !important;
+}
+a:link, a:visited {
+    color: #eb78bf !important;
+}
+.button, input[type=submit], input[type=button] {
+    background-color: #eb78bf !important;
+    color: #0f0f13 !important;
+}
+input, textarea, select {
+    background-color: #1e1e26 !important;
+    color: #ffffff !important;
+    border: 1px solid #333 !important;
+}
+#recent-actions-module {
+    background-color: #1e1e26 !important;
+}
+#recent-actions-module h2 {
+    background-color: #eb78bf !important;
+    color: #0f0f13 !important;
+}

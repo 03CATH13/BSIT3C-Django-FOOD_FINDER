@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Avg
+from django.contrib.auth.models import User
+
 
 
 class Restaurant(models.Model):
@@ -133,3 +135,17 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f"{self.user.username} ♥ {self.restaurant.name}"
+
+
+class UserProfile(models.Model):
+    """Extra information about a user."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    age = models.IntegerField(null=True, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+
+    class Meta:
+        db_table = 'tbl_user_profile'
+
+    def __str__(self):
+        return f"{self.user.username}'s Profile"

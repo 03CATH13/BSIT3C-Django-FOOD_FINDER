@@ -1,255 +1,284 @@
-{% extends 'theme/base_dashboard.html' %}
-
-{% block content %}
-<style>
-    /* PINIPILIT ANG BUONG SCREEN NA MAGING BLACK (Tinatanggal ang puting gilid) */
-    html, body {
-        background-color: #1b1b1b !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100%;
-        min-height: 100vh;
-    }
-
-    /* LIGHT AESTHETIC BACKGROUND */
-    .dashboard-container {
-        background: #1b1b1b;
-        min-height: 100vh;
-        padding: 4rem 1.5rem;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-    }
-
-    /* Header Styling */
-    .welcome-header {
-        text-align: center;
-        margin-bottom: 4rem;
-    }
-    .welcome-header h1 {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #eb78bf;
-        margin-bottom: 0.3rem;
-    }
-    .welcome-header p {
-        color: #a3a3a3; /* Ginawa kong light gray para mabasa sa dark bg */
-        font-size: 1rem;
-    }
-
-    /* PAHIGA NGA RECTANGLE CARD (May Kulay ang Buong Card) */
-    .landscape-card {
-        border-radius: 16px;
-        padding: 1rem 1.2rem;
-        text-decoration: none !important;
-        display: flex;
-        flex-direction: row; 
-        align-items: center;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        border: 1px solid transparent;
-        width: 100%;
-        height: 90px;
-        gap: 12px;
-    }
-
-    /* Hover Effect */
-    .landscape-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-        border-color: #334155; /* Dark border pag hover */
-    }
-
-    /* GAMAY NGA ICON NGA PUTI ANG SULOD */
-    .icon-bubble {
-        width: 50px; 
-        height: 50px; 
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        animation: float 3s ease-in-out infinite;
-        flex-shrink: 0;
-        background: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
-    }
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}KabankalanEats - Food Finder System{% endblock %}</title>
     
-    .icon-bubble i {
-        font-size: 1.2rem !important;
-    }
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- FORCE EVERYTHING TO BE DARK --- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
 
-    /* Delay per icon */
-    .card-delay-1 .icon-bubble { animation-delay: 0s; }
-    .card-delay-2 .icon-bubble { animation-delay: 0.5s; }
-    .card-delay-3 .icon-bubble { animation-delay: 1s; }
-    .card-delay-4 .icon-bubble { animation-delay: 1.5s; }
-    .card-delay-5 .icon-bubble { animation-delay: 2s; }
+        html, body {
+            background-color: #0f0f13 !important;
+            background: #0f0f13 !important;
+            color: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0 !important;
+            padding: 0 !important;
+            min-height: 100vh;
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+        }
 
-    .landscape-card:hover .icon-bubble {
-        animation: bounce 0.5s ease;
-    }
+        /* --- SIDEBAR STYLING --- */
+        .sidebar {
+            background-color: #16161a !important;
+            min-height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem 1rem;
+            box-sizing: border-box;
+        }
 
-    /* TEXT ALIGNMENT */
-    .text-content {
-        text-align: left;
-        overflow: hidden;
-    }
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 1.5rem;
+            text-decoration: none;
+        }
 
-    .landscape-card h3 {
-        color: #1e293b !important;
-        font-weight: 700;
-        font-size: 0.95rem;
-        margin-bottom: 0.1rem;
-        text-decoration: none !important;
-        white-space: nowrap;
-    }
-    .landscape-card p {
-        color: #475569 !important;
-        font-size: 0.7rem;
-        line-height: 1.2;
-        margin: 0;
-        text-decoration: none !important;
-    }
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #eb78bf, #a78bfa);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
 
-    /* COLORED RECTANGLE BACKGROUNDS */
-    .card-blue { background: #dbeafe; }     /* Light Blue */
-    .card-pink { background: #fce7f3; }     /* Light Pink */
-    .card-cyan { background: #cffafe; }     /* Light Cyan */
-    .card-purple { background: #f3e8ff; }   /* Light Purple */
-    .card-yellow { background: #fef9c3; }   /* Light Yellow */
+        .brand-text h4 {
+            color: #ffffff;
+            font-weight: 800;
+            margin: 0;
+            font-size: 1.1rem;
+            letter-spacing: -0.5px;
+        }
+        .brand-text span { color: #eb78bf; }
+        .brand-text p {
+            color: #71717a;
+            font-size: 0.6rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-    /* ICON COLORS (Matches the background) */
-    .text-blue { color: #1d4ed8; }
-    .text-pink { color: #be185d; }
-    .text-cyan { color: #0e7490; }
-    .text-purple { color: #6d28d9; }
-    .text-yellow { color: #b45309; }
+        .nav-section { margin-bottom: 1.5rem; }
+        .nav-section-title {
+            color: #52525b;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 0.8rem;
+            padding-left: 0.5rem;
+        }
 
-    /* FOOTER STYLING */
-    .dashboard-footer {
-        margin-top: auto;
-        text-align: center;
-        color: #a3a3a3; /* Pinalitan ng light gray para mabasa sa dark */
-        font-size: 0.89rem;
-        padding-top: 5rem;
-    }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.7rem 1rem;
+            color: #a1a1aa;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-bottom: 2px;
+        }
 
-    /* KEYFRAMES */
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-3px); }
-        100% { transform: translateY(0px); }
-    }
+        .sidebar-link:hover, .sidebar-link.active {
+            background: rgba(235, 120, 191, 0.1);
+            color: #eb78bf;
+        }
 
-    @keyframes bounce {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-    }
+        .sidebar-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
 
-    .animate-card {
-        animation: fadeInUp 0.5s ease-out forwards;
-        opacity: 0;
-    }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
-    .delay-5 { animation-delay: 0.5s; }
+        .sidebar-user {
+            margin-top: auto;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
 
-<div class="dashboard-container">
-    <!-- Ginawa kong fluid at tinanggal ang px-5 para sumagad sa gilid kung kailangan -->
-    <div class="container-fluid px-4"> 
-        
-        <!-- Header -->
-        <div class="welcome-header">
-            <h1>Welcome {{ Girlies }}! 👋</h1>
-            <p>What would you like to explore today?</p>
+        .user-info h6 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .user-info p {
+            color: #71717a;
+            margin: 0;
+            font-size: 0.7rem;
+        }
+
+        /* --- MAIN CONTENT AREA (PINAKA-IMPORTANTE) --- */
+        .main-content {
+            margin-left: 250px;
+            min-height: 100vh;
+            background-color: #0f0f13 !important;
+            width: calc(100% - 250px);
+            padding: 0;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- OVERLAY PARA TAKPAN ANG PUTI SA LIKOD --- */
+        .dark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0f0f13;
+            z-index: -1; /* Nasa likod ng lahat */
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- DARK OVERLAY (Para matakpan ang puting background) -->
+    <div class="dark-overlay"></div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <a href="{% url 'food_finder:home' %}" class="sidebar-brand">
+            <div class="brand-icon"><i class="fas fa-utensils"></i></div>
+            <div class="brand-text">
+                <h4>Food<span>_Finder</span></h4>
+                <p>Food Finder System</p>
+            </div>
+        </a>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Main Menu</div>
+            <a href="{% url 'food_finder:home' %}" class="sidebar-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+            <a href="{% url 'food_finder:restaurant_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'restaurant_list' %}active{% endif %}">
+                <i class="fas fa-store"></i> Restaurants
+            </a>
+            <a href="{% url 'food_finder:my_favorites' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_favorites' %}active{% endif %}">
+                <i class="fas fa-heart"></i> My Favorites
+            </a>
         </div>
 
-        <!-- Dashboard Cards -->
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-3 justify-content-center">
-            
-            <!-- RESTAURANTS (Blue) -->
-            <div class="col animate-card delay-1 card-delay-1">
-                <a href="{% url 'food_finder:restaurant_list' %}" class="landscape-card card-blue">
-                    <div class="icon-bubble">
-                        <i class="fas fa-store text-blue"></i>
-                    </div>
-                    <div class="text-content">
-                        <h3>Restaurants</h3>
-                        <p>Browse restaurants.</p>
-                    </div>
-                </a>
-            </div>
+        <div class="nav-section">
+            <div class="nav-section-title">Information</div>
+            <a href="{% url 'food_finder:about' %}" class="sidebar-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                <i class="fas fa-info-circle"></i> About Food Finder
+            </a>
+        </div>
 
-            <!-- MY FAVORITES (Pink) -->
-            <div class="col animate-card delay-2 card-delay-2">
-                <a href="{% url 'food_finder:my_favorites' %}" class="landscape-card card-pink">
-                    <div class="icon-bubble">
-                        <i class="fas fa-heart text-pink"></i>
-                    </div>
-                    <div class="text-content">
-                        <h3>Favorites</h3>
-                        <p>Saved favorites.</p>
-                    </div>
-                </a>
-            </div>
-
-            <!-- ABOUT (Cyan) -->
-            <div class="col animate-card delay-3 card-delay-3">
-                <a href="/info/" class="landscape-card card-cyan">
-                    <div class="icon-bubble">
-                        <i class="fas fa-info-circle text-cyan"></i>
-                    </div>
-                    <div class="text-content">
-                        <h3>About</h3>
-                        <p>System info.</p>
-                    </div>
-                </a>
-            </div>
-
-            <!-- ADMIN PANEL (Purple) -->
+        <div class="nav-section">
+            <div class="nav-section-title">Account</div>
             {% if user.is_staff %}
-            <div class="col animate-card delay-4 card-delay-4">
-                <a href="{% url 'admin:index' %}" class="landscape-card card-purple">
-                    <div class="icon-bubble">
-                        <i class="fas fa-users-cog text-purple"></i>
-                    </div>
-                    <div class="text-content">
-                        <h3>Admin</h3>
-                        <p>Manage settings.</p>
-                    </div>
-                </a>
-            </div>
+            <a href="{% url 'admin:index' %}" class="sidebar-link">
+                <i class="fas fa-users-cog"></i> Admin Panel
+            </a>
             {% endif %}
+            <a href="{% url 'logout' %}" class="sidebar-link">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
 
-            <!-- LOGOUT (Yellow) -->
-            <div class="col animate-card delay-5 card-delay-5">
-                <a href="{% url 'logout' %}" class="landscape-card card-yellow">
-                    <div class="icon-bubble">
-                        <i class="fas fa-sign-out-alt text-yellow"></i>
-                    </div>
-                    <div class="text-content">
-                        <h3>Logout</h3>
-                        <p>Sign out safely.</p>
-                    </div>
-                </a>
+        <div class="sidebar-user">
+            <div class="user-avatar">
+                {{ user.username|first|upper }}
             </div>
-
+            <div class="user-info">
+                <h6>{{ user.username }}</h6>
+                <p>{% if user.is_staff %}Administrator{% else %}User{% endif %}</p>
+            </div>
         </div>
-
-        <!-- FOOTER -->
-        <div class="dashboard-footer">
-            &copy; 2026 KabankalanEats &mdash; Food Finder System. All rights reserved.
-        </div>
-
     </div>
-</div>
 
-{% endblock %}
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SCRIPT PARA PILITIN ANG LAHAT NA ITIM -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pilitin ang html at body
+            document.documentElement.style.setProperty('background-color', '#0f0f13', 'important');
+            document.body.style.setProperty('background-color', '#0f0f13', 'important');
+            document.body.style.setProperty('margin', '0', 'important');
+            document.body.style.setProperty('padding', '0', 'important');
+
+            // Hanapin lahat ng containers at gawing transparent
+            const containers = document.querySelectorAll('.container, .container-fluid, .row, .col, main, .content, .wrapper, .main-panel');
+            containers.forEach(function(el) {
+                el.style.setProperty('background-color', 'transparent', 'important');
+                el.style.setProperty('background', 'transparent', 'important');
+            });
+
+            // Hanapin ang lahat ng direct children ng body maliban sa sidebar, main-content, at overlay
+            const bodyChildren = document.body.children;
+            for (let i = 0; i < bodyChildren.length; i++) {
+                const el = bodyChildren[i];
+                if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE' && !el.classList.contains('sidebar') && !el.classList.contains('main-content') && !el.classList.contains('dark-overlay')) {
+                    el.style.setProperty('background-color', '#0f0f13', 'important');
+                    el.style.setProperty('background', '#0f0f13', 'important');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

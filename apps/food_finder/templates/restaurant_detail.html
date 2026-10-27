@@ -1,63 +1,206 @@
 {% extends 'theme/base_dashboard.html' %}
 
 {% block content %}
-<div style="background: #0f0f13; min-height: 100vh; padding: 2rem; color: white; font-family: sans-serif;">
-    
-    <!-- BUTTONS -->
-    <div style="margin-bottom: 2rem;">
-        <a href="{% url 'food_finder:restaurant_list' %}" style="background: rgba(255,255,255,0.1); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); display: inline-block; margin-right: 10px;">
-            ← Back to Restaurants
-        </a>
-        <a href="{% url 'food_finder:home' %}" style="background: rgba(255,255,255,0.1); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); display: inline-block;">
-            🏠 Back to Dashboard
-        </a>
-    </div>
+<style>
+    /* --- GLOBAL DARK THEME --- */
+    html, body {
+        background-color: #0f0f13 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
 
-    <!-- DEBUG BOX: Dapat may laman ito -->
-    <div style="background: #eb78bf; color: black; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold;">
-        DEBUG: ID = "{{ restaurant.id }}" | Name = "{{ restaurant.name }}" | Menu Count = "{{ restaurant.menu_items|length }}"
-    </div>
+    .detail-wrapper {
+        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
+        width: 100vw;
+        min-height: 100vh;
+        padding: 2rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+    }
 
-    <!-- DETAILS -->
-    <div style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 2rem; border: 1px solid rgba(255,255,255,0.1);">
+    .detail-container {
+        max-width: 900px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    /* --- BACK BUTTONS --- */
+    .top-buttons {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #d4d4d8;
+        padding: 0.6rem 1.2rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .back-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* --- DETAILS CARD --- */
+    .detail-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .detail-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background-color: #1e1e26;
+    }
+
+    .detail-body {
+        padding: 2.5rem;
+    }
+
+    .detail-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+    }
+
+    .detail-subtitle {
+        color: #eb78bf;
+        font-size: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #a1a1aa;
+        font-size: 0.95rem;
+        margin-bottom: 0.8rem;
+    }
+    .info-row i { color: #eb78bf; width: 20px; text-align: center; }
+
+    .detail-description {
+        color: #d4d4d8;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    /* --- MENU SECTION --- */
+    .menu-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+    }
+    .menu-title i { color: #eb78bf; }
+
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .menu-item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 1rem 1.2rem;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+    .menu-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(235, 120, 191, 0.3);
+    }
+    .menu-name { color: #e5e7eb; font-weight: 500; font-size: 0.95rem; }
+    .menu-price { color: #eb78bf; font-weight: 700; font-size: 1rem; }
+</style>
+
+<div class="detail-wrapper">
+    <div class="detail-container">
         
-        <!-- IMAGE -->
-        {% if restaurant.image %}
-            <img src="{{ restaurant.image }}" alt="{{ restaurant.name }}" style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px; margin-bottom: 2rem;">
-        {% else %}
-            <div style="width: 100%; height: 200px; background: #1e1e26; display: flex; align-items: center; justify-content: center; color: #52525b; border-radius: 12px; margin-bottom: 2rem;">
-                No Image Available
-            </div>
-        {% endif %}
-
-        <!-- TITLE -->
-        <h1 style="color: #eb78bf; font-size: 2.5rem; margin-bottom: 0.5rem;">{{ restaurant.name|default:"WALANG PANGALAN" }}</h1>
-        <h2 style="color: #a1a1aa; font-size: 1rem; text-transform: uppercase; margin-bottom: 1.5rem;">{{ restaurant.cuisine_type|default:"WALANG CUISINE" }}</h2>
-
-        <!-- INFO -->
-        <p style="color: #d4d4d8; font-size: 1rem; margin-bottom: 10px;">
-            <span style="color: #eb78bf;">📍</span> {{ restaurant.address|default:"WALANG ADDRESS" }}
-        </p>
-        <p style="color: #d4d4d8; font-size: 1rem; margin-bottom: 10px;">
-            <span style="color: #eb78bf;">🕐</span> {{ restaurant.opening_hours|default:"WALANG ORAS" }}
-        </p>
-
-        <!-- DESCRIPTION -->
-        <p style="color: #d4d4d8; font-size: 1rem; line-height: 1.6; margin-top: 1.5rem; margin-bottom: 2rem;">
-            {{ restaurant.description|default:"WALANG DESCRIPTION" }}
-        </p>
-
-        <!-- MENU -->
-        <h3 style="color: #fff; font-size: 1.5rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">📖 Menu</h3>
-        
-        {% for item in restaurant.menu_items %}
-        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-            <span style="color: #e5e7eb;">{{ item.name }}</span>
-            <span style="color: #eb78bf; font-weight: bold;">{{ item.price }}</span>
+        <!-- BACK BUTTONS -->
+        <div class="top-buttons">
+            <a href="{% url 'food_finder:restaurant_list' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Restaurants
+            </a>
+            <a href="{% url 'food_finder:home' %}" class="back-btn">
+                <i class="fas fa-home"></i> Back to Dashboard
+            </a>
         </div>
-        {% empty %}
-        <p style="color: #a1a1aa;">WALANG MENU</p>
-        {% endfor %}
+
+        <!-- DETAILS CARD -->
+        <div class="detail-card">
+            
+            <!-- IMAGE -->
+            <img src="{{ restaurant.image }}" alt="{{ restaurant.name }}" class="detail-image">
+
+            <div class="detail-body">
+                <!-- TITLE -->
+                <h1 class="detail-title">{{ restaurant.name }}</h1>
+                <div class="detail-subtitle">{{ restaurant.cuisine_type }}</div>
+
+                <!-- INFO -->
+                <div class="info-row">
+                    <i class="fas fa-map-marker-alt"></i> {{ restaurant.address }}
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-clock"></i> {{ restaurant.opening_hours }}
+                </div>
+
+                <!-- DESCRIPTION -->
+                <p class="detail-description">{{ restaurant.description }}</p>
+
+                <!-- MENU LIST -->
+                <h3 class="menu-title"><i class="fas fa-book-open"></i> Menu</h3>
+                <div class="menu-grid">
+                    {% for item in restaurant.menu_items %}
+                    <div class="menu-item">
+                        <span class="menu-name">{{ item.name }}</span>
+                        <span class="menu-price">{{ item.price }}</span>
+                    </div>
+                    {% empty %}
+                    <p style="color: #a1a1aa;">No menu available.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>

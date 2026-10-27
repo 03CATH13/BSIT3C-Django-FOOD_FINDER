@@ -1,0 +1,256 @@
+{% extends 'theme/base_dashboard.html' %}
+
+{% block content %}
+<style>
+    /* --- SOBRANG FORCE DARK MODE --- */
+    html, body {
+        background-color: #0f0f13 !important;
+        background: #0f0f13 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    /* Pilitin ang lahat ng pwedeng maging container */
+    body *, div, main, section, article, .container, .container-fluid {
+        background-color: transparent !important;
+    }
+
+    /* Ang about-wrapper ang magiging itim */
+    .about-wrapper {
+        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%) !important;
+        width: 100vw !important;
+        min-height: 100vh !important;
+        padding: 2rem !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* --- TOP NAVIGATION --- */
+    .top-nav {
+        width: 100%;
+        margin: 0 0 2rem 0;
+        display: flex;
+        justify-content: flex-start; 
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #d4d4d8;
+        padding: 0.6rem 1.2rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .back-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateX(-3px);
+    }
+
+    /* --- HEADER --- */
+    .about-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    .about-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+    }
+    .about-header h1 i {
+        color: #eb78bf;
+        text-shadow: 0 0 15px rgba(235, 120, 191, 0.5);
+        font-size: 2rem;
+    }
+    .about-header p {
+        color: #a1a1aa;
+        font-size: 1rem;
+    }
+
+    /* --- CONTENT CARDS --- */
+    .about-content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .about-card {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+    }
+
+    .about-card:hover {
+        border-color: rgba(235, 120, 191, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transform: translateY(-3px);
+    }
+
+    .about-card h2 {
+        color: #ffffff;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .about-card h2 i {
+        color: #eb78bf;
+        font-size: 1.3rem;
+    }
+
+    .about-card p {
+        color: #a1a1aa;
+        line-height: 1.7;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+    }
+    .about-card p:last-child {
+        margin-bottom: 0;
+    }
+
+    /* --- FEATURES LIST --- */
+    .features-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .features-list li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #d4d4d8;
+        font-size: 0.95rem;
+    }
+
+    .features-list li i {
+        color: #10b981;
+        font-size: 1rem;
+    }
+
+    /* --- FOOTER --- */
+    .dashboard-footer {
+        margin-top: 4rem;
+        text-align: center;
+        color: #4b5563;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+</style>
+
+<div class="about-wrapper" style="background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%) !important; width: 100vw !important; min-height: 100vh !important; margin: 0 !important; padding: 2rem !important; position: relative !important; left: 0 !important; top: 0 !important;">
+    
+    <!-- BACK BUTTON -->
+    <div class="top-nav">
+        <a href="{% url 'food_finder:home' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <!-- HEADER -->
+    <div class="about-header">
+        <h1><i class="fas fa-info-circle"></i> About Food Finder</h1>
+        <p>Your ultimate guide to the best eats in Kabankalan City.</p>
+    </div>
+
+    <!-- CONTENT CARDS -->
+    <div class="about-content">
+        
+        <!-- CARD 1 -->
+        <div class="about-card" style="background: rgba(255, 255, 255, 0.03) !important;">
+            <h2><i class="fas fa-utensils"></i> What is KabankalanEats?</h2>
+            <p>
+                <strong>KabankalanEats (Food Finder System)</strong> is a web-based application designed to help people—including tourists and locals—find the most delicious food spots in Kabankalan City.
+            </p>
+            <p>
+                Our goal is to make food discovery easy and convenient by providing a centralized platform where users can browse restaurants, view menus, check locations, and access contact details.
+            </p>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="about-card" style="background: rgba(255, 255, 255, 0.03) !important;">
+            <h2><i class="fas fa-star"></i> Key Features</h2>
+            <ul class="features-list">
+                <li><i class="fas fa-check-circle"></i> Search for restaurants by name, cuisine, or dish.</li>
+                <li><i class="fas fa-check-circle"></i> View full menus and prices for each restaurant.</li>
+                <li><i class="fas fa-check-circle"></i> Save your favorite restaurants to your "Favorites" list.</li>
+                <li><i class="fas fa-check-circle"></i> Locate restaurants using Google Maps integration.</li>
+                <li><i class="fas fa-check-circle"></i> Register and log in to access personalized features.</li>
+            </ul>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="about-card" style="background: rgba(255, 255, 255, 0.03) !important;">
+            <h2><i class="fas fa-code"></i> About the Developer</h2>
+            <p>
+                This system was developed as a project for <strong>BSIT 3C</strong> at <strong>Central Philippines State University (CPSU)</strong>. It is built using the <strong>Django Framework</strong> (Python), <strong>Bootstrap</strong>, and <strong>Custom CSS</strong> for a modern, dark-mode design.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="dashboard-footer">
+        &copy; 2026 KabankalanEats &mdash; Food Finder System. All rights reserved.
+    </div>
+
+</div>
+
+<!-- JAVASCRIPT PARA PILITIN ANG LAHAT NA ITIM -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Pilitin ang html at body
+        document.documentElement.style.setProperty('background-color', '#0f0f13', 'important');
+        document.body.style.setProperty('background-color', '#0f0f13', 'important');
+        document.body.style.setProperty('margin', '0', 'important');
+        document.body.style.setProperty('padding', '0', 'important');
+
+        // Pilitin ang lahat ng divs, sections, at containers
+        const allElements = document.querySelectorAll('div, main, section, article, .container, .container-fluid, .wrapper, .main-panel, .content, .page-inner');
+        allElements.forEach(function(el) {
+            // Huwag galawin ang about-card at about-wrapper
+            if (!el.classList.contains('about-card') && !el.classList.contains('about-wrapper') && !el.classList.contains('about-content') && !el.classList.contains('icon-bubble') && !el.classList.contains('dark-overlay')) {
+                el.style.setProperty('background-color', 'transparent', 'important');
+                el.style.setProperty('background', 'transparent', 'important');
+                el.style.setProperty('margin-left', '0', 'important');
+                el.style.setProperty('margin-right', '0', 'important');
+                el.style.setProperty('padding-left', '0', 'important');
+                el.style.setProperty('padding-right', '0', 'important');
+                el.style.setProperty('max-width', '100%', 'important');
+                el.style.setProperty('width', '100%', 'important');
+            }
+        });
+    });
+</script>
+{% endblock %}

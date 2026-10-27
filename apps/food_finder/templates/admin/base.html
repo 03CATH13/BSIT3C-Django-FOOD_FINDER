@@ -1,0 +1,238 @@
+{% load i18n static %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
+<head>
+<title>{% block title %}{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}">
+{% if not is_popup and is_nav_sidebar_enabled %}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/nav_sidebar.css" %}">
+  <script src="{% static 'admin/js/nav_sidebar.js' %}" defer></script>
+{% endif %}
+{% block extrastyle %}{% endblock %}
+{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}
+{% block extrahead %}{% endblock %}
+{% block responsive %}
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/responsive.css" %}">
+    {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% static "admin/css/responsive_rtl.css" %}">{% endif %}
+{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
+
+<!-- ============================================== -->
+<!-- CUSTOM DARK MODE CSS (PINIPILIT ANG DESIGN) -->
+<!-- ============================================== -->
+<style>
+    /* --- FORCE DARK MODE --- */
+    html, body, #container, #main, .content, .module, .results, .changelist-form, .submit-row {
+        background-color: #0f0f13 !important;
+        color: #e5e7eb !important;
+    }
+    
+    #header {
+        background-color: #16161a !important;
+        color: #eb78bf !important;
+        border-bottom: 2px solid #eb78bf !important;
+    }
+    #header a:link, #header a:visited { color: #ffffff !important; }
+    #branding h1 { color: #eb78bf !important; font-weight: 800; }
+    
+    div.breadcrumbs {
+        background-color: #1e1e26 !important;
+        color: #a1a1aa !important;
+        border-bottom: 1px solid #333 !important;
+    }
+    div.breadcrumbs a { color: #eb78bf !important; }
+    
+    .module {
+        background-color: #1e1e26 !important;
+        border: 1px solid #333 !important;
+        border-radius: 10px !important;
+        overflow: hidden;
+    }
+    .module h2, .module caption {
+        background-color: #eb78bf !important;
+        color: #0f0f13 !important;
+        font-weight: 700 !important;
+        padding: 10px !important;
+    }
+    
+    table {
+        background-color: #16161a !important;
+        color: #e5e7eb !important;
+    }
+    th {
+        background-color: #1e1e26 !important;
+        color: #eb78bf !important;
+    }
+    td, th { border-bottom: 1px solid #333 !important; }
+    tr.row1 { background-color: #16161a !important; }
+    tr.row2 { background-color: #1e1e26 !important; }
+    
+    a:link, a:visited { color: #eb78bf !important; }
+    a:hover { color: #ffffff !important; }
+    
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background-color: #eb78bf !important;
+        color: #0f0f13 !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        border: none !important;
+        padding: 10px 15px !important;
+    }
+    .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, a.button:hover {
+        background-color: #f08cc9 !important;
+    }
+    
+    input, textarea, select {
+        background-color: #1e1e26 !important;
+        color: #ffffff !important;
+        border: 1px solid #333 !important;
+        border-radius: 6px !important;
+        padding: 8px !important;
+    }
+    input:focus, textarea:focus, select:focus {
+        border-color: #eb78bf !important;
+        outline: none !important;
+        box-shadow: 0 0 10px rgba(235, 120, 191, 0.3) !important;
+    }
+    
+    #recent-actions-module { background-color: #1e1e26 !important; }
+    #recent-actions-module h2 { background-color: #eb78bf !important; color: #0f0f13 !important; }
+    #recent-actions-module ul li { border-bottom: 1px solid #333 !important; }
+    #recent-actions-module ul li a { color: #eb78bf !important; }
+    
+    #user-tools { color: #a1a1aa !important; }
+    #user-tools a { color: #eb78bf !important; }
+    
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0f0f13; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #eb78bf; }
+</style>
+
+<!-- ============================================== -->
+<!-- JAVASCRIPT PARA SIGURADONG MAKAPASOK ANG CSS -->
+<!-- ============================================== -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Pilitin ang body at html
+        document.documentElement.style.setProperty('background-color', '#0f0f13', 'important');
+        document.body.style.setProperty('background-color', '#0f0f13', 'important');
+
+        // Pilitin lahat ng containers na maging itim
+        const allElements = document.querySelectorAll('div, section, main, header, footer, table, tr, td, th, form, input, select, textarea, button, a, h1, h2, h3, p, span');
+        allElements.forEach(function(el) {
+            if (el.tagName === 'A') {
+                el.style.setProperty('color', '#eb78bf', 'important');
+            } else if (el.id === 'header') {
+                el.style.setProperty('background-color', '#16161a', 'important');
+            } else if (el.classList.contains('module')) {
+                el.style.setProperty('background-color', '#1e1e26', 'important');
+            } else if (el.tagName === 'TABLE') {
+                el.style.setProperty('background-color', '#16161a', 'important');
+            } else if (el.tagName === 'TH') {
+                el.style.setProperty('background-color', '#1e1e26', 'important');
+                el.style.setProperty('color', '#eb78bf', 'important');
+            } else {
+                el.style.setProperty('background-color', 'transparent', 'important');
+            }
+        });
+    });
+</script>
+
+</head>
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}{% if not is_popup and is_nav_sidebar_enabled %} nav-sidebar{% endif %}"
+  data-admin-utc-offset="{% now "Z" %}">
+<a href="#content-start" class="skip-to-content-link">{% translate 'Skip to main content' %}</a>
+<!-- Container -->
+<div id="container">
+    {% if not is_popup %}
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+        {% block branding %}{% endblock %}
+        </div>
+        {% block usertools %}
+        {% if has_permission %}
+        <div id="user-tools">
+            {% block welcome-msg %}
+                {% translate 'Welcome,' %}
+                <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+            {% endblock %}
+            {% block userlinks %}
+                {% if site_url %}
+                    <a href="{{ site_url }}">{% translate 'View site' %}</a> /
+                {% endif %}
+                {% if user.is_active and user.is_staff %}
+                    {% url 'django-admindocs-docroot' as docsroot %}
+                    {% if docsroot %}
+                        <a href="{{ docsroot }}">{% translate 'Documentation' %}</a> /
+                    {% endif %}
+                {% endif %}
+                {% if user.has_usable_password %}
+                <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a> /
+                {% endif %}
+                <a href="{% url 'admin:logout' %}">{% translate 'Log out' %}</a>
+            {% endblock %}
+        </div>
+        {% endif %}
+        {% endblock %}
+        {% block nav-global %}{% endblock %}
+    </div>
+    <!-- END Header -->
+    {% block breadcrumbs %}
+    <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    {% if title %} &rsaquo; {{ title }}{% endif %}
+    </div>
+    {% endblock %}
+    {% endif %}
+
+    <div class="main" id="main">
+      {% if not is_popup and is_nav_sidebar_enabled %}
+        {% block nav-sidebar %}
+          {% include "admin/nav_sidebar.html" %}
+        {% endblock %}
+      {% endif %}
+      <div class="content">
+        {% block messages %}
+          {% if messages %}
+            <ul class="messagelist">{% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+            {% endfor %}</ul>
+          {% endif %}
+        {% endblock messages %}
+        <!-- Content -->
+        <div id="content" class="{% block coltype %}colM{% endblock %}">
+          {% block pretitle %}{% endblock %}
+          {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
+          {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
+          {% block content %}
+            {% block object-tools %}{% endblock %}
+            {{ content }}
+          {% endblock %}
+          {% block sidebar %}{% endblock %}
+          <br class="clear">
+        </div>
+        <!-- END Content -->
+        {% block footer %}<div id="footer"></div>{% endblock %}
+      </div>
+    </div>
+</div>
+<!-- END Container -->
+
+<script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+<script src="{% static 'admin/js/jquery.init.js' %}"></script>
+<script src="{% static 'admin/js/core.js' %}"></script>
+<script src="{% static 'admin/js/admin/RelatedObjectLookups.js' %}"></script>
+<script src="{% static 'admin/js/actions.js' %}"></script>
+<script src="{% static 'admin/js/urlify.js' %}"></script>
+<script src="{% static 'admin/js/prepopulate.js' %}"></script>
+<script src="{% static 'admin/js/vendor/xregexp/xregexp.js' %}"></script>
+{% if not is_popup and is_nav_sidebar_enabled %}
+<script src="{% static 'admin/js/nav_sidebar.js' %}"></script>
+{% endif %}
+<script src="{% static 'admin/js/cancel.js' %}"></script>
+</body>
+</html>

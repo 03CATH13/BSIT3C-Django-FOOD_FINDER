@@ -12,6 +12,7 @@ urlpatterns = [
     path('map/', views.restaurant_map, name='restaurant_map'),
     path('my-favorites/', views.my_favorites, name='my_favorites'),
     path('register/', views.register_view, name='register'),
+    path('about/', views.about_view, name='about'),
 
     # --- DYNAMIC PATHS (DAPAT NASA BABA) ---
     path('<int:pk>/', views.restaurant_detail, name='restaurant_detail'),

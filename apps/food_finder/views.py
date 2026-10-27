@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import urllib.parse
 from .forms import RestaurantForm, RegisterForm
 from .models import Favorite, Restaurant
+from django.contrib.auth.models import User
 
 
 # ==========================================
@@ -433,8 +434,10 @@ RESTAURANT_LIST_DATA = [
 def home(request):
     total_favorites = Favorite.objects.filter(user=request.user).count()
     
+    user_name = request.user.first_name if request.user.first_name else request.user.username
+    
     context = {
-        'Girlies': request.user.first_name if request.user.first_name else request.user.username,
+        'Girlies': user_name,
         'greeting': 'Welcome',
         'total_restaurants': len(RESTAURANT_LIST_DATA),
         'total_favorites': total_favorites,
@@ -521,48 +524,22 @@ def restaurant_list(request):
 
 
 # ==========================================
-# RESTAURANT DETAILS (PINAKA-SIMPLENG VERSION)
+# RESTAURANT DETAILS
 # ==========================================
 
 @login_required
 def restaurant_detail(request, pk):
-    # Siguraduhing integer
     pk = int(pk)
-
-    # Hanapin ang restaurant
     restaurant = None
     for item in RESTAURANT_LIST_DATA:
         if item['id'] == pk:
             restaurant = item
             break
 
-    # Kung wala, balik sa listahan
     if restaurant is None:
         return redirect('food_finder:restaurant_list')
 
-    # Gumawa ng map embed
-    search_location = f"{restaurant['name']}, {restaurant['address']}"
-    encoded_location = urllib.parse.quote(search_location)
-    
-    restaurant['map_embed'] = (
-        f"https://maps.google.com/maps?q={encoded_location}"
-        "&t=&z=16&ie=UTF8&iwloc=&output=embed"
-    )
-    
-    restaurant['map_link'] = (
-        "https://www.google.com/maps/search/?api=1"
-        f"&query={encoded_location}"
-    )
-    
-    # I-set ang menu_items
     restaurant['menu_items'] = restaurant.get('menu', [])
-
-    # I-print para makita sa terminal
-    print("=" * 50)
-    print(f"DEBUG: ID = {pk}")
-    print(f"DEBUG: Name = {restaurant['name']}")
-    print(f"DEBUG: Menu count = {len(restaurant['menu_items'])}")
-    print("=" * 50)
 
     return render(request, 'restaurant_detail.html', {
         'restaurant': restaurant,
@@ -637,6 +614,14 @@ def my_favorites(request):
 
 
 @login_required
+def info_management(request):
+    all_users = User.objects.all().order_by('-date_joined')
+    return render(request, 'info.html', {
+        'users': all_users,
+    })
+
+
+@login_required
 def add_restaurant(request):
     return redirect('food_finder:restaurant_list')
 
@@ -658,3 +643,12 @@ def register_view(request):
         form = RegisterForm()
         
     return render(request, 'register.html', {'form': form})
+
+
+# ==========================================
+# ABOUT PAGE
+# ==========================================
+
+@login_required
+def about_view(request):
+    return render(request, 'about.html')

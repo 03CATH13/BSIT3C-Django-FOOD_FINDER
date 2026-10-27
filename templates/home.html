@@ -48,31 +48,50 @@
     .welcome-header { text-align: center; margin: 0; }
     
     .welcome-header h1 {
-        font-size: 3rem;
-        font-weight: 800;
+        font-size: 4rem;
+        font-weight: 900;
         color: #ffffff;
-        margin-bottom: 0.3rem;
-        letter-spacing: -1px;
+        margin-bottom: 0.5rem;
+        letter-spacing: -2px;
+        line-height: 1.1;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 15px;
+        animation: floatGlow 3s ease-in-out infinite;
     }
     
     .welcome-header h1 span.gradient-text { 
         background: linear-gradient(135deg, #eb78bf 0%, #a78bfa 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 30px rgba(235, 120, 191, 0.2); 
+        text-shadow: 0 0 40px rgba(235, 120, 191, 0.6), 0 0 80px rgba(167, 139, 250, 0.4);
+        display: inline-block;
+        animation: pulseGlow 2s ease-in-out infinite;
     }
     
-    .welcome-header p { color: #a1a1aa; font-size: 1rem; margin: 0; }
+    @keyframes floatGlow {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes pulseGlow {
+        0%, 100% { filter: drop-shadow(0 0 20px rgba(235, 120, 191, 0.5)); }
+        50% { filter: drop-shadow(0 0 40px rgba(235, 120, 191, 0.9)); }
+    }
+    
+    .welcome-header p { 
+        color: #a1a1aa; 
+        font-size: 1.2rem; 
+        margin: 0; 
+    }
 
+    /* WAVE ANIMATION */
     .wave {
         display: inline-block;
         animation: wave-animation 2.5s infinite;
         transform-origin: 70% 70%;
-        font-size: 2.5rem;
+        font-size: 3.5rem;
     }
 
     @keyframes wave-animation {
@@ -169,6 +188,53 @@
     .icon-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; }
     .icon-yellow { background: linear-gradient(135deg, #f59e0b, #b45309); color: white; }
 
+    /* --- ADMIN & LOGOUT SA ILALIM --- */
+    .bottom-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 3rem;
+        width: 100%;
+    }
+
+    .bottom-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #d4d4d8;
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .bottom-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .bottom-btn.admin {
+        color: #a78bfa;
+        border-color: rgba(167, 139, 250, 0.3);
+    }
+    .bottom-btn.admin:hover {
+        background: rgba(167, 139, 250, 0.1);
+    }
+
+    .bottom-btn.logout {
+        color: #f59e0b;
+        border-color: rgba(245, 158, 11, 0.3);
+    }
+    .bottom-btn.logout:hover {
+        background: rgba(245, 158, 11, 0.1);
+    }
+
     /* --- FOOTER --- */
     .dashboard-footer {
         margin-top: 3rem;
@@ -192,10 +258,10 @@
             </div>
         </div>
 
-        <!-- CARDS -->
-        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 justify-content-center w-100 px-2">
+        <!-- MAIN CARDS (4 LANG SA GITNA) -->
+        <div class="row row-cols-2 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center w-100 px-4">
             
-            <!-- RESTAURANTS (DAPAT NAKA-LINK SA restaurant_list) -->
+            <!-- RESTAURANTS -->
             <div class="col">
                 <a href="{% url 'food_finder:restaurant_list' %}" class="landscape-card">
                     <div class="icon-bubble icon-blue"><i class="fas fa-store"></i></div>
@@ -221,7 +287,7 @@
 
             <!-- ABOUT -->
             <div class="col">
-                <a href="/info/" class="landscape-card">
+                <a href="{% url 'food_finder:about' %}" class="landscape-card">
                     <div class="icon-bubble icon-cyan"><i class="fas fa-info-circle"></i></div>
                     <div class="text-content">
                         <h3>About</h3>
@@ -230,32 +296,25 @@
                 </a>
             </div>
 
-            <!-- ADMIN -->
-            {% if user.is_staff %}
-            <div class="col">
-                <a href="{% url 'admin:index' %}" class="landscape-card">
-                    <div class="icon-bubble icon-purple"><i class="fas fa-users-cog"></i></div>
-                    <div class="text-content">
-                        <h3>Admin</h3>
-                        <p>Manage system</p>
-                    </div>
-                </a>
-            </div>
-            {% endif %}
-
-            <!-- LOGOUT -->
-            <div class="col">
-                <a href="{% url 'logout' %}" class="landscape-card">
-                    <div class="icon-bubble icon-yellow"><i class="fas fa-sign-out-alt"></i></div>
-                    <div class="text-content">
-                        <h3>Logout</h3>
-                        <p>Sign out safely</p>
-                    </div>
-                </a>
-            </div>
-
+            <!-- PWEDE MO PANG DAGDAGAN NG ISA KUNG GUSTO, PERO 3 LANG MUNA -->
+            <!-- KUNG MAY ADMIN, NANDITO NA SA ILALIM -->
+            
         </div>
 
+        <!-- ADMIN & LOGOUT SA ILALIM -->
+        <div class="bottom-actions">
+            {% if user.is_staff %}
+            <a href="{% url 'admin:index' %}" class="bottom-btn admin">
+                <i class="fas fa-users-cog"></i> Admin Panel
+            </a>
+            {% endif %}
+            
+            <a href="{% url 'logout' %}" class="bottom-btn logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+
+        <!-- FOOTER -->
         <div class="dashboard-footer">
             &copy; 2026 KabankalanEats &mdash; Food Finder System. All rights reserved.
         </div>

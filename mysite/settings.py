@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-zsnno#^l!whuzs%55j6*366px#r09+borh$1^2mj*_ovz47!o_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -113,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Manila'
 
 USE_I18N = True
 
@@ -129,8 +130,44 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-LOGIN_REDIRECT_URL = '/home/'
-LOGOUT_REDIRECT_URL = '/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+# ============================================
+# MEDIA FILES (Images, Uploads)
+# ============================================
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# ============================================
+# LOGIN / LOGOUT
+# ============================================
+
+LOGIN_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL = '/'
+
+
+# ============================================
+# DEFAULT AUTO FIELD
+# ============================================
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ============================================
+# DJANGO ADMIN - DARK MODE
+# ============================================
+
+# Ito ang mag-e-enable ng dark mode sa Django Admin (Django 4.2+)
+DJANGO_ADMIN_DARK_MODE = True
+
+
+# ============================================
+# ADMIN SITE CUSTOMIZATION
+# ============================================
+
+ADMIN_SITE_HEADER = "KabankalanEats Admin"
+ADMIN_SITE_TITLE = "KabankalanEats Admin Portal"
+ADMIN_INDEX_TITLE = "Welcome to the Food Finder Management System"
