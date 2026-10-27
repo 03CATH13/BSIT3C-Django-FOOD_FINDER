@@ -1,552 +1,298 @@
-{% extends 'theme/base.html' %}
-{% load static %}
+{% extends 'theme/base_dashboard.html' %}
 
 {% block content %}
-
 <style>
-    .kf-body {
-        background: #1a1b26;
+    /* --- GLOBAL DARK THEME --- */
+    html, body {
+        background-color: #0f0f13 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .detail-wrapper {
+        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
+        width: 100vw;
         min-height: 100vh;
-        margin: -1.5rem;
-        color: #fff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 2rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
     }
 
-    .kf-navbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.2rem 3rem;
-        border-bottom: 1px solid #2e3144;
-        flex-wrap: wrap;
-        gap: 15px;
-    }
-
-    .kf-brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 1.4rem;
-        font-weight: 800;
-    }
-
-    .kf-brand-icon {
-        background: linear-gradient(135deg, #ff8c00, #ff5e00);
-        width: 45px;
-        height: 45px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-    }
-
-    .kf-brand-sub {
-        font-size: .75rem;
-        color: #a0a0b0;
-        font-weight: normal;
-    }
-
-    .kf-location-badge {
-        border: 1px solid #ff8c00;
-        color: #ff9d26;
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: .85rem;
-    }
-
-    .kf-hero {
-        text-align: center;
-        padding: 3rem 1rem 2.5rem;
-        background: radial-gradient(circle at top, #292b3d, #1a1b26 80%);
-    }
-
-    .kf-hero-badge {
-        display: inline-block;
-        padding: 7px 15px;
-        margin-bottom: 18px;
-        border-radius: 20px;
-        color: #ff8c00;
-        background: #302719;
-        font-size: .75rem;
-        font-weight: 700;
-    }
-
-    .kf-hero h1 {
-        font-size: clamp(1.8rem, 4vw, 2.7rem);
-        line-height: 1.2;
-        font-weight: 800;
-        margin-bottom: 15px;
-        color: #fff;
-    }
-
-    .kf-hero p {
-        color: #a0a0b0;
-        line-height: 1.7;
-        max-width: 650px;
+    .detail-container {
+        max-width: 900px;
         margin: 0 auto;
     }
 
-    .kf-search-container {
-        max-width: 680px;
-        margin: 25px auto 0;
-        padding: 0 10px;
-    }
-
-    .kf-search-form {
+    /* --- BUTTONS CONTAINER --- */
+    .buttons-container {
         display: flex;
-        gap: 10px;
+        gap: 12px;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
     }
 
-    .kf-search-input {
-        flex: 1;
-        min-width: 0;
-        padding: 15px 18px;
+    /* --- BACK BUTTONS STYLE --- */
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #d4d4d8;
+        padding: 0.6rem 1.2rem;
         border-radius: 12px;
-        background: #232533;
-        border: 1px solid #3a3c50;
-        color: white;
-        outline: none;
-    }
-
-    .kf-search-input::placeholder {
-        color: #888a9d;
-    }
-
-    .kf-search-input:focus {
-        border-color: #ff8c00;
-    }
-
-    .kf-search-btn {
-        border: 0;
-        background: linear-gradient(135deg, #ff8c00, #ff5e00);
-        color: #fff;
-        border-radius: 12px;
-        padding: 0 20px;
-        font-weight: 700;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
         cursor: pointer;
     }
 
-    .kf-search-btn:hover {
-        filter: brightness(1.1);
+    .back-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
     }
 
-    .kf-grid {
-        padding: 2rem 3rem 4rem;
+    /* Animation kapag pinindot */
+    .back-btn.clicked {
+        transform: scale(0.92) translateX(-8px);
+        background: rgba(235, 120, 191, 0.3);
+        color: #eb78bf;
+        border-color: #eb78bf;
+        box-shadow: 0 0 20px rgba(235, 120, 191, 0.4);
     }
 
-    .kf-section-heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-bottom: 22px;
+    .back-btn i {
+        transition: transform 0.3s ease;
+    }
+    
+    .back-btn:hover i {
+        transform: translateX(-3px); 
     }
 
-    .kf-section-heading h2 {
-        color: white;
-        font-size: 1.5rem;
+    /* --- RESTAURANT DETAILS CARD --- */
+    .detail-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .detail-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .detail-body {
+        padding: 2.5rem;
+    }
+
+    .detail-title {
+        font-size: 2.5rem;
         font-weight: 800;
-        margin: 0;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
     }
 
-    .kf-results-count {
-        color: #a0a0b0;
-        font-size: .85rem;
+    .detail-subtitle {
+        color: #eb78bf;
+        font-size: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 1.5rem;
     }
 
-    .kf-card {
-        height: 100%;
-        background: #232533;
-        border: 1px solid #34364a;
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #a1a1aa;
+        font-size: 0.95rem;
+        margin-bottom: 0.8rem;
+    }
+    .info-row i { color: #eb78bf; width: 20px; text-align: center; }
+
+    .detail-description {
+        color: #d4d4d8;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    /* --- MAP --- */
+    .map-container {
         border-radius: 16px;
         overflow: hidden;
-        transition: transform .2s, border-color .2s;
-        display: flex;
-        flex-direction: column;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        margin-bottom: 2rem;
     }
-
-    .kf-card:hover {
-        transform: translateY(-4px);
-        border-color: #ff8c00;
-    }
-
-    .kf-card-link {
-        display: block;
-        text-decoration: none;
-    }
-
-    .kf-card-img {
+    .map-container iframe {
         width: 100%;
-        height: 190px;
-        object-fit: cover;
-        display: block;
-        background: #2e3144;
+        height: 250px;
+        border: none;
     }
 
-    .kf-card-body {
-        padding: 18px;
-    }
-
-    .kf-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 14px;
-    }
-
-    .kf-badge-cuisine {
-        color: #ff9d26;
-        background: #35291d;
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: .7rem;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-
-    .kf-time {
-        color: #bbb;
-        background: #1e202e;
-        padding: 5px 9px;
-        border-radius: 6px;
-        font-size: .72rem;
-    }
-
-    .kf-card-title {
-        color: white;
-        font-size: 1.25rem;
+    /* --- MENU SECTION --- */
+    .menu-title {
+        font-size: 1.5rem;
         font-weight: 700;
-        margin-bottom: 10px;
-    }
-
-    .kf-location {
-        color: #a0a0b0;
-        font-size: .83rem;
-        line-height: 1.5;
-        margin-bottom: 10px;
-    }
-
-    .kf-location i {
-        color: #ff8c00;
-        margin-right: 4px;
-    }
-
-    .kf-description {
-        color: #a0a0b0;
-        font-size: .84rem;
-        line-height: 1.6;
-    }
-
-    .kf-card-footer {
-        padding: 14px 18px;
-        background: #1e202e;
-        border-top: 1px solid #34364a;
+        color: #fff;
+        margin-bottom: 1.5rem;
         display: flex;
-        justify-content: space-between;
         align-items: center;
         gap: 10px;
-        flex-wrap: wrap;
-        margin-top: auto;
+    }
+    .menu-title i { color: #eb78bf; }
+
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
     }
 
-    .kf-btn-map {
-        color: #ff9d26;
-        text-decoration: none;
-        font-size: .8rem;
-        font-weight: 600;
-        background: #35291d;
-        border: 1px solid #ff8c00;
-        padding: 8px 11px;
-        border-radius: 8px;
-        transition: .2s;
+    .menu-item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 1rem 1.2rem;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
     }
-
-    .kf-btn-map:hover {
-        color: white;
-        background: #ff8c00;
+    .menu-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(235, 120, 191, 0.3);
     }
-
-    .kf-btn-details {
-        color: #ff8c00;
-        background: #303246;
-        padding: 9px 12px;
-        border-radius: 8px;
-        text-decoration: none;
-    }
-
-    .kf-btn-details:hover {
-        color: white;
-        background: #ff8c00;
-    }
-
-    .kf-empty {
-        color: #a0a0b0;
-        text-align: center;
-        padding: 3rem 1rem;
-        background: #232533;
-        border: 1px dashed #45475a;
-        border-radius: 16px;
-    }
-
-    .kf-empty i {
-        font-size: 2.5rem;
-        color: #ff8c00;
-        margin-bottom: 15px;
-    }
-
-    .kf-empty h3 {
-        color: white;
-    }
-
-    .kf-footer-note {
-        text-align: center;
-        color: #77798c;
-        padding: 0 1rem 25px;
-        font-size: .8rem;
-    }
-
-    @media (max-width: 992px) {
-        .kf-grid {
-            padding: 1.5rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .kf-navbar {
-            padding: 1rem;
-        }
-
-        .kf-hero {
-            padding: 2rem .75rem;
-        }
-
-        .kf-grid {
-            padding: 1rem;
-        }
-
-        .kf-card-img {
-            height: 180px;
-        }
-
-        .kf-search-form {
-            flex-direction: column;
-        }
-
-        .kf-search-btn {
-            padding: 13px;
-        }
-    }
+    .menu-name { color: #e5e7eb; font-weight: 500; font-size: 0.95rem; }
+    .menu-price { color: #eb78bf; font-weight: 700; font-size: 1rem; }
 </style>
 
-<div class="kf-body">
+<div class="detail-wrapper">
+    <div class="detail-container">
+        
+        <!-- DALAWA NANG BUTTONS -->
+        <div class="buttons-container">
+            <!-- Back to Restaurants -->
+            <a href="{% url 'food_finder:restaurant_list' %}" 
+               id="backToRestaurantsBtn"
+               class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Restaurants
+            </a>
 
-    <!-- HEADER -->
-    <nav class="kf-navbar">
-        <div class="kf-brand">
-            <div class="kf-brand-icon">
-                <i class="fas fa-utensils"></i>
-            </div>
-
-            <div>
-                KabankalanEats
-                <div class="kf-brand-sub">Find your next food trip</div>
-            </div>
+            <!-- Back to Dashboard -->
+            <a href="{% url 'food_finder:home' %}" 
+               id="backToDashboardBtn"
+               class="back-btn">
+                <i class="fas fa-home"></i> Back to Dashboard
+            </a>
         </div>
 
-        <div class="kf-location-badge">
-            <i class="fas fa-map-marker-alt"></i>
-            Kabankalan City
-        </div>
-    </nav>
+        <!-- RESTAURANT DETAILS -->
+        <div class="detail-card">
+            <img src="{{ restaurant.image }}" alt="{{ restaurant.name }}" class="detail-image">
+            
+            <div class="detail-body">
+                <h1 class="detail-title">{{ restaurant.name }}</h1>
+                <div class="detail-subtitle">{{ restaurant.cuisine_type }}</div>
 
-    <!-- HERO AND SEARCH -->
-    <section class="kf-hero">
-        <div class="kf-hero-badge">
-            <i class="fas fa-fire"></i>
-            HOT CRAVINGS SPOT
-        </div>
+                <div class="info-row">
+                    <i class="fas fa-map-marker-alt"></i> {{ restaurant.address }}
+                </div>
+                <div class="info-row">
+                    <i class="fas fa-clock"></i> {{ restaurant.opening_hours }}
+                </div>
 
-        <h1>Find Your Favorite Restaurant<br>and Foods!</h1>
+                <p class="detail-description">{{ restaurant.description }}</p>
 
-        <p>
-            Explore restaurants and find your next
-            favorite meal in Kabankalan City.
-        </p>
-
-        <div class="kf-search-container">
-            <form method="get" class="kf-search-form">
-
-                {% if current_cuisine %}
-                    <input
-                        type="hidden"
-                        name="cuisine"
-                        value="{{ current_cuisine }}"
-                    >
+                <!-- MAP -->
+                {% if restaurant.map_embed %}
+                <div class="map-container">
+                    <iframe src="{{ restaurant.map_embed }}" allowfullscreen="" loading="lazy"></iframe>
+                </div>
                 {% endif %}
 
-                <input
-                    type="search"
-                    name="q"
-                    class="kf-search-input"
-                    placeholder="Search restaurant or cuisine..."
-                    value="{{ query|default:'' }}"
-                    aria-label="Search restaurants"
-                >
-
-                <button type="submit" class="kf-search-btn">
-                    <i class="fas fa-search"></i>
-                    Search
-                </button>
-            </form>
-        </div>
-    </section>
-
-    <!-- RESTAURANT LIST -->
-    <section class="kf-grid">
-
-        <div class="kf-section-heading">
-            <h2>
-                <i class="fas fa-store" style="color:#ff8c00;"></i>
-                Recommended Restaurants
-            </h2>
-
-            <span class="kf-results-count">
-                {{ restaurants|length }}
-                restaurant{{ restaurants|length|pluralize }} found
-            </span>
-        </div>
-
-        <div class="row g-4">
-
-            {% for r in restaurants %}
-
-                <div class="col-sm-12 col-md-6 col-xl-4">
-
-                    <article class="kf-card">
-
-                        <!-- RESTAURANT IMAGE AND INFORMATION -->
-                        <a
-                            href="{% url 'food_finder:restaurant_detail' r.id %}"
-                            class="kf-card-link"
-                        >
-
-                            {% if r.image %}
-
-                                <img
-                                    src="{{ r.image }}"
-                                    alt="{{ r.name }}"
-                                    class="kf-card-img"
-                                    loading="lazy"
-                                >
-
-                            {% else %}
-
-                                <div class="kf-card-img kf-no-image">
-                                    <i class="fas fa-utensils"></i>
-                                    <span>Restaurant image unavailable</span>
-                                </div>
-
-                            {% endif %}
-
-                            <div class="kf-card-body">
-
-                                <div class="kf-card-header">
-
-                                    <span class="kf-badge-cuisine">
-                                        {{ r.cuisine_type }}
-                                    </span>
-
-                                    {% if r.opening_hours %}
-                                        <span class="kf-time">
-                                            <i class="far fa-clock"></i>
-                                            {{ r.opening_hours }}
-                                        </span>
-                                    {% endif %}
-
-                                </div>
-
-                                <div class="kf-card-title">
-                                    {{ r.name }}
-                                </div>
-
-                                <div class="kf-location">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    {{ r.address }}
-                                </div>
-
-                                <div class="kf-description">
-                                    {{ r.description|default:"Discover the food offered by this restaurant."|truncatechars:110 }}
-                                </div>
-
-                            </div>
-                        </a>
-
-                        <!-- RESTAURANT ACTIONS -->
-                        <div class="kf-card-footer">
-
-                            <a
-                                href="https://www.google.com/maps/search/?api=1&amp;query={{ r.name|urlencode }}%2C%20{{ r.address|urlencode }}%2C%20Kabankalan%20City%2C%20Negros%20Occidental"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="kf-btn-map"
-                            >
-                                <i class="fas fa-map-marked-alt"></i>
-                                View Location
-                            </a>
-
-                            <a
-                                href="{% url 'food_finder:restaurant_detail' r.id %}"
-                                class="kf-btn-details"
-                                aria-label="View {{ r.name }} details"
-                                title="Restaurant details"
-                            >
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-
-                        </div>
-
-                    </article>
-
-                </div>
-
-            {% empty %}
-
-                <div class="col-12">
-
-                    <div class="kf-empty">
-                        <i class="fas fa-search"></i>
-
-                        <h3>No restaurants found</h3>
-
-                        <p>
-                            Try another search or choose a different food category.
-                        </p>
-
-                        <a
-                            href="{% url 'food_finder:restaurant_list' %}"
-                            class="kf-btn-map"
-                        >
-                            <i class="fas fa-undo"></i>
-                            Show All Restaurants
-                        </a>
+                <!-- MENU LIST -->
+                <h3 class="menu-title"><i class="fas fa-book-open"></i> Menu</h3>
+                <div class="menu-grid">
+                    {% for item in restaurant.menu_items %}
+                    <div class="menu-item">
+                        <span class="menu-name">{{ item.name }}</span>
+                        <span class="menu-price">{{ item.price }}</span>
                     </div>
-
+                    {% empty %}
+                    <p style="color: #a1a1aa;">No menu available.</p>
+                    {% endfor %}
                 </div>
-
-            {% endfor %}
-
+            </div>
         </div>
-    </section>
 
-    <!-- FOOTER -->
-    <div class="kf-footer-note">
-        KabankalanEats &mdash; Discover food spots in Kabankalan City.
     </div>
-
 </div>
+
+<!-- JAVASCRIPT PARA SA CLICK SOUND AT ANIMATION -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Pumili ng lahat ng buttons na may class na "back-btn"
+        const backButtons = document.querySelectorAll('.back-btn');
+
+        // Function para sa click sound
+        function playClickSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+
+                gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.1);
+            } catch(e) {}
+        }
+
+        // I-apply ang sound at animation sa LAHAT ng back buttons
+        backButtons.forEach(function(btn) {
+            btn.addEventListener('mousedown', function() {
+                playClickSound();
+                btn.classList.add('clicked');
+            });
+
+            btn.addEventListener('mouseup', function() {
+                btn.classList.remove('clicked');
+            });
+
+            btn.addEventListener('mouseleave', function() {
+                btn.classList.remove('clicked');
+            });
+
+            // Para sa mobile
+            btn.addEventListener('touchstart', function() {
+                playClickSound();
+                btn.classList.add('clicked');
+            });
+            
+            btn.addEventListener('touchend', function() {
+                btn.classList.remove('clicked');
+            });
+        });
+    });
+</script>
 
 {% endblock %}

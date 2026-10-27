@@ -1,80 +1,64 @@
-{% extends 'theme/base.html' %}
+{% extends 'theme/base_dashboard.html' %}
 
 {% block content %}
-<style>
-    .detail-body { background-color: #1a1b26; min-height: 100vh; padding: 2rem 4rem; margin: -1.5rem; font-family: 'Segoe UI', sans-serif; }
-    .detail-card { background: #232533; border: 1px solid #2e3144; border-radius: 16px; overflow: hidden; max-width: 1000px; margin: 0 auto; }
-    .hero-img { width: 100%; height: 300px; object-fit: cover; border-bottom: 1px solid #2e3144; }
-    .detail-content { padding: 2rem; }
-    .resto-name { color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; }
-    .resto-meta { display: flex; gap: 15px; color: #a0a0b0; font-size: 0.9rem; margin-bottom: 1.5rem; align-items: center; flex-wrap: wrap; }
-    .badge-orange { background: rgba(255,140,0,0.1); color: #ff8c00; border: 1px solid #ff8c00; padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }
+<div style="background: #0f0f13; min-height: 100vh; padding: 2rem; color: white; font-family: sans-serif;">
     
-    .section-title { color: white; font-weight: 700; margin-bottom: 1rem; border-bottom: 1px solid #2e3144; padding-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
-    .section-title i { color: #ff8c00; }
-    
-    .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px dashed #2e3144; }
-    .menu-item:last-child { border-bottom: none; }
-    .menu-name { color: #d1d1d6; font-weight: 600; font-size: 1rem; margin: 0; }
-    .menu-price { color: #ff8c00; font-weight: 800; font-size: 1.1rem; margin: 0; }
-
-    .map-container { margin-top: 2rem; border-radius: 12px; overflow: hidden; border: 1px solid #2e3144; }
-    .map-container iframe { width: 100%; height: 300px; border: 0; }
-    
-    .btn-back { display: inline-block; margin-bottom: 1.5rem; color: #a0a0b0; text-decoration: none; font-weight: 600; transition: 0.2s; }
-    .btn-back:hover { color: #ff8c00; transform: translateX(-5px); }
-</style>
-
-<div class="detail-body">
-    <div class="container">
-        
-        <a href="{% url 'food_finder:restaurant_list' %}" class="btn-back">
-            <i class="fas fa-arrow-left me-2"></i> Back to Restaurants
+    <!-- BUTTONS -->
+    <div style="margin-bottom: 2rem;">
+        <a href="{% url 'food_finder:restaurant_list' %}" style="background: rgba(255,255,255,0.1); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); display: inline-block; margin-right: 10px;">
+            ← Back to Restaurants
         </a>
+        <a href="{% url 'food_finder:home' %}" style="background: rgba(255,255,255,0.1); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); display: inline-block;">
+            🏠 Back to Dashboard
+        </a>
+    </div>
 
-        <div class="detail-card">
-            <img src="{{ restaurant.image }}" alt="{{ restaurant.name }}" class="hero-img">
-            
-            <div class="detail-content">
-                <h1 class="resto-name">{{ restaurant.name }}</h1>
-                <div class="resto-meta">
-                    <span class="badge-orange">{{ restaurant.cuisine_type }}</span>
-                    <span><i class="fas fa-clock"></i> {{ restaurant.opening_hours }}</span>
-                    <span><i class="fas fa-map-marker-alt text-danger"></i> {{ restaurant.address }}</span>
-                </div>
-                
-                <p style="color: #a0a0b0; font-size: 1rem; margin-bottom: 2rem;">{{ restaurant.description }}</p>
+    <!-- DEBUG BOX: Dapat may laman ito -->
+    <div style="background: #eb78bf; color: black; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold;">
+        DEBUG: ID = "{{ restaurant.id }}" | Name = "{{ restaurant.name }}" | Menu Count = "{{ restaurant.menu_items|length }}"
+    </div>
 
-                <div class="row">
-                    <!-- MENU & PRICE -->
-                    <div class="col-md-6 mb-4">
-                        <h3 class="section-title"><i class="fas fa-book-open"></i> Menu & Prices</h3>
-                        <div style="background: #1e202e; padding: 1.5rem; border-radius: 12px;">
-                            {% for item in restaurant.menu %}
-                            <div class="menu-item">
-                                <p class="menu-name">{{ item.name }}</p>
-                                <p class="menu-price">{{ item.price }}</p>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                    <!-- MAP -->
-                    <div class="col-md-6 mb-4">
-                        <h3 class="section-title"><i class="fas fa-map-marked-alt"></i> Location</h3>
-                        <div class="map-container">
-                            <iframe src="{{ restaurant.map_embed }}" allowfullscreen="" loading="lazy"></iframe>
-                        </div>
-                        <div class="mt-3 text-center">
-                            <a href="{{ restaurant.map_link }}" target="_blank" class="btn btn-warning w-100 fw-bold" style="background: #ff8c00; border: none;">
-                                <i class="fas fa-directions"></i> Get Directions
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
+    <!-- DETAILS -->
+    <div style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 2rem; border: 1px solid rgba(255,255,255,0.1);">
+        
+        <!-- IMAGE -->
+        {% if restaurant.image %}
+            <img src="{{ restaurant.image }}" alt="{{ restaurant.name }}" style="width: 100%; height: 250px; object-fit: cover; border-radius: 12px; margin-bottom: 2rem;">
+        {% else %}
+            <div style="width: 100%; height: 200px; background: #1e1e26; display: flex; align-items: center; justify-content: center; color: #52525b; border-radius: 12px; margin-bottom: 2rem;">
+                No Image Available
             </div>
+        {% endif %}
+
+        <!-- TITLE -->
+        <h1 style="color: #eb78bf; font-size: 2.5rem; margin-bottom: 0.5rem;">{{ restaurant.name|default:"WALANG PANGALAN" }}</h1>
+        <h2 style="color: #a1a1aa; font-size: 1rem; text-transform: uppercase; margin-bottom: 1.5rem;">{{ restaurant.cuisine_type|default:"WALANG CUISINE" }}</h2>
+
+        <!-- INFO -->
+        <p style="color: #d4d4d8; font-size: 1rem; margin-bottom: 10px;">
+            <span style="color: #eb78bf;">📍</span> {{ restaurant.address|default:"WALANG ADDRESS" }}
+        </p>
+        <p style="color: #d4d4d8; font-size: 1rem; margin-bottom: 10px;">
+            <span style="color: #eb78bf;">🕐</span> {{ restaurant.opening_hours|default:"WALANG ORAS" }}
+        </p>
+
+        <!-- DESCRIPTION -->
+        <p style="color: #d4d4d8; font-size: 1rem; line-height: 1.6; margin-top: 1.5rem; margin-bottom: 2rem;">
+            {{ restaurant.description|default:"WALANG DESCRIPTION" }}
+        </p>
+
+        <!-- MENU -->
+        <h3 style="color: #fff; font-size: 1.5rem; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">📖 Menu</h3>
+        
+        {% for item in restaurant.menu_items %}
+        <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <span style="color: #e5e7eb;">{{ item.name }}</span>
+            <span style="color: #eb78bf; font-weight: bold;">{{ item.price }}</span>
         </div>
+        {% empty %}
+        <p style="color: #a1a1aa;">WALANG MENU</p>
+        {% endfor %}
+
     </div>
 </div>
 {% endblock %}

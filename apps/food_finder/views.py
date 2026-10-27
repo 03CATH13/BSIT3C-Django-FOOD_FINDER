@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import urllib.parse
 from .forms import RestaurantForm, RegisterForm
-from .models import Favorite
+from .models import Favorite, Restaurant
 
 
 # ==========================================
-# RESTAURANT DATA (May Exact Coordinates)
+# RESTAURANT DATA
 # ==========================================
 
 RESTAURANT_LIST_DATA = [
@@ -426,7 +426,24 @@ RESTAURANT_LIST_DATA = [
 
 
 # ==========================================
-# RESTAURANT LIST, SEARCH, AND FILTER
+# DASHBOARD
+# ==========================================
+
+@login_required
+def home(request):
+    total_favorites = Favorite.objects.filter(user=request.user).count()
+    
+    context = {
+        'Girlies': request.user.first_name if request.user.first_name else request.user.username,
+        'greeting': 'Welcome',
+        'total_restaurants': len(RESTAURANT_LIST_DATA),
+        'total_favorites': total_favorites,
+    }
+    return render(request, 'home.html', context)
+
+
+# ==========================================
+# RESTAURANT LIST
 # ==========================================
 
 @login_required
@@ -465,17 +482,33 @@ def restaurant_list(request):
         restaurants = filtered_restaurants
 
     if cuisine_filter:
-        restaurants = [
-            restaurant for restaurant in restaurants
-            if restaurant.get('cuisine_type', '').casefold()
-            == cuisine_filter.casefold()
-        ]
+        clean_filter = cuisine_filter.lower()
+        clean_filter = clean_filter.replace('+', ' ')
+        clean_filter = clean_filter.replace('%26', '&')
+        clean_filter = clean_filter.replace('and', '&')
+        clean_filter = clean_filter.replace('%20', ' ')
+        clean_filter = clean_filter.strip()
+        
+        keywords = clean_filter.split()
 
-    # --- INAYOS: Kunin ang totoong bilang ng favorites mula sa DB ---
-    total_favorites = Favorite.objects.filter(user=request.user).count() if request.user.is_authenticated else 0
+        filtered_by_cuisine = []
+        for restaurant in restaurants:
+            cuisine_type = restaurant.get('cuisine_type', '').lower()
+            if all(keyword in cuisine_type for keyword in keywords):
+                filtered_by_cuisine.append(restaurant)
+                
+        restaurants = filtered_by_cuisine
+
+    favorite_ids = []
+    if request.user.is_authenticated:
+        user_favs = Favorite.objects.filter(user=request.user).select_related('restaurant')
+        favorite_ids = [fav.restaurant.id for fav in user_favs if fav.restaurant]
+
+    total_favorites = len(favorite_ids)
 
     for restaurant in restaurants:
         restaurant['menu_items'] = restaurant.get('menu', [])
+        restaurant['is_favorited'] = restaurant['id'] in favorite_ids
 
     return render(request, 'restaurant_list.html', {
         'restaurants': restaurants,
@@ -483,47 +516,53 @@ def restaurant_list(request):
         'query': query,
         'current_cuisine': cuisine_filter,
         'total_restaurants': len(restaurants),
-        'total_favorites': total_favorites,  # <--- IDINAGDAG
+        'total_favorites': total_favorites,
     })
 
 
 # ==========================================
-# RESTAURANT DETAILS
+# RESTAURANT DETAILS (PINAKA-SIMPLENG VERSION)
 # ==========================================
 
 @login_required
 def restaurant_detail(request, pk):
-    restaurant = next(
-        (
-            item.copy()
-            for item in RESTAURANT_LIST_DATA
-            if item['id'] == pk
-        ),
-        None
-    )
+    # Siguraduhing integer
+    pk = int(pk)
 
+    # Hanapin ang restaurant
+    restaurant = None
+    for item in RESTAURANT_LIST_DATA:
+        if item['id'] == pk:
+            restaurant = item
+            break
+
+    # Kung wala, balik sa listahan
     if restaurant is None:
         return redirect('food_finder:restaurant_list')
 
-    restaurant['menu_items'] = restaurant.get('menu', [])
-
-    search_location = (
-        f"{restaurant['name']}, {restaurant['address']}"
-    )
+    # Gumawa ng map embed
+    search_location = f"{restaurant['name']}, {restaurant['address']}"
     encoded_location = urllib.parse.quote(search_location)
-
+    
     restaurant['map_embed'] = (
         f"https://maps.google.com/maps?q={encoded_location}"
         "&t=&z=16&ie=UTF8&iwloc=&output=embed"
     )
-
+    
     restaurant['map_link'] = (
         "https://www.google.com/maps/search/?api=1"
         f"&query={encoded_location}"
     )
+    
+    # I-set ang menu_items
+    restaurant['menu_items'] = restaurant.get('menu', [])
 
-    restaurant['latitude'] = restaurant.get('lat', '')
-    restaurant['longitude'] = restaurant.get('lng', '')
+    # I-print para makita sa terminal
+    print("=" * 50)
+    print(f"DEBUG: ID = {pk}")
+    print(f"DEBUG: Name = {restaurant['name']}")
+    print(f"DEBUG: Menu count = {len(restaurant['menu_items'])}")
+    print("=" * 50)
 
     return render(request, 'restaurant_detail.html', {
         'restaurant': restaurant,
@@ -551,20 +590,12 @@ def add_review(request, pk):
     return redirect('food_finder:restaurant_list')
 
 
-# --- INAYOS: Toggle Favorite Function ---
 @login_required
 def toggle_favorite(request, pk):
-    # Dahil hardcoded data tayo, kailangan muna nating i-save ang Restaurant sa DB
-    # para may ma-link ang Favorite model.
-    # Pero para hindi mag-error, ginawa nating try-except.
-    from .models import Restaurant
-    
     try:
-        # Hanapin o gumawa ng restaurant record base sa ID
         restaurant_data = next((r for r in RESTAURANT_LIST_DATA if r['id'] == pk), None)
         
         if restaurant_data:
-            # I-save o kunin ang Restaurant object
             restaurant_obj, created = Restaurant.objects.get_or_create(
                 id=pk,
                 defaults={
@@ -577,13 +608,12 @@ def toggle_favorite(request, pk):
                 }
             )
             
-            # Check kung naka-favorite na
             favorite = Favorite.objects.filter(user=request.user, restaurant=restaurant_obj).first()
             
             if favorite:
-                favorite.delete()  # Unfavorite
+                favorite.delete()
             else:
-                Favorite.objects.create(user=request.user, restaurant=restaurant_obj)  # Favorite
+                Favorite.objects.create(user=request.user, restaurant=restaurant_obj)
                 
     except Exception as e:
         print(f"Error in toggle_favorite: {e}")
@@ -591,16 +621,11 @@ def toggle_favorite(request, pk):
     return redirect('food_finder:restaurant_list')
 
 
-# --- INAYOS: My Favorites Function ---
 @login_required
 def my_favorites(request):
-    # Kunin lahat ng favorites ng user
-    favorites = Favorite.objects.filter(user=request.user)
-    
-    # Kunin ang IDs ng mga naka-favorite na restaurants
+    favorites = Favorite.objects.filter(user=request.user).select_related('restaurant')
     fav_ids = [fav.restaurant.id for fav in favorites if fav.restaurant]
     
-    # I-filter ang RESTAURANT_LIST_DATA para makuha lang yung mga naka-favorite
     favorite_restaurants = [
         r for r in RESTAURANT_LIST_DATA 
         if r['id'] in fav_ids
@@ -617,7 +642,7 @@ def add_restaurant(request):
 
 
 # ==========================================
-# USER REGISTRATION (BAGONG DAGDAG)
+# USER REGISTRATION
 # ==========================================
 
 def register_view(request):

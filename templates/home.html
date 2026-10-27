@@ -2,22 +2,16 @@
 
 {% block content %}
 <style>
-    /* --- GLOBAL DARK THEME & FONT --- */
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-
+    /* --- GLOBAL DARK THEME --- */
     html, body {
-        background-color: #0a0a0f !important;
+        background-color: #0f0f13 !important;
         margin: 0 !important;
         padding: 0 !important;
-        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    /* --- BACKGROUND WITH GLOWING ORBS --- */
     .dashboard-wrapper {
-        background-color: #0a0a0f;
-        background-image: 
-            radial-gradient(circle at 15% 50%, rgba(235, 120, 191, 0.06) 0%, transparent 50%),
-            radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
         width: 100vw;
         min-height: 100vh;
         margin: 0;
@@ -25,7 +19,7 @@
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 1;
+        z-index: 10;
         display: flex;
         flex-direction: column;
     }
@@ -36,31 +30,29 @@
         flex-direction: column;
         justify-content: center; 
         align-items: center;
-        padding: 2rem 1rem; /* Binawasan ang padding */
+        padding: 2rem 1rem;
         width: 100%;
-        max-width: 1200px; /* Binawasan ang max-width */
+        max-width: 1200px;
         margin: 0 auto;
     }
 
-    /* --- HEADER LAYOUT --- */
+    /* --- HEADER --- */
     .welcome-header-wrapper {
         display: flex;
         justify-content: center;
         align-items: center; 
         width: 100%;
-        margin-bottom: 2.5rem; /* Binawasan ang space sa baba */
-        animation: fadeInDown 0.8s ease-out;
+        margin-bottom: 2.5rem;
     }
 
     .welcome-header { text-align: center; margin: 0; }
     
     .welcome-header h1 {
-        font-size: 3rem; /* Pinaliit mula 4.5rem */
+        font-size: 3rem;
         font-weight: 800;
         color: #ffffff;
         margin-bottom: 0.3rem;
         letter-spacing: -1px;
-        line-height: 1.1;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -74,19 +66,13 @@
         text-shadow: 0 0 30px rgba(235, 120, 191, 0.2); 
     }
     
-    .welcome-header p { 
-        color: #a1a1aa; 
-        font-size: 1rem; /* Pinaliit */
-        font-weight: 400; 
-        margin: 0; 
-    }
+    .welcome-header p { color: #a1a1aa; font-size: 1rem; margin: 0; }
 
-    /* --- ANIMATION PARA SA KAMAY --- */
     .wave {
         display: inline-block;
         animation: wave-animation 2.5s infinite;
         transform-origin: 70% 70%;
-        font-size: 2.5rem; /* Pinaliit */
+        font-size: 2.5rem;
     }
 
     @keyframes wave-animation {
@@ -100,13 +86,12 @@
         100% { transform: rotate( 0.0deg) }
     }
 
-    /* --- MAS MALIIT NA GLASSMORPHISM CARDS --- */
+    /* --- CARDS STYLING --- */
     .landscape-card {
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-radius: 16px; /* Pinaliit ang radius */
-        padding: 1.2rem 1rem; /* Binawasan ang padding */
+        border-radius: 16px;
+        padding: 1.2rem 1rem;
         text-decoration: none !important;
         display: flex;
         flex-direction: column;
@@ -115,110 +100,81 @@
         transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         border: 1px solid rgba(255, 255, 255, 0.08);
         width: 100%;
-        height: 130px; /* Pinaliit mula 180px */
+        height: 140px;
+        gap: 10px;
         position: relative;
-        overflow: hidden;
     }
 
     .landscape-card:hover {
-        transform: translateY(-5px); /* Bahagyang aangat */
-        border-color: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-6px) scale(1.03);
+        border-color: rgba(235, 120, 191, 0.4);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(235, 120, 191, 0.1);
     }
 
-    /* Specific Glows per Card */
-    .card-blue:hover { box-shadow: 0 10px 20px rgba(59, 130, 246, 0.1); }
-    .card-pink:hover { box-shadow: 0 10px 20px rgba(235, 120, 191, 0.1); }
-    .card-cyan:hover { box-shadow: 0 10px 20px rgba(14, 116, 144, 0.1); }
-    .card-purple:hover { box-shadow: 0 10px 20px rgba(109, 40, 217, 0.1); }
-    .card-yellow:hover { box-shadow: 0 10px 20px rgba(180, 83, 9, 0.1); }
-
-    /* --- MAS MALIIT NA ICONS --- */
+    /* --- ICON STYLING --- */
     .icon-bubble {
-        width: 40px; /* Pinaliit mula 60px */
-        height: 40px; 
+        width: 45px; 
+        height: 45px; 
         border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         transition: all 0.3s ease;
-        margin-bottom: 8px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-bottom: 5px;
     }
-
-    .icon-bubble i { font-size: 1.1rem !important; transition: all 0.3s ease; }
+    .icon-bubble i { font-size: 1.2rem !important; transition: all 0.3s ease; }
     .landscape-card:hover .icon-bubble i { transform: scale(1.15) rotate(-5deg); }
 
-    /* --- TEXT STYLING --- */
+    /* --- TEXT & BADGE STYLING --- */
     .text-content {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap: 3px;
         width: 100%;
     }
 
     .landscape-card h3 {
         color: #ffffff !important;
         font-weight: 700;
-        font-size: 0.95rem; /* Pinaliit */
+        font-size: 1.05rem;
         margin: 0;
     }
-    
     .landscape-card p {
         color: #a1a1aa !important;
-        font-size: 0.7rem; /* Pinaliit */
+        font-size: 0.75rem;
         line-height: 1.2;
         margin: 0;
-        font-weight: 500;
     }
 
     .count-badge {
         display: inline-block;
-        background: rgba(255, 255, 255, 0.08);
-        color: #d4d4d8;
-        font-size: 0.6rem; /* Pinaliit */
+        background: rgba(255, 255, 255, 0.1);
+        color: #e5e7eb;
+        font-size: 0.65rem;
         font-weight: 600;
-        padding: 2px 8px;
-        border-radius: 10px;
-        margin-top: 5px;
+        padding: 3px 8px;
+        border-radius: 20px;
+        margin-top: 4px;
         width: fit-content;
         align-self: center;
         border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    /* --- ICON BACKGROUND COLORS --- */
+    /* --- ICON COLORS --- */
     .icon-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
     .icon-pink { background: linear-gradient(135deg, #ec4899, #be185d); color: white; }
     .icon-cyan { background: linear-gradient(135deg, #06b6d4, #0e7490); color: white; }
     .icon-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; }
     .icon-yellow { background: linear-gradient(135deg, #f59e0b, #b45309); color: white; }
 
-    /* --- FOOTER & ANIMATIONS --- */
+    /* --- FOOTER --- */
     .dashboard-footer {
-        margin-top: 3rem; /* Binawasan */
+        margin-top: 3rem;
         text-align: center;
         color: #52525b;
-        font-size: 0.75rem; /* Pinaliit */
-        font-weight: 500;
-    }
-
-    .animate-card { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
-    .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; } .delay-4 { animation-delay: 0.4s; } .delay-5 { animation-delay: 0.5s; }
-
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes fadeInDown {
-        from { opacity: 0; transform: translateY(-20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .welcome-header h1 { font-size: 2.2rem; }
-        .landscape-card { height: 120px; padding: 1rem 0.5rem; }
+        font-size: 0.85rem;
     }
 </style>
 
@@ -236,11 +192,12 @@
             </div>
         </div>
 
-        <!-- DASHBOARD CARDS -->
+        <!-- CARDS -->
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 justify-content-center w-100 px-2">
             
-            <div class="col animate-card delay-1">
-                <a href="{% url 'food_finder:restaurant_list' %}" class="landscape-card card-blue">
+            <!-- RESTAURANTS (DAPAT NAKA-LINK SA restaurant_list) -->
+            <div class="col">
+                <a href="{% url 'food_finder:restaurant_list' %}" class="landscape-card">
                     <div class="icon-bubble icon-blue"><i class="fas fa-store"></i></div>
                     <div class="text-content">
                         <h3>Restaurants</h3>
@@ -250,8 +207,9 @@
                 </a>
             </div>
 
-            <div class="col animate-card delay-2">
-                <a href="{% url 'food_finder:my_favorites' %}" class="landscape-card card-pink">
+            <!-- FAVORITES -->
+            <div class="col">
+                <a href="{% url 'food_finder:my_favorites' %}" class="landscape-card">
                     <div class="icon-bubble icon-pink"><i class="fas fa-heart"></i></div>
                     <div class="text-content">
                         <h3>Favorites</h3>
@@ -261,8 +219,9 @@
                 </a>
             </div>
 
-            <div class="col animate-card delay-3">
-                <a href="/info/" class="landscape-card card-cyan">
+            <!-- ABOUT -->
+            <div class="col">
+                <a href="/info/" class="landscape-card">
                     <div class="icon-bubble icon-cyan"><i class="fas fa-info-circle"></i></div>
                     <div class="text-content">
                         <h3>About</h3>
@@ -271,9 +230,10 @@
                 </a>
             </div>
 
+            <!-- ADMIN -->
             {% if user.is_staff %}
-            <div class="col animate-card delay-4">
-                <a href="{% url 'admin:index' %}" class="landscape-card card-purple">
+            <div class="col">
+                <a href="{% url 'admin:index' %}" class="landscape-card">
                     <div class="icon-bubble icon-purple"><i class="fas fa-users-cog"></i></div>
                     <div class="text-content">
                         <h3>Admin</h3>
@@ -283,8 +243,9 @@
             </div>
             {% endif %}
 
-            <div class="col animate-card delay-5">
-                <a href="{% url 'logout' %}" class="landscape-card card-yellow">
+            <!-- LOGOUT -->
+            <div class="col">
+                <a href="{% url 'logout' %}" class="landscape-card">
                     <div class="icon-bubble icon-yellow"><i class="fas fa-sign-out-alt"></i></div>
                     <div class="text-content">
                         <h3>Logout</h3>
