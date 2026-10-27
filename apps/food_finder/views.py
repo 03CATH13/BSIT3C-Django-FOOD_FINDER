@@ -1,11 +1,10 @@
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import urllib.parse
 
 
 # ==========================================
-# RESTAURANT DATA
+# RESTAURANT DATA (May Exact Coordinates)
 # ==========================================
 
 RESTAURANT_LIST_DATA = [
@@ -17,8 +16,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '9AM - 9PM',
         'image': 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&q=80',
         'description': 'Well-known Philippines fast-food chain.',
-        'lat': '9.9899',
-        'lng': '122.8146',
+        'lat': '9.99028', 'lng': '122.81472',
         'menu': [
             {'name': 'Chickenjoy (1pc)', 'price': '₱85'},
             {'name': 'Jolly Spaghetti', 'price': '₱60'},
@@ -40,8 +38,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '8AM - 10PM',
         'image': 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=80',
         'description': 'Home of the famous Chicken Inasal.',
-        'lat': '9.9938',
-        'lng': '122.8180',
+        'lat': '9.99388', 'lng': '122.81798',
         'menu': [
             {'name': 'Paborito Meal (PM1)', 'price': '₱120'},
             {'name': 'Unli Rice', 'price': '₱35'},
@@ -61,8 +58,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': 'Open 24/7',
         'image': 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=500&q=80',
         'description': "I'm lovin' it.",
-        'lat': '9.9885',
-        'lng': '122.8140',
+        'lat': '9.98998', 'lng': '122.81442',
         'menu': [
             {'name': 'Big Mac', 'price': '₱150'},
             {'name': 'Fries (Medium)', 'price': '₱65'},
@@ -83,8 +79,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': 'Open Daily',
         'image': 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&q=80',
         'description': 'Chinese-style fast food.',
-        'lat': '9.9905',
-        'lng': '122.8160',
+        'lat': '9.99058', 'lng': '122.81592',
         'menu': [
             {'name': 'Chao Fan w/ Siomai', 'price': '₱95'},
             {'name': 'Beef Wanton Mami', 'price': '₱110'},
@@ -103,8 +98,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '10AM - 10PM',
         'image': 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=500&q=80',
         'description': 'Coffee, pastries, and pasta.',
-        'lat': '9.9910',
-        'lng': '122.8175',
+        'lat': '9.99108', 'lng': '122.81758',
         'menu': [
             {'name': 'Iced Latte', 'price': '₱120'},
             {'name': 'Carbonara', 'price': '₱150'},
@@ -126,8 +120,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': 'Open 24/7',
         'image': 'https://images.unsplash.com/photo-1547592180-85f173990554?w=500&q=80',
         'description': 'Famous Cansi and Sizzling Sisig.',
-        'lat': '9.9900',
-        'lng': '122.8165',
+        'lat': '9.99008', 'lng': '122.81652',
         'menu': [
             {'name': 'Cansi (Good for 2)', 'price': '₱180'},
             {'name': 'Sizzling Sisig', 'price': '₱130'},
@@ -148,8 +141,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '8AM - 8PM',
         'image': 'https://images.unsplash.com/photo-1626776876729-bab4369a5a5a?w=500&q=80',
         'description': 'Filipino home-cooked meals.',
-        'lat': '9.9895',
-        'lng': '122.8150',
+        'lat': '9.98958', 'lng': '122.81508',
         'menu': [
             {'name': 'Pork Adobo w/ Rice', 'price': '₱85'},
             {'name': 'Sinigang na Baboy', 'price': '₱120'},
@@ -170,8 +162,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '10AM - 10PM',
         'image': 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80',
         'description': 'Fresh seafood and grilled fish.',
-        'lat': '9.9890',
-        'lng': '122.8170',
+        'lat': '9.98898', 'lng': '122.81698',
         'menu': [
             {'name': 'Grilled Fish', 'price': '₱150'},
             {'name': 'Buttered Shrimp', 'price': '₱200'},
@@ -191,8 +182,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '10AM - 9PM',
         'image': 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&q=80',
         'description': 'Chicken Inasal near Gaisano Mall.',
-        'lat': '9.9875',
-        'lng': '122.8120',
+        'lat': '9.98758', 'lng': '122.81208',
         'menu': [
             {'name': 'Paborito Meal (PM1)', 'price': '₱120'},
             {'name': 'Pork BBQ (2 pcs)', 'price': '₱145'},
@@ -215,8 +205,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '8AM - 8PM',
         'image': 'https://th.bing.com/th/id/OIP.Ly_7Z5aIAM0qNIUagX_JLAHaE8?r=0&pid=CanonicalCanvas',
         'description': 'Classic British menu, European breads and pasties.',
-        'lat': '9.9870',
-        'lng': '122.8135',
+        'lat': '9.98708', 'lng': '122.81358',
         'menu': [
             {'name': 'British Paties', 'price': '₱120'},
             {'name': 'Coffe Latte', 'price': '₱95'},
@@ -240,8 +229,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '10AM - 9PM',
         'image': 'https://th.bing.com/th/id/OIP.xjw55CL1DD1fxRTe8L42QAHaHa?r=0&pid=CanonicalCanvas',
         'description': 'Authentic wood-fired Italian Pizza by Italian Pizzaiolo.',
-        'lat': '9.9860',
-        'lng': '122.8140',
+        'lat': '9.98608', 'lng': '122.81408',
         'menu': [
             {'name': 'Margherita Pizza', 'price': '₱299'},
             {'name': 'Chicken Inasal Paa', 'price': '₱135'},
@@ -262,8 +250,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '9AM - 9PM',
         'image': 'https://tse2.mm.bing.net/th/id/OIP.DjvJRW80K48q_WU7degRkwAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
         'description': 'Filipino Grill and Chicken dishes.',
-        'lat': '9.9885',
-        'lng': '122.8100',
+        'lat': '9.98858', 'lng': '122.81008',
         'menu': [
             {'name': 'Chicken Inasal Paa', 'price': '₱120'},
             {'name': 'Pork BBQ (2 sticks)', 'price': '₱80'},
@@ -288,8 +275,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '9AM - 9PM',
         'image': 'https://th.bing.com/th/id/OLC.i2vkFy008YAnpA480x360?&rs=1&pid=ImgDetMain&o=7&rm=3',
         'description': 'Chicken Inasal near Gaisano Mall.',
-        'lat': '9.9855',
-        'lng': '122.8150',
+        'lat': '9.98558', 'lng': '122.81508',
         'menu': [
             {'name': 'Double Chinese Burger', 'price': '₱165'},
             {'name': 'Fries w/ Cheese', 'price': '₱75'},
@@ -307,8 +293,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '8AM - 10PM',
         'image': 'https://mms.img.susercontent.com/vn-11134513-7r98o-lsvai0zxaahlc2@resize_ss640x400!@crop_w640_h400_cT',
         'description': 'Diner style meals and quick bites.',
-        'lat': '9.9895',
-        'lng': '122.8115',
+        'lat': '9.98958', 'lng': '122.81158',
         'menu': [
             {'name': 'Tapsilog', 'price': '₱120'},
             {'name': 'Burger Steak (2pcs)', 'price': '₱115'},
@@ -330,8 +315,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '10AM-9PM',
         'image': 'https://th.bing.com/th/id/OIP.QrvKJSuy6PZSBcmdkAAoRgHaF7?r=0&o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3',
         'description': 'Chinese dishes, Dim sum, Beef specialties.',
-        'lat': '9.9880',
-        'lng': '122.8105',
+        'lat': '9.98808', 'lng': '122.81058',
         'menu': [
             {'name': 'Siomai (4pcs)', 'price': '₱85'},
             {'name': 'Siomai (10 pcs)', 'price': '₱120'},
@@ -357,8 +341,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '',
         'image': 'https://tse4.mm.bing.net/th/id/OIP.z7NZBl0obIFnbMdlHsRLBQHaE7?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
         'description': 'Italian pasta, wood-fired pizza and lasagna.',
-        'lat': '9.9875',
-        'lng': '122.8120',
+        'lat': '9.98758', 'lng': '122.81208',
         'menu': [
             {'name': 'Pepperoni Pizza', 'price': '₱350'},
             {'name': 'Pasta Carbonara', 'price': '₱185'},
@@ -382,8 +365,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': 'Open 24 Hours',
         'image': 'https://tse1.mm.bing.net/th/id/OIP.n2B-8wnf-NuX75YfyMHHOAHaE7?r=1&pid=ImgDetMain&o=7&rm=3',
         'description': 'Original Kabankalan Cansi - sour beef shank soup.',
-        'lat': '9.9865',
-        'lng': '122.8130',
+        'lat': '9.98658', 'lng': '122.81308',
         'menu': [
             {'name': 'Cansi Bulalo', 'price': '₱280'},
             {'name': 'Sizzling Cansi', 'price': '₱250'},
@@ -403,8 +385,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '7AM-10PM',
         'image': 'https://tse4.mm.bing.net/th/id/OIP.zxuoQgP87JhIM0Bh1YDwngHaJQ?r=0&w=1080&h=1350&rs=1&pid=ImgDetMain&o=7&rm=3',
         'description': 'Famous Cansi and Native Chicken dishes.',
-        'lat': '9.9900',
-        'lng': '122.8160',
+        'lat': '9.99008', 'lng': '122.81608',
         'menu': [
             {'name': 'Special Cansi', 'price': '₱260'},
             {'name': 'Native Chicken Tinola', 'price': '₱200'},
@@ -423,8 +404,7 @@ RESTAURANT_LIST_DATA = [
         'opening_hours': '9AM-7PM',
         'image': 'https://tse2.mm.bing.net/th/id/OIP.z1B9BD5AUVGgkvUVYAD5vgHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
         'description': 'Tambayan - fries, burgers and shakes near Riverside.',
-        'lat': '9.9862',
-        'lng': '122.8128',
+        'lat': '9.98628', 'lng': '122.81288',
         'menu': [
             {'name': 'RS Special Burger', 'price': '₱85'},
             {'name': 'Cheese Burger', 'price': '₱65'},
@@ -453,7 +433,6 @@ def restaurant_list(request):
     query = request.GET.get('q', '').strip()
     cuisine_filter = request.GET.get('cuisine', '').strip()
 
-    # Search restaurant names, addresses, cuisine, descriptions, and dishes.
     if query:
         search_text = query.casefold()
         filtered_restaurants = []
@@ -482,7 +461,6 @@ def restaurant_list(request):
 
         restaurants = filtered_restaurants
 
-    # Filter by cuisine category, ignoring capitalization.
     if cuisine_filter:
         restaurants = [
             restaurant for restaurant in restaurants
@@ -490,7 +468,6 @@ def restaurant_list(request):
             == cuisine_filter.casefold()
         ]
 
-    # Provide both menu_items and menu to the HTML template.
     for restaurant in restaurants:
         restaurant['menu_items'] = restaurant.get('menu', [])
 

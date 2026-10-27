@@ -1,26 +1,245 @@
-{% extends "theme/base.html" %}
+{% extends 'theme/base_dashboard.html' %}
+
 {% block content %}
-<div class="container-xl">
-  <div class="page-header d-print-none" aria-label="Page header">
-    <div class="container-xl">
-      <div class="row align-items-center">
-        <div class="col">
-          <div class="page-pretitle">Overview</div>
-          <div class="d-flex align-items-center gap-3 flex-wrap d-none d-md-flex">
-            <h2 class="page-title mb-0">Dashboard</h2>
-          </div>
-          <h2 class="page-title mb-0 d-md-none">Dashboard</h2>
+<style>
+    /* LIGHT AESTHETIC BACKGROUND */
+    .dashboard-container {
+        background: #f1f5f9;
+        min-height: 100vh;
+        padding: 4rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Header Styling */
+    .welcome-header {
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+    .welcome-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: #eb78bf;
+        margin-bottom: 0.3rem;
+    }
+    .welcome-header p {
+        color: #776161;
+        font-size: 1rem;
+    }
+
+    /* PAHIGA NGA RECTANGLE CARD (May Kulay ang Buong Card) */
+    .landscape-card {
+        border-radius: 16px;
+        padding: 1rem 1.2rem;
+        text-decoration: none !important;
+        display: flex;
+        flex-direction: row; 
+        align-items: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid transparent;
+        width: 100%;
+        height: 90px;
+        gap: 12px;
+    }
+
+    /* Hover Effect */
+    .landscape-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        border-color: #1e293b; /* Dark border pag hover */
+    }
+
+    /* GAMAY NGA ICON NGA PUTI ANG SULOD */
+    .icon-bubble {
+        width: 50px; 
+        height: 50px; 
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        animation: float 3s ease-in-out infinite;
+        flex-shrink: 0;
+        background: rgba(255, 255, 255, 0.6); /* Semi-transparent white */
+    }
+    
+    .icon-bubble i {
+        font-size: 1.2rem !important;
+    }
+
+    /* Delay per icon */
+    .card-delay-1 .icon-bubble { animation-delay: 0s; }
+    .card-delay-2 .icon-bubble { animation-delay: 0.5s; }
+    .card-delay-3 .icon-bubble { animation-delay: 1s; }
+    .card-delay-4 .icon-bubble { animation-delay: 1.5s; }
+    .card-delay-5 .icon-bubble { animation-delay: 2s; }
+
+    .landscape-card:hover .icon-bubble {
+        animation: bounce 0.5s ease;
+    }
+
+    /* TEXT ALIGNMENT */
+    .text-content {
+        text-align: left;
+        overflow: hidden;
+    }
+
+    .landscape-card h3 {
+        color: #1e293b !important;
+        font-weight: 700;
+        font-size: 0.95rem;
+        margin-bottom: 0.1rem;
+        text-decoration: none !important;
+        white-space: nowrap;
+    }
+    .landscape-card p {
+        color: #475569 !important;
+        font-size: 0.7rem;
+        line-height: 1.2;
+        margin: 0;
+        text-decoration: none !important;
+    }
+
+    /* COLORED RECTANGLE BACKGROUNDS */
+    .card-blue { background: #dbeafe; }     /* Light Blue */
+    .card-pink { background: #fce7f3; }     /* Light Pink */
+    .card-cyan { background: #cffafe; }     /* Light Cyan */
+    .card-purple { background: #f3e8ff; }   /* Light Purple */
+    .card-yellow { background: #fef9c3; }   /* Light Yellow */
+
+    /* ICON COLORS (Matches the background) */
+    .text-blue { color: #1d4ed8; }
+    .text-pink { color: #be185d; }
+    .text-cyan { color: #0e7490; }
+    .text-purple { color: #6d28d9; }
+    .text-yellow { color: #b45309; }
+
+        /* FOOTER STYLING */
+    .dashboard-footer {
+        margin-top: auto;
+        text-align: center;
+        color: #1f3f6c;
+        font-size: 0.89rem;
+        padding-top: 5rem;
+    }
+
+    /* KEYFRAMES */
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-3px); }
+        100% { transform: translateY(0px); }
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .animate-card {
+        animation: fadeInUp 0.5s ease-out forwards;
+        opacity: 0;
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="container-fluid px-5">
+        
+        <!-- Header -->
+        <div class="welcome-header">
+            <h1>Welcome {{ Girlies }}! 👋</h1>
+
+            <p>What would you like to explore today?</p>
         </div>
-      </div>
-    </div>
-  </div>
-  <br>
 
-  <div class="card">
-    <div class="card-body text-muted">
-      Dashboard
-    </div>
-  </div>
+        <!-- Dashboard Cards -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-3 justify-content-center">
+            
+            <!-- RESTAURANTS (Blue) -->
+            <div class="col animate-card delay-1 card-delay-1">
+                <a href="{% url 'food_finder:restaurant_list' %}" class="landscape-card card-blue">
+                    <div class="icon-bubble">
+                        <i class="fas fa-store text-blue"></i>
+                    </div>
+                    <div class="text-content">
+                        <h3>Restaurants</h3>
+                        <p>Browse restaurants.</p>
+                    </div>
+                </a>
+            </div>
 
+            <!-- MY FAVORITES (Pink) -->
+            <div class="col animate-card delay-2 card-delay-2">
+                <a href="{% url 'food_finder:my_favorites' %}" class="landscape-card card-pink">
+                    <div class="icon-bubble">
+                        <i class="fas fa-heart text-pink"></i>
+                    </div>
+                    <div class="text-content">
+                        <h3>Favorites</h3>
+                        <p>Saved favorites.</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- ABOUT (Cyan) -->
+            <div class="col animate-card delay-3 card-delay-3">
+                <a href="/info/" class="landscape-card card-cyan">
+                    <div class="icon-bubble">
+                        <i class="fas fa-info-circle text-cyan"></i>
+                    </div>
+                    <div class="text-content">
+                        <h3>About</h3>
+                        <p>System info.</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- ADMIN PANEL (Purple) -->
+            {% if user.is_staff %}
+            <div class="col animate-card delay-4 card-delay-4">
+                <a href="{% url 'admin:index' %}" class="landscape-card card-purple">
+                    <div class="icon-bubble">
+                        <i class="fas fa-users-cog text-purple"></i>
+                    </div>
+                    <div class="text-content">
+                        <h3>Admin</h3>
+                        <p>Manage settings.</p>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- LOGOUT (Yellow) -->
+            <div class="col animate-card delay-5 card-delay-5">
+                <a href="{% url 'logout' %}" class="landscape-card card-yellow">
+                    <div class="icon-bubble">
+                        <i class="fas fa-sign-out-alt text-yellow"></i>
+                    </div>
+                    <div class="text-content">
+                        <h3>Logout</h3>
+                        <p>Sign out safely.</p>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="dashboard-footer">
+            &copy; 2026 KabankalanEats &mdash; Food Finder System. All rights reserved.
+        </div>
+
+    </div>
 </div>
+
 {% endblock %}

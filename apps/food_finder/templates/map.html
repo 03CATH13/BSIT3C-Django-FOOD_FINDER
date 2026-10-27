@@ -1,690 +1,193 @@
-```html
 {% extends 'theme/base.html' %}
 {% load static %}
 
 {% block content %}
-
-<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}">
-
 <style>
-    * {
-        box-sizing: border-box;
+    /* Inayos ang background para malinis */
+    .map-wrapper {
+        background: #f1f5f9;
+        padding: 1.5rem;
+        margin: -1.5rem;
+        min-height: 100vh;
     }
 
-    .offline-map-page {
+    /* Header */
+    .map-header {
+        background: linear-gradient(135deg, #ff8c00, #ff5e00);
+        color: white;
+        padding: 1.5rem 2rem;
+        border-radius: 16px;
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .map-header h1 { margin: 0; font-size: 1.5rem; font-weight: 800; }
+    .map-header p { margin: 5px 0 0 0; font-size: 0.85rem; opacity: 0.9; }
+
+    /* Sidebar Card */
+    .sidebar-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        height: 75vh;
         display: flex;
         flex-direction: column;
-        gap: 18px;
-        padding: 20px;
-        color: #263238;
-    }
-
-    .map-header {
-        padding: 24px;
-        color: white;
-        border-radius: 18px;
-        background: linear-gradient(135deg, #087f5b, #20a779);
-        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
-    }
-
-    .map-header h2 {
-        margin: 0 0 8px;
-        font-size: 28px;
-        font-weight: 800;
-    }
-
-    .map-header p {
-        margin: 0;
-        opacity: 0.95;
-    }
-
-    .offline-badge {
-        display: inline-block;
-        margin-top: 14px;
-        padding: 7px 12px;
-        color: #075b42;
-        background: #e1fff2;
-        border-radius: 30px;
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    .map-search {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .map-search input {
-        flex: 1;
-        min-width: 200px;
-        padding: 13px 16px;
-        border: 1px solid #d5ded9;
-        border-radius: 12px;
-        outline: none;
-        font-size: 15px;
-    }
-
-    .map-search input:focus {
-        border-color: #20a779;
-        box-shadow: 0 0 0 3px rgba(32, 167, 121, 0.12);
-    }
-
-    .map-search button {
-        padding: 12px 18px;
-        border: none;
-        border-radius: 12px;
-        color: white;
-        background: #087f5b;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .map-search button:hover {
-        background: #056747;
-    }
-
-    .map-layout {
-        display: grid;
-        grid-template-columns: 320px minmax(0, 1fr);
-        gap: 18px;
-        align-items: stretch;
-    }
-
-    .restaurant-panel,
-    .map-panel {
-        min-width: 0;
         overflow: hidden;
-        background: white;
-        border: 1px solid #e5ece8;
-        border-radius: 16px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
     }
-
-    .panel-heading {
-        padding: 18px;
-        border-bottom: 1px solid #e8eeeb;
+    .sidebar-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+        background: #f8fafc;
+        font-weight: 700;
+        color: #1e293b;
     }
-
-    .panel-heading h3 {
-        margin: 0 0 5px;
-        font-size: 18px;
-    }
-
-    .panel-heading p {
-        margin: 0;
-        color: #718078;
-        font-size: 13px;
-    }
-
-    .restaurant-list {
-        max-height: 620px;
+    .sidebar-list {
+        flex: 1;
         overflow-y: auto;
-        padding: 12px;
+        padding: 1rem;
     }
-
-    .restaurant-card {
+    .resto-item {
         display: flex;
-        gap: 12px;
-        margin-bottom: 10px;
-        padding: 12px;
-        border: 1px solid #e7ece9;
+        gap: 1rem;
+        padding: 1rem;
+        border: 1px solid #e2e8f0;
         border-radius: 12px;
+        margin-bottom: 1rem;
         cursor: pointer;
         transition: 0.2s;
+        background: #fff;
     }
-
-    .restaurant-card:hover,
-    .restaurant-card.active {
-        border-color: #20a779;
-        background: #f0fff8;
+    .resto-item:hover, .resto-item.active {
+        border-color: #ff8c00;
+        background: #fff7ed;
     }
+    .resto-item img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; }
+    .resto-item h4 { margin: 0 0 4px 0; font-size: 0.9rem; font-weight: 700; color: #1e293b; }
+    .resto-item p { margin: 0; font-size: 0.75rem; color: #64748b; }
 
-    .restaurant-image {
-        width: 78px;
-        height: 78px;
-        flex-shrink: 0;
-        object-fit: cover;
-        border-radius: 10px;
-        background: #edf4f0;
+    /* Map Container */
+    .map-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        height: 75vh; /* Parehong height sa sidebar */
+        overflow: hidden;
     }
-
-    .restaurant-details {
-        min-width: 0;
-    }
-
-    .restaurant-details h4 {
-        margin: 2px 0 7px;
-        font-size: 15px;
-        overflow-wrap: anywhere;
-    }
-
-    .restaurant-details p {
-        margin: 0 0 7px;
-        color: #68776f;
-        font-size: 12px;
-        overflow-wrap: anywhere;
-    }
-
-    .show-map-button {
-        padding: 7px 10px;
-        border: none;
-        border-radius: 7px;
-        color: white;
-        background: #087f5b;
-        cursor: pointer;
-        font-size: 12px;
-    }
-
-    .map-panel {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .map-status {
-        padding: 12px 16px;
-        color: #075b42;
-        background: #eafff5;
-        border-bottom: 1px solid #d5f3e5;
-        font-size: 13px;
-    }
-
-    #offline-map {
+    #map {
         width: 100%;
-        height: 620px;
-        min-height: 400px;
-        background: #edf1ed;
-        z-index: 1;
+        height: 100%;
     }
-
-    .empty-results {
-        padding: 25px 12px;
-        color: #718078;
-        text-align: center;
-        font-size: 14px;
-    }
-
-    .map-legend {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        padding: 13px 16px;
-        color: #59675f;
-        border-top: 1px solid #e8eeeb;
-        font-size: 12px;
-    }
-
-    .map-note {
-        padding: 14px 16px;
-        color: #67531d;
-        background: #fff8df;
-        border-radius: 12px;
-        font-size: 13px;
-        line-height: 1.6;
-    }
-
-    @media (max-width: 900px) {
-        .map-layout {
-            grid-template-columns: 1fr;
-        }
-
-        .restaurant-list {
-            max-height: 350px;
-        }
-
-        #offline-map {
-            height: 480px;
-        }
-    }
-
-    @media (max-width: 500px) {
-        .offline-map-page {
-            padding: 10px;
-        }
-
-        .map-header {
-            padding: 18px;
-        }
-
-        .map-header h2 {
-            font-size: 23px;
-        }
-
-        #offline-map {
-            height: 380px;
-            min-height: 300px;
-        }
-    }
+    
+    /* Popup */
+    .popup-title { font-weight: 800; color: #1e293b; margin-bottom: 5px; }
+    .popup-address { font-size: 0.8rem; color: #64748b; margin-bottom: 8px; }
+    .popup-btn { background: #ff8c00; color: white; padding: 4px 8px; border-radius: 4px; text-decoration: none; font-size: 0.7rem; }
 </style>
 
-<div class="offline-map-page">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
+<div class="map-wrapper">
+    
+    <!-- HEADER -->
     <div class="map-header">
-        <h2>🍽️ Food Finder Map</h2>
-        <p>Find restaurants and explore their locations, even without an internet connection.</p>
-        <span class="offline-badge">● OFFLINE MAP MODE</span>
+        <div>
+            <h1><i class="fas fa-map-marked-alt"></i> Food Finder Map</h1>
+            <p>Explore all restaurant locations in Kabankalan City.</p>
+        </div>
+        <a href="{% url 'food_finder:restaurant_list' %}" class="btn btn-light fw-bold text-warning">
+            <i class="fas fa-list"></i> View List
+        </a>
     </div>
 
-    <div class="map-search">
-        <input
-            type="text"
-            id="restaurant-search"
-            placeholder="Search restaurant name or address..."
-            autocomplete="off"
-        >
-        <button type="button" id="search-button">🔍 Search</button>
-        <button type="button" id="show-all-button">📍 Show All</button>
-    </div>
-
-    <div class="map-layout">
-
-        <aside class="restaurant-panel">
-            <div class="panel-heading">
-                <h3>🍴 Restaurants</h3>
-                <p><span id="restaurant-count">0</span> restaurants available</p>
-            </div>
-
-            <div class="restaurant-list" id="restaurant-list">
-
-                {% for r in restaurant_list %}
-                <div
-                    class="restaurant-card"
-                    data-id="{{ r.id }}"
-                    data-name="{{ r.name|escape }}"
-                    data-address="{{ r.address|default_if_none:''|escape }}"
-                    data-lat="{{ r.lat|default_if_none:'' }}"
-                    data-lng="{{ r.lng|default_if_none:'' }}"
-                >
-                    {% if r.image %}
-                        <img
-                            class="restaurant-image"
-                            src="{{ r.image.url }}"
-                            alt="{{ r.name }}"
-                            loading="lazy"
-                        >
-                    {% else %}
-                        <div
-                            class="restaurant-image"
-                            style="display:flex;align-items:center;justify-content:center;font-size:30px;"
-                        >🍽️</div>
-                    {% endif %}
-
-                    <div class="restaurant-details">
-                        <h4>{{ r.name }}</h4>
-                        <p>📍 {{ r.address|default:"Address not available" }}</p>
-
-                        <button
-                            type="button"
-                            class="show-map-button"
-                            data-show-restaurant="{{ r.id }}"
-                        >
-                            View on Map
-                        </button>
+    <!-- BOOTSTRAP ROW -->
+    <div class="row g-4">
+        
+        <!-- KALIWA: SIDEBAR (Listahan) -->
+        <div class="col-md-4">
+            <div class="sidebar-card">
+                <div class="sidebar-header">
+                    <i class="fas fa-store text-warning"></i> SELECT RESTAURANT
+                </div>
+                <div class="sidebar-list">
+                    {% for r in restaurants %}
+                    <div class="resto-item" id="item-{{ r.id }}" onclick="focusMap({{ r.lat }}, {{ r.lng }}, {{ r.id }})">
+                        <img src="{{ r.image }}" alt="{{ r.name }}">
+                        <div>
+                            <h4>{{ r.name }}</h4>
+                            <p><i class="fas fa-map-marker-alt text-warning"></i> {{ r.address }}</p>
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-
-                {% empty %}
-                <div class="empty-results">
-                    No restaurants found. Add restaurants to your database first.
-                </div>
-                {% endfor %}
-
             </div>
-        </aside>
+        </div>
 
-        <section class="map-panel">
-            <div class="panel-heading">
-                <h3>🗺️ Restaurant Locations</h3>
-                <p>Click a marker to view restaurant information.</p>
+        <!-- KANAN: MAPA -->
+        <div class="col-md-8">
+            <div class="map-card">
+                <div id="map"></div>
             </div>
-
-            <div class="map-status" id="map-status" role="status">
-                Loading offline map...
-            </div>
-
-            <div id="offline-map"></div>
-
-            <div class="map-legend">
-                <span>📍 Restaurant location</span>
-                <span>🗺️ Locally saved map tiles</span>
-            </div>
-        </section>
+        </div>
 
     </div>
-
-    <div class="map-note">
-        <strong>Offline reminder:</strong>
-        This page does not use Google Maps. The restaurant markers and page layout
-        can work offline when their required files are stored locally. For actual
-        streets and buildings to appear, you must save the appropriate map tiles
-        on your computer. Restaurant images must also be stored locally to display
-        without internet.
-    </div>
-
 </div>
 
-<script src="{% static 'vendor/leaflet/leaflet.js' %}"></script>
-
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-(function () {
-    "use strict";
+    // 1. Initialize Map
+    var map = L.map('map').setView([9.9899, 122.8146], 14);
 
-    const mapElement = document.getElementById("offline-map");
-    const statusElement = document.getElementById("map-status");
-    const searchInput = document.getElementById("restaurant-search");
-    const restaurantCards = Array.from(
-        document.querySelectorAll(".restaurant-card")
-    );
+    // 2. Tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap France',
+        maxZoom: 19
+    }).addTo(map);
 
-    if (typeof L === "undefined") {
-        statusElement.textContent =
-            "Leaflet could not load. Check your local leaflet.js file.";
-        return;
-    }
-
-    /*
-     * Default center: Kabankalan City area.
-     * Change these coordinates if your project covers another location.
-     */
-    const DEFAULT_CENTER = [9.9899, 122.8146];
-    const DEFAULT_ZOOM = 13;
-
-    /*
-     * IMPORTANT:
-     * Put downloaded PNG map tiles inside:
-     * static/maps/kabankalan/{z}/{x}/{y}.png
-     *
-     * No online tile provider is used here.
-     */
-    const OFFLINE_TILE_URL =
-        "{% static 'maps/kabankalan/{z}/{x}/{y}.png' %}";
-
-    const map = L.map("offline-map", {
-        center: DEFAULT_CENTER,
-        zoom: DEFAULT_ZOOM,
-        minZoom: 5,
-        maxZoom: 18,
-        zoomControl: true
+    // 3. Icon
+    var customIcon = L.icon({
+        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
     });
 
-    const offlineTiles = L.tileLayer(OFFLINE_TILE_URL, {
-        minZoom: 5,
-        maxZoom: 18,
-        attribution: "Offline Map",
-        errorTileUrl: ""
-    });
+    var allMarkers = {};
 
-    let loadedTiles = 0;
-    let failedTiles = 0;
+    // 4. Loop for Markers
+    {% for r in restaurants %}
+        var marker = L.marker([{{ r.lat }}, {{ r.lng }}], {icon: customIcon}).addTo(map);
+        
+        var popup = `
+            <div class="popup-title">{{ r.name }}</div>
+            <div class="popup-address"><i class="fas fa-map-marker-alt" style="color:#ff8c00;"></i> {{ r.address }}</div>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ r.lat }},{{ r.lng }}" target="_blank" class="popup-btn">
+                Get Directions
+            </a>
+        `;
+        
+        marker.bindPopup(popup);
+        allMarkers[{{ r.id }}] = marker;
+    {% endfor %}
 
-    offlineTiles.on("tileload", function () {
-        loadedTiles++;
-
-        if (loadedTiles > 0) {
-            statusElement.textContent =
-                "Offline street map loaded. Restaurant locations are available below.";
-        }
-    });
-
-    offlineTiles.on("tileerror", function () {
-        failedTiles++;
-
-        if (loadedTiles === 0) {
-            statusElement.textContent =
-                "Map tiles are missing or unavailable. Restaurant markers may still work.";
-        }
-    });
-
-    offlineTiles.addTo(map);
-
-    const markersById = {};
-    const validMarkers = [];
-
-    function getRestaurantData(card) {
-        const lat = Number(card.dataset.lat);
-        const lng = Number(card.dataset.lng);
-
-        if (
-            card.dataset.lat.trim() === "" ||
-            card.dataset.lng.trim() === "" ||
-            !Number.isFinite(lat) ||
-            !Number.isFinite(lng) ||
-            lat < -90 ||
-            lat > 90 ||
-            lng < -180 ||
-            lng > 180
-        ) {
-            return null;
+    // 5. Focus Function
+    function focusMap(lat, lng, id) {
+        // Zoom in to level 19
+        map.setView([lat, lng], 19);
+        
+        // Open popup
+        if (allMarkers[id]) {
+            allMarkers[id].openPopup();
         }
 
-        return {
-            id: card.dataset.id,
-            name: card.dataset.name || "Restaurant",
-            address: card.dataset.address || "Address not available",
-            lat: lat,
-            lng: lng
-        };
+        // Highlight active item
+        document.querySelectorAll('.resto-item').forEach(item => item.classList.remove('active'));
+        document.getElementById('item-' + id).classList.add('active');
     }
 
-    restaurantCards.forEach(function (card) {
-        const restaurant = getRestaurantData(card);
-
-        if (!restaurant) {
-            return;
-        }
-
-        const marker = L.marker(
-            [restaurant.lat, restaurant.lng]
-        ).addTo(map);
-
-        marker.bindPopup(
-            "<strong>" + escapeHtml(restaurant.name) + "</strong>" +
-            "<br>" + escapeHtml(restaurant.address)
-        );
-
-        markersById[restaurant.id] = marker;
-
-        validMarkers.push({
-            id: restaurant.id,
-            marker: marker,
-            card: card,
-            name: restaurant.name.toLowerCase(),
-            address: restaurant.address.toLowerCase()
-        });
-
-        marker.on("click", function () {
-            highlightCard(card);
-        });
-    });
-
-    function escapeHtml(value) {
-        return String(value).replace(/[&<>"']/g, function (character) {
-            const entities = {
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;"
-            };
-
-            return entities[character];
-        });
-    }
-
-    function highlightCard(selectedCard) {
-        restaurantCards.forEach(function (card) {
-            card.classList.toggle("active", card === selectedCard);
-        });
-
-        if (selectedCard) {
-            selectedCard.scrollIntoView({
-                behavior: "auto",
-                block: "nearest"
-            });
-        }
-    }
-
-    function showRestaurant(id) {
-        const marker = markersById[String(id)];
-
-        if (!marker) {
-            statusElement.textContent =
-                "This restaurant has no valid map coordinates. Check its latitude and longitude.";
-            return;
-        }
-
-        const position = marker.getLatLng();
-
-        map.setView(position, 16);
-        marker.openPopup();
-
-        const selected = restaurantCards.find(function (card) {
-            return String(card.dataset.id) === String(id);
-        });
-
-        highlightCard(selected);
-    }
-
-    document.querySelectorAll("[data-show-restaurant]").forEach(function (button) {
-        button.addEventListener("click", function (event) {
-            event.stopPropagation();
-            showRestaurant(button.dataset.showRestaurant);
-        });
-    });
-
-    restaurantCards.forEach(function (card) {
-        card.addEventListener("click", function (event) {
-            if (event.target.closest("button")) {
-                return;
-            }
-
-            showRestaurant(card.dataset.id);
-        });
-    });
-
-    function searchRestaurant_List() {
-        const query = searchInput.value.trim().toLowerCase();
-        let matches = 0;
-        const matchingMarkers = [];
-
-        restaurantCards.forEach(function (card) {
-            const name = (card.dataset.name || "").toLowerCase();
-            const address = (card.dataset.address || "").toLowerCase();
-            const matchesQuery =
-                query === "" ||
-                name.includes(query) ||
-                address.includes(query);
-
-            card.style.display = matchesQuery ? "flex" : "none";
-
-            if (matchesQuery) {
-                matches++;
-
-                const marker = markersById[String(card.dataset.id)];
-
-                if (marker) {
-                    matchingMarkers.push(marker);
-                }
-            }
-        });
-
-        document.getElementById("restaurant-count").textContent = matches;
-
-        if (query && matches === 0) {
-            statusElement.textContent = "No matching restaurants found.";
-            return;
-        }
-
-        if (matchingMarkers.length === 1 && query !== "") {
-            const marker = matchingMarkers[0];
-            map.setView(marker.getLatLng(), 16);
-            marker.openPopup();
-        } else if (matchingMarkers.length > 1 && query !== "") {
-            const group = L.featureGroup(matchingMarkers);
-            map.fitBounds(group.getBounds(), {
-                padding: [30, 30],
-                maxZoom: 15
-            });
-        } else if (query === "") {
-            showAllRestaurant_List();
-        }
-
-        if (query !== "") {
-            statusElement.textContent =
-                matches + " matching restaurant(s) found.";
-        }
-    }
-
-    function showAllRestaurant_List() {
-        restaurantCards.forEach(function (card) {
-            card.style.display = "flex";
-            card.classList.remove("active");
-        });
-
-        document.getElementById("restaurant-count").textContent =
-            restaurantCards.length;
-
-        if (validMarkers.length > 0) {
-            const group = L.featureGroup(
-                validMarkers.map(function (item) {
-                    return item.marker;
-                })
-            );
-
-            map.fitBounds(group.getBounds(), {
-                padding: [35, 35],
-                maxZoom: 14
-            });
-
-            statusElement.textContent =
-                validMarkers.length +
-                " restaurant location(s) displayed.";
-        } else {
-            map.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
-
-            statusElement.textContent =
-                "No valid restaurant coordinates found. Add latitude and longitude to your restaurants.";
-        }
-    }
-
-    document.getElementById("search-button").addEventListener(
-        "click",
-        searchRestaurant_List
-    );
-
-    searchInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            searchRestaurant_List();
-        }
-    });
-
-    document.getElementById("show-all-button").addEventListener(
-        "click",
-        function () {
-            searchInput.value = "";
-            showAllRestaurant_List();
-        }
-    );
-
-    document.getElementById("restaurant-count").textContent =
-        restaurantCards.length;
-
-    if (validMarkers.length > 0) {
-        statusElement.textContent =
-            validMarkers.length +
-            " restaurant location(s) ready. Checking local map tiles...";
-    } else {
-        statusElement.textContent =
-            "Map opened, but no valid restaurant coordinates were found.";
-    }
-
-    /*
-     * Invalidate the map size after the page layout is ready.
-     */
-    map.invalidateSize();
-
-})();
+    // 6. Fix Gray Box Issue
+    setTimeout(function() {
+        map.invalidateSize();
+    }, 500);
 </script>
 
 {% endblock %}
-```

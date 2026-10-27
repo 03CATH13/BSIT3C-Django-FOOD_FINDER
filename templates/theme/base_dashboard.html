@@ -1,0 +1,66 @@
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Dashboard - Food Finder</title>
+
+    <!-- CSS Libraries -->
+    <link href="{% static 'libs/jsvectormap/dist/jsvectormap.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/tabler.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/tabler-flags.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/tabler-payments.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/tabler-vendors.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/tabler-marketing.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/tabler-themes.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/app-theme.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        @import url("https://rsms.me/inter/inter.css");
+        body {
+            background-color: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .page {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .page-wrapper {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .dashboard-wrapper {
+            min-height: 100vh;
+            padding: 2rem;
+        }
+    </style>
+  </head>
+
+  <body>
+    <div class="page">
+        <div class="page-wrapper">
+            <div class="page-body">
+                <div class="container-xl">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Libraries -->
+    <script src="{% static 'js/tabler-theme.js' %}"></script>
+    <script src="{% static 'libs/apexcharts/dist/apexcharts.min.js' %}" defer></script>
+    <script src="{% static 'libs/jsvectormap/dist/jsvectormap.min.js' %}" defer></script>
+    <script src="{% static 'libs/jsvectormap/dist/maps/world.js' %}" defer></script>
+    <script src="{% static 'libs/jsvectormap/dist/maps/world-merc.js' %}" defer></script>
+    <script src="{% static 'libs/list.js/dist/list.min.js' %}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/tabler.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+  </body>
+</html>
