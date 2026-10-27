@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - KabankalanEats</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+        }
+        .register-card {
+            background: rgba(30, 30, 38, 0.8);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .register-card h2 {
+            font-weight: 800;
+            color: #eb78bf;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .form-label { font-weight: 600; color: #d1d5db; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+        }
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: #eb78bf;
+            box-shadow: 0 0 10px rgba(235, 120, 191, 0.3);
+        }
+        .form-control::placeholder { color: #6b7280; }
+        .btn-register {
+            background: #eb78bf;
+            color: #0f0f13;
+            font-weight: 800;
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 50px;
+            border: none;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        .btn-register:hover { background: #f08cc9; transform: translateY(-2px); }
+        .login-link { text-align: center; margin-top: 1.5rem; color: #9ca3af; font-size: 0.9rem; }
+        .login-link a { color: #eb78bf; text-decoration: none; font-weight: 600; }
+        .errorlist { color: #ef4444; font-size: 0.8rem; list-style: none; padding-left: 0; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="register-card">
+        <h2><i class="fas fa-user-plus me-2"></i> Create Account</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                {{ form.password1 }}
+                {{ form.password1.errors }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+            <button type="submit" class="btn btn-register">Sign Up Now <i class="fas fa-arrow-right ms-2"></i></button>
+        </form>
+        <div class="login-link">
+            Already have an account? <a href="{% url 'login' %}">Sign In Here</a>
+        </div>
+    </div>
+</body>
+</html>

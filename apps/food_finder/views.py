@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 import urllib.parse
+from .forms import RestaurantForm, RegisterForm
+from .models import Favorite
 
 
 # ==========================================
@@ -427,6 +429,7 @@ RESTAURANT_LIST_DATA = [
 # RESTAURANT LIST, SEARCH, AND FILTER
 # ==========================================
 
+@login_required  # <--- IDINAGDAG PARA BAWAL PUMASOK KUNG HINDI NAKA-LOGIN
 def restaurant_list(request):
     restaurants = RESTAURANT_LIST_DATA.copy()
 
@@ -484,6 +487,7 @@ def restaurant_list(request):
 # RESTAURANT DETAILS
 # ==========================================
 
+@login_required  # <--- IDINAGDAG
 def restaurant_detail(request, pk):
     restaurant = next(
         (
@@ -526,6 +530,7 @@ def restaurant_detail(request, pk):
 # RESTAURANT MAP
 # ==========================================
 
+@login_required  # <--- IDINAGDAG
 def restaurant_map(request):
     return render(request, 'map.html', {
         'restaurant_list': RESTAURANT_LIST_DATA,
@@ -557,3 +562,22 @@ def my_favorites(request):
 @login_required
 def add_restaurant(request):
     return redirect('food_finder:restaurant_list')
+
+
+# ==========================================
+# USER REGISTRATION (BAGONG DAGDAG)
+# ==========================================
+
+def register_view(request):
+    if request.user.is_authenticated:
+        return redirect('food_finder:restaurant_list')
+        
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = RegisterForm()
+        
+    return render(request, 'register.html', {'form': form})

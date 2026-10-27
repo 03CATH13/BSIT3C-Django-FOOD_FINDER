@@ -1,4 +1,3 @@
-
 from django.urls import path
 from . import views
 
@@ -13,4 +12,5 @@ urlpatterns = [
     path('<int:pk>/review/', views.add_review, name='add_review'),
     path('<int:pk>/favorite/', views.toggle_favorite, name='toggle_favorite'),
     path('my-favorites/', views.my_favorites, name='my_favorites'),
+    path('register/', views.register_view, name='register'), # <--- BAGONG DAGDAG
 ]

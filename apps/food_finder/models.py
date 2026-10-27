@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -30,13 +29,6 @@ class Restaurant(models.Model):
         blank=True,
         help_text="e.g., 9:00 AM - 10:00 PM"
     )
-
-    # Optional image field; Pillow is required to enable it.
-    # image = models.ImageField(
-    #     upload_to='restaurants/',
-    #     blank=True,
-    #     null=True
-    # )
 
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
