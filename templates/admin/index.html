@@ -3,124 +3,190 @@
 
 {% block content %}
 <style>
-    /* Container para sa lahat ng app cards */
+    /* ==========================================
+       PREMIUM AESTHETIC DASHBOARD
+       ========================================== */
+
+    /* Container */
     .app-dashboard-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 30px;
         align-items: flex-start;
-        margin-bottom: 30px;
+        margin-bottom: 50px;
+        padding: 10px;
     }
 
-    /* Bawat App Card */
+    /* GLASSMORPHISM CARD */
     .app-card {
         flex: 1 1 30%;
-        min-width: 280px;
-        background: #f1dcdc;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        min-width: 320px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(15px);
+        border-radius: 24px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        border: 1px solid #dee4ec;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 15px 35px rgba(69, 61, 61, 0.1);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
     }
 
-    /* Header ng Card - PINK AT BOUNCE */
+    /* Hover Effect */
+    .app-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(236, 72, 153, 0.2);
+        border-color: rgba(236, 72, 153, 0.4);
+    }
+
+    /* DECORATIVE TOP BORDER */
+    .app-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #ec4899, #f472b6);
+    }
+
+    /* HEADER */
     .app-card-header {
-        background: #cdd3d8;
-        padding: 10px 15px;
-        font-size: 1rem;
-        font-weight: 700;
-        color: #e092b9;
-        border-bottom: 1px solid #e2e8f0;
+        padding: 22px 25px;
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #9399a4;
         display: flex;
         align-items: center;
-        gap: 8px;
-        animation: bounce 2s infinite;
+        gap: 12px;
+        background: transparent;
+        border-bottom: 1px solid #f1f5f9;
     }
 
-    @keyframes bounce {
-        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-        40% { transform: translateY(-5px); }
-        60% { transform: translateY(-3px); }
+    /* ICON CIRCLE - DARK BACKGROUND */
+    .app-card-header .icon-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        font-size: 1.3rem;
+        animation: float 3s ease-in-out infinite;
+        
+        background: #1e293b !important; /* Dark Blue */
+        color: white !important;
+        box-shadow: 0 4px 10px rgba(30, 41, 59, 0.3);
     }
 
-    /* Body ng Card */
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    /* BODY */
     .app-card-body {
         display: flex;
         flex-direction: column;
-        padding: 8px;
-        gap: 8px;
+        padding: 15px 20px 20px;
+        gap: 12px;
     }
 
-    /* Bawat Model Row */
+    /* MODEL ROW - DARK BACKGROUND NA */
     .model-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 12px;
-        background: #e4ccdf;
-        border-radius: 6px;
-        border: 1px solid #f1f5f9;
-        transition: background 0.2s;
+        padding: 14px 18px;
+        background: #1e293b; /* DARK SLATE BACKGROUND */
+        border-radius: 12px;
+        border: 1px solid #334155;
+        transition: all 0.3s ease;
     }
 
     .model-row:hover {
-        background: #efcadc;
+        background: #334155; /* Mas light na dark kapag hover */
+        border-color: #ec4899;
+        transform: translateX(5px);
+        box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2);
     }
 
+    /* MODEL NAME - PUTI NA ANG TEXT */
     .model-name {
-        font-weight: 600;
-        font-size: 0.85rem;
-        color: #3b475c;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #f8fafc; /* Puting text */
         text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .model-name:hover {
-        color: #d288ad;
+        color: #f472b6; /* Pink hover */
     }
 
-    /* BLOCK BUTTONS (Parisukat at pantay) */
+    /* BUTTONS */
     .btn-admin {
-        padding: 4px 10px;
-        border-radius: 4px;
+        padding: 6px 14px;
+        border-radius: 8px;
         text-decoration: none;
-        font-size: 0.7rem;
-        font-weight: 600;
-        color: rgb(238, 231, 231) !important;
-        transition: all 0.2s;
-        
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: white !important;
+        transition: all 0.2s ease;
         display: inline-block; 
         text-align: center;
-        min-width: 60px; 
+        min-width: 65px; 
         border: none;
         cursor: pointer;
+        letter-spacing: 0.3px;
     }
 
     .btn-admin:hover {
         opacity: 0.9;
-        transform: scale(1.05);
+        transform: scale(1.08);
     }
 
-    /* PINK BUTTONS */
+    /* PINK GRADIENT BUTTONS */
     .btn-add { 
-        background: #766470 !important; 
+        background: linear-gradient(135deg, #ec4899, #db2777) !important; 
+        box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
     }
     .btn-change { 
-        background: #af88a7 !important; 
+        background: linear-gradient(135deg, #f472b6, #ec4899) !important; 
+        box-shadow: 0 4px 12px rgba(244, 114, 182, 0.4);
     }
 
-    /* SAYINGS SA IBABA - MAS MALAKI AT KITANG-KITA */
+    /* SAYINGS */
     .dashboard-saying {
         text-align: center;
-        padding: 40px 20px;
-        margin-top: 30px;
-        border-top: 1px dashed #334155;
-        background: rgba(211, 200, 200, 0.02);
-        border-radius: 12px;
+        padding: 50px 20px;
+        margin-top: 40px;
+        border-top: 2px dashed #334155;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(236, 72, 153, 0.08) 100%);
+        border-radius: 24px;
     }
 
-    /* Responsive */
+    .dashboard-saying p:first-child {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #ec4899;
+        font-style: italic;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        margin-bottom: 15px;
+        line-height: 1.4;
+    }
+
+    .dashboard-saying p:last-child {
+        font-size: 1.05rem;
+        color: #94a3b8;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+    }
+
+    /* RESPONSIVE */
     @media (max-width: 992px) {
         .app-card { flex: 1 1 100%; }
     }
@@ -129,11 +195,13 @@
 <div class="app-dashboard-container">
     {% if app_list %}
         {% for app in app_list %}
+            {% if app.name != 'Food_Finder' %}
             <div class="app-card">
                 <div class="app-card-header">
-                    {% if app.name == 'Authentication and Authorization' %}🔐{% endif %}
-                    {% if app.name == 'Food_Finder' %}🍔{% endif %}
-                    {% if app.name == 'Info' %}📋{% endif %}
+                    <div class="icon-wrapper">
+                        {% if app.name == 'Authentication and Authorization' %}🔐{% endif %}
+                        {% if app.name == 'Info' %}📋{% endif %}
+                    </div>
                     {{ app.name }}
                 </div>
                 <div class="app-card-body">
@@ -154,19 +222,16 @@
                     {% endfor %}
                 </div>
             </div>
+            {% endif %}
         {% endfor %}
     {% else %}
         <p>You don't have permission to view or edit anything.</p>
     {% endif %}
 </div>
 
-<!-- SAYINGS SA IBABA - MAS MALAKI AT MAY KULAY -->
+<!-- SAYINGS SA IBABA -->
 <div class="dashboard-saying">
-    <p style="font-size: 1.5rem; font-weight: 800; color: #fcb1d6; font-style: italic; text-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 10px;">
-        "Good food is the foundation of genuine happiness."
-    </p>
-    <p style="font-size: 1rem; color: #697482; font-weight: 600; margin-top: 0;">
-
-    </p>
+    <p>"Good food is the foundation of genuine happiness."</p>
+    <p>— Auguste Escoffier</p>
 </div>
 {% endblock %}

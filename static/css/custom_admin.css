@@ -1,5 +1,5 @@
 /* ==========================================
-   1. PANGKALAHATANG BACKGROUND
+   1. DARK AESTHETIC BACKGROUND
    ========================================== */
 body {
     background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%) !important;
@@ -10,20 +10,19 @@ body {
    2. DARK TOP NAVIGATION BAR (MAY PINK ACCENTS)
    ========================================== */
 .navbar, .main-header, .app-header {
-    background-color: #0f172a !important; 
+    background-color: #cdd0d9 !important; 
     border-bottom: 1px solid #1e293b !important;
 }
 
 .navbar .nav-link, .navbar-brand, .main-header .nav-link {
-    color: #e2e8f0 !important;
+    color: #aeb9c9 !important;
     font-weight: 600 !important;
 }
 
 .navbar .nav-link:hover {
-    color: #ec4899 !important; /* Pink Hover */
+    color: #e0b3ca !important; 
 }
 
-/* Search bars sa navbar */
 .navbar .form-control, .navbar input[type="text"] {
     background-color: #1e293b !important;
     border: 1px solid #334155 !important;
@@ -114,7 +113,7 @@ body {
 }
 
 .btn-success:hover, .addlink:hover {
-    background-color: #db2777 !important;
+    background-color: #c79db0 !important;
     transform: scale(1.05);
 }
 
@@ -128,4 +127,35 @@ body {
     background-color: #9d174d !important;
     transform: scale(0.95);
     box-shadow: inset 0 3px 5px rgba(0,0,0,0.2) !important;
+}
+
+/* ==========================================
+   6. SAYINGS SA IBABA
+   ========================================== */
+.dashboard-saying {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 30px;
+    border-top: 1px dashed #334155;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+}
+
+/* ==========================================
+   7. ITAGO ANG FOOD_FINDER SA SIDEBAR
+   ========================================== */
+/* Itago ang module na may "Food_Finder" sa sidebar */
+.app-food_finder,
+.module.app-food_finder,
+#nav-sidebar .app-food_finder,
+.sidebar .app-food_finder,
+li.app-food_finder,
+div.app-food_finder {
+    display: none !important;
+}
+
+/* Fallback: Itago kung may "Food_Finder" na text sa loob ng sidebar */
+.sidebar a[href*="food_finder"],
+#nav-sidebar a[href*="food_finder"] {
+    display: none !important;
 }
