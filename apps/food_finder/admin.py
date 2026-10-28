@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import User
 from .models import (
     Restaurant,
     MenuItem,
@@ -131,38 +129,10 @@ class FavoriteAdmin(admin.ModelAdmin):
 
 
 # ============================================
-# USER PROFILE INLINE (sa User Admin)
+# USER PROFILE ADMIN (DILI NA I-REGISTER SA USER)
 # ============================================
 
-class UserProfileInline(admin.StackedInline):
-    model = UserProfile
-    can_delete = False
-    verbose_name_plural = 'Profile'
-    fields = ('age', 'address', 'phone_number')
-
-
-class UserAdmin(BaseUserAdmin):
-    inlines = [UserProfileInline]
-    list_display = (
-        'username',
-        'email',
-        'first_name',
-        'last_name',
-        'is_staff',
-        'is_active',
-        'date_joined',
-    )
-
-
-# I-unregister ang default User admin at i-register ang custom
-admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
-
-
-# ============================================
-# ADMIN SITE HEADER
-# ============================================
-
-admin.site.site_header = "KabankalanEats Admin"
-admin.site.site_title = "KabankalanEats Admin Portal"
-admin.site.index_title = "Welcome to the Food Finder Management System"
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'age', 'address', 'phone_number')
+    search_fields = ('user__username', 'address', 'phone_number')

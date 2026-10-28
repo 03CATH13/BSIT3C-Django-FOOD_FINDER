@@ -21,5 +21,3 @@ class Order(models.Model):
 
     class Meta:
         ordering = ['-created_at']
-        verbose_name = "Order"
-        verbose_name_plural = "Orders"

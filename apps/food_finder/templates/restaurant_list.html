@@ -32,6 +32,16 @@
         flex-grow: 1;
     }
 
+    /* --- TOP NAVIGATION (BAGONG DUGANG) --- */
+    .top-nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
     /* --- BACK BUTTON --- */
     .back-to-dash-btn {
         display: inline-flex;
@@ -47,8 +57,6 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
         cursor: pointer;
-        margin-bottom: 1rem;
-        align-self: flex-start;
     }
 
     .back-to-dash-btn:hover {
@@ -66,6 +74,29 @@
 
     .back-to-dash-btn i { transition: transform 0.3s ease; }
     .back-to-dash-btn:hover i { transform: translateX(-3px); }
+
+    /* --- GO TO NEAR ME BUTTON (BAGONG DUGANG) --- */
+    .go-near-me-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        padding: 0.6rem 1.2rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    .go-near-me-btn:hover {
+        background: rgba(16, 185, 129, 0.2);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+    }
 
     /* --- HEADER --- */
     .restaurants-header {
@@ -244,15 +275,26 @@
         justify-content: center;
         margin: 0 auto 1rem auto;
     }
+
+    @media (max-width: 768px) {
+        .top-nav-container {
+            justify-content: center;
+        }
+    }
 </style>
 
 <div class="restaurants-wrapper">
     <div class="restaurants-container">
         
-        <!-- BACK BUTTON -->
-        <a href="{% url 'food_finder:home' %}" id="backBtn" class="back-to-dash-btn">
-            <i class="fas fa-arrow-left"></i> Back to Dashboard
-        </a>
+        <!-- TOP NAVIGATION (DUHA KA BUTTONS) -->
+        <div class="top-nav-container">
+            <a href="{% url 'food_finder:home' %}" id="backBtn" class="back-to-dash-btn">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <a href="{% url 'core:near_me' %}" class="go-near-me-btn">
+                <i class="fas fa-map-marker-alt"></i> Go to Near Me
+            </a>
+        </div>
 
         <!-- Header -->
         <div class="restaurants-header">
