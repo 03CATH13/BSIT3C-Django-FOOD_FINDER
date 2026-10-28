@@ -1,0 +1,109 @@
+{% extends 'theme/base_dashboard.html' %}
+{% block content %}
+<style>
+    .page-wrapper { 
+        background: #0f0f13; 
+        position: fixed; inset: 0; 
+        padding: 3rem 2rem; 
+        overflow-y: auto; 
+        color: white; 
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+    }
+    
+    .back-link {
+        color: #eb78bf; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; font-weight: 600;
+    }
+    
+    .header-img { 
+        width: 100%; 
+        max-height: 350px; 
+        object-fit: cover; 
+        border-radius: 16px; 
+        margin-bottom: 25px; 
+    }
+    
+    .rest-title { 
+        font-size: 3rem; 
+        font-weight: 900; 
+        margin-bottom: 10px; 
+        color: white;
+    }
+    
+    .rest-meta { 
+        color: #a1a1aa; 
+        font-size: 1rem; 
+        margin-bottom: 30px; 
+        display: flex; 
+        gap: 25px; 
+        flex-wrap: wrap; 
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 20px;
+    }
+
+    .rest-meta span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .menu-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .menu-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+        gap: 15px; 
+    }
+    
+    .menu-item { 
+        background: rgba(255,255,255,0.03); 
+        border: 1px solid rgba(255,255,255,0.08); 
+        padding: 15px 20px; 
+        border-radius: 12px; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        transition: all 0.2s ease;
+    }
+
+    .menu-item:hover {
+        background: rgba(255,255,255,0.06);
+        border-color: rgba(16, 185, 129, 0.4);
+    }
+    
+    .menu-item h4 { margin: 0; font-size: 1rem; color: white; font-weight: 500;}
+    .menu-item .price { color: #10b981; font-weight: bold; font-size: 1.1rem; }
+</style>
+
+<div class="page-wrapper">
+    <a href="{% url 'core:near_me' %}" class="back-link"><i class="fas fa-arrow-left"></i> Back to Near Me</a>
+    
+    <img src="{{ restaurant.image }}" alt="{{ restaurant.name }}" class="header-img">
+    
+    <h1 class="rest-title">{{ restaurant.name }}</h1>
+    
+    <div class="rest-meta">
+        <span><i class="fas fa-utensils" style="color: #10b981;"></i> {{ restaurant.cuisine_type }}</span>
+        <span><i class="fas fa-map-marker-alt" style="color: #eb78bf;"></i> {{ restaurant.address }}</span>
+        <span><i class="fas fa-clock" style="color: #3b82f6;"></i> {{ restaurant.opening_hours }}</span>
+    </div>
+
+    <h3 class="menu-title"><i class="fas fa-book-open" style="color: #f59e0b;"></i> Menu Highlights</h3>
+    <div class="menu-grid">
+        {% for item in restaurant.menu %}
+        <div class="menu-item">
+            <h4>{{ item.name }}</h4>
+            <span class="price">{{ item.price }}</span>
+        </div>
+        {% empty %}
+        <p style="color: #888;">No menu available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -5,7 +5,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-zsnno#^l!whuzs%55j6*366px#r09+borh$1^2mj*_ovz47!o_'
 DEBUG = True
-ALLOWED_HOSTS = []
+
+# GIPALITAN NAKO ITO PARA MAKA-ACCESS ANG CELLPHONE MO
+ALLOWED_HOSTS = ['*'] 
 
 INSTALLED_APPS = [
     'jazzmin',
@@ -96,6 +98,11 @@ LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/'
 
 # ==========================================
+# SECURITY FIX PARA GUMANA ANG MAPA
+# ==========================================
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+# ==========================================
 # JAZZMIN CUSTOMIZATION
 # ==========================================
 JAZZMIN_SETTINGS = {
@@ -124,7 +131,7 @@ JAZZMIN_SETTINGS = {
     "show_sidebar": True,
     "navigation_expanded": True,
     "order_with_respect_to": ["auth", "food_finder", "info"],
-    "custom_css": "css/custom_admin.css",  # <--- ITO ANG MAGPAPAGANDA
+    "custom_css": "css/custom_admin.css",
 }
 
 JAZZMIN_UI_TWEAKS = {

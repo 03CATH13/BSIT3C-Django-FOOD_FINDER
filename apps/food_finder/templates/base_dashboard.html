@@ -1,284 +1,374 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}KabankalanEats - Food Finder System{% endblock %}</title>
+{% extends 'theme/base_dashboard.html' %}
+
+{% block content %}
+<style>
+    /* --- GLOBAL DARK THEME --- */
+    html, body {
+        background-color: #0f0f13 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .dashboard-wrapper {
+        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
+        width: 100vw;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dashboard-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+        padding: 2rem 1rem;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* --- HEADER --- */
+    .welcome-header-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        width: 100%;
+        margin-bottom: 2.5rem;
+    }
+
+    .welcome-header { text-align: center; margin: 0; }
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    .welcome-header h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+        letter-spacing: -2px;
+        line-height: 1.1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        animation: floatGlow 3s ease-in-out infinite;
+    }
     
-    <style>
-        /* --- FORCE EVERYTHING TO BE DARK --- */
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
+    .welcome-header h1 span.gradient-text { 
+        background: linear-gradient(135deg, #eb78bf 0%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 40px rgba(235, 120, 191, 0.6), 0 0 80px rgba(167, 139, 250, 0.4);
+        display: inline-block;
+        animation: pulseGlow 2s ease-in-out infinite;
+    }
+    
+    @keyframes floatGlow {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes pulseGlow {
+        0%, 100% { filter: drop-shadow(0 0 20px rgba(235, 120, 191, 0.5)); }
+        50% { filter: drop-shadow(0 0 40px rgba(235, 120, 191, 0.9)); }
+    }
+    
+    .welcome-header p { 
+        color: #a1a1aa; 
+        font-size: 1.2rem; 
+        margin: 0; 
+    }
 
-        html, body {
-            background-color: #0f0f13 !important;
-            background: #0f0f13 !important;
-            color: #ffffff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0 !important;
-            padding: 0 !important;
-            min-height: 100vh;
-            width: 100% !important;
-            max-width: 100% !important;
-            overflow-x: hidden !important;
-        }
+    /* WAVE ANIMATION */
+    .wave {
+        display: inline-block;
+        animation: wave-animation 2.5s infinite;
+        transform-origin: 70% 70%;
+        font-size: 3.5rem;
+    }
 
-        /* --- SIDEBAR STYLING --- */
-        .sidebar {
-            background-color: #16161a !important;
-            min-height: 100vh;
-            width: 250px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            flex-direction: column;
-            padding: 1.5rem 1rem;
-            box-sizing: border-box;
-        }
+    @keyframes wave-animation {
+        0% { transform: rotate( 0.0deg) }
+        10% { transform: rotate(14.0deg) }
+        20% { transform: rotate(-8.0deg) }
+        30% { transform: rotate(14.0deg) }
+        40% { transform: rotate(-4.0deg) }
+        50% { transform: rotate(10.0deg) }
+        60% { transform: rotate( 0.0deg) }
+        100% { transform: rotate( 0.0deg) }
+    }
 
-        .sidebar-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 1.5rem;
-            text-decoration: none;
-        }
+    /* --- CARDS STYLING --- */
+    .landscape-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 1.2rem 1rem;
+        text-decoration: none !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        width: 100%;
+        height: 140px;
+        gap: 10px;
+        position: relative;
+    }
 
-        .brand-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #eb78bf, #a78bfa);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
+    .landscape-card:hover {
+        transform: translateY(-6px) scale(1.03);
+        border-color: rgba(235, 120, 191, 0.4);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(235, 120, 191, 0.1);
+    }
 
-        .brand-text h4 {
-            color: #ffffff;
-            font-weight: 800;
-            margin: 0;
-            font-size: 1.1rem;
-            letter-spacing: -0.5px;
-        }
-        .brand-text span { color: #eb78bf; }
-        .brand-text p {
-            color: #71717a;
-            font-size: 0.6rem;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+    /* --- ICON STYLING --- */
+    .icon-bubble {
+        width: 45px; 
+        height: 45px; 
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-bottom: 5px;
+    }
+    .icon-bubble i { font-size: 1.2rem !important; transition: all 0.3s ease; }
+    .landscape-card:hover .icon-bubble i { transform: scale(1.15) rotate(-5deg); }
 
-        .nav-section { margin-bottom: 1.5rem; }
-        .nav-section-title {
-            color: #52525b;
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 0.8rem;
-            padding-left: 0.5rem;
-        }
+    /* --- TEXT & BADGE STYLING --- */
+    .text-content {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        width: 100%;
+    }
 
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 0.7rem 1rem;
-            color: #a1a1aa;
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            margin-bottom: 2px;
-        }
+    .landscape-card h3 {
+        color: #ffffff !important;
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin: 0;
+    }
+    .landscape-card p {
+        color: #a1a1aa !important;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        margin: 0;
+    }
 
-        .sidebar-link:hover, .sidebar-link.active {
-            background: rgba(235, 120, 191, 0.1);
-            color: #eb78bf;
-        }
+    .count-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.1);
+        color: #e5e7eb;
+        font-size: 0.65rem;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 20px;
+        margin-top: 4px;
+        width: fit-content;
+        align-self: center;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
 
-        .sidebar-link i {
-            width: 20px;
-            text-align: center;
-            font-size: 1rem;
-        }
+    /* --- ICON COLORS --- */
+    .icon-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+    .icon-pink { background: linear-gradient(135deg, #ec4899, #be185d); color: white; }
+    .icon-cyan { background: linear-gradient(135deg, #06b6d4, #0e7490); color: white; }
+    /* BAGONG KULAY PARA SA MGA BAGONG CARDS */
+    .icon-green { background: linear-gradient(135deg, #10b981, #047857); color: white; }
+    .icon-orange { background: linear-gradient(135deg, #f97316, #c2410c); color: white; }
+    .icon-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; }
+    .icon-yellow { background: linear-gradient(135deg, #f59e0b, #b45309); color: white; }
 
-        .sidebar-user {
-            margin-top: auto;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            padding: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
+    /* --- ADMIN & LOGOUT SA ILALIM --- */
+    .bottom-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 3rem;
+        width: 100%;
+    }
 
-        .user-avatar {
-            width: 35px;
-            height: 35px;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-        }
+    .bottom-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #d4d4d8;
+        padding: 0.8rem 1.5rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
 
-        .user-info h6 {
-            color: #ffffff;
-            margin: 0;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .user-info p {
-            color: #71717a;
-            margin: 0;
-            font-size: 0.7rem;
-        }
+    .bottom-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
 
-        /* --- MAIN CONTENT AREA (PINAKA-IMPORTANTE) --- */
-        .main-content {
-            margin-left: 250px;
-            min-height: 100vh;
-            background-color: #0f0f13 !important;
-            width: calc(100% - 250px);
-            padding: 0;
-            box-sizing: border-box;
-            position: relative;
-            z-index: 1;
-        }
+    .bottom-btn.admin {
+        color: #a78bfa;
+        border-color: rgba(167, 139, 250, 0.3);
+    }
+    .bottom-btn.admin:hover {
+        background: rgba(167, 139, 250, 0.1);
+    }
 
-        /* --- OVERLAY PARA TAKPAN ANG PUTI SA LIKOD --- */
-        .dark-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #0f0f13;
-            z-index: -1; /* Nasa likod ng lahat */
-        }
+    .bottom-btn.logout {
+        color: #f59e0b;
+        border-color: rgba(245, 158, 11, 0.3);
+    }
+    .bottom-btn.logout:hover {
+        background: rgba(245, 158, 11, 0.1);
+    }
 
-        @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .main-content { margin-left: 0; width: 100%; }
-        }
-    </style>
-</head>
-<body>
+    /* --- FOOTER --- */
+    .dashboard-footer {
+        margin-top: 3rem;
+        text-align: center;
+        color: #52525b;
+        font-size: 0.85rem;
+    }
+</style>
 
-    <!-- DARK OVERLAY (Para matakpan ang puting background) -->
-    <div class="dark-overlay"></div>
-
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <a href="{% url 'food_finder:home' %}" class="sidebar-brand">
-            <div class="brand-icon"><i class="fas fa-utensils"></i></div>
-            <div class="brand-text">
-                <h4>Food<span>_Finder</span></h4>
-                <p>Food Finder System</p>
+<div class="dashboard-wrapper">
+    <div class="dashboard-container">
+        
+        <!-- HEADER -->
+        <div class="welcome-header-wrapper">
+            <div class="welcome-header">
+                <h1>
+                    <span class="gradient-text">Welcome!</span> 
+                    <span class="wave">👋</span>
+                </h1>
+                <p>What would you like to explore today?</p>
             </div>
-        </a>
-
-        <div class="nav-section">
-            <div class="nav-section-title">Main Menu</div>
-            <a href="{% url 'food_finder:home' %}" class="sidebar-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                <i class="fas fa-home"></i> Dashboard
-            </a>
-            <a href="{% url 'food_finder:restaurant_list' %}" class="sidebar-link {% if request.resolver_match.url_name == 'restaurant_list' %}active{% endif %}">
-                <i class="fas fa-store"></i> Restaurants
-            </a>
-            <a href="{% url 'food_finder:my_favorites' %}" class="sidebar-link {% if request.resolver_match.url_name == 'my_favorites' %}active{% endif %}">
-                <i class="fas fa-heart"></i> My Favorites
-            </a>
         </div>
 
-        <div class="nav-section">
-            <div class="nav-section-title">Information</div>
-            <a href="{% url 'food_finder:about' %}" class="sidebar-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
-                <i class="fas fa-info-circle"></i> About Food Finder
-            </a>
+        <!-- MAIN CARDS (7 CARDS TOTAL) -->
+        <div class="row row-cols-2 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center w-100 px-4">
+            
+            <!-- 1. RESTAURANTS -->
+            <div class="col">
+                <a href="{% url 'food_finder:restaurant_list' %}" class="landscape-card">
+                    <div class="icon-bubble icon-blue"><i class="fas fa-store"></i></div>
+                    <div class="text-content">
+                        <h3>Restaurants</h3>
+                        <p>Browse all</p>
+                        <span class="count-badge">{{ total_restaurants|default:"19" }} available</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 2. FAVORITES -->
+            <div class="col">
+                <a href="{% url 'food_finder:my_favorites' %}" class="landscape-card">
+                    <div class="icon-bubble icon-pink"><i class="fas fa-heart"></i></div>
+                    <div class="text-content">
+                        <h3>Favorites</h3>
+                        <p>Your saved list</p>
+                        <span class="count-badge">{{ total_favorites|default:"0" }} saved</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 3. ABOUT -->
+            <div class="col">
+                <a href="{% url 'food_finder:about' %}" class="landscape-card">
+                    <div class="icon-bubble icon-cyan"><i class="fas fa-info-circle"></i></div>
+                    <div class="text-content">
+                        <h3>About</h3>
+                        <p>System info</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 4. NEAR ME -->
+            <div class="col">
+                <!-- Palitan ang '#' ng tamang URL kung meron ka na -->
+                <a href="#" class="landscape-card">
+                    <div class="icon-bubble icon-green"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="text-content">
+                        <h3>Near Me</h3>
+                        <p>Map View</p>
+                        <span class="count-badge">Find location</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 5. TOP RATED -->
+            <div class="col">
+                <a href="#" class="landscape-card">
+                    <div class="icon-bubble icon-orange"><i class="fas fa-fire"></i></div>
+                    <div class="text-content">
+                        <h3>Top Rated</h3>
+                        <p>Trending spots</p>
+                        <span class="count-badge">Popular now</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 6. MY ORDERS -->
+            <div class="col">
+                <a href="#" class="landscape-card">
+                    <div class="icon-bubble icon-purple"><i class="fas fa-receipt"></i></div>
+                    <div class="text-content">
+                        <h3>My Orders</h3>
+                        <p>Order History</p>
+                        <span class="count-badge">0 orders</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 7. PROMOS -->
+            <div class="col">
+                <a href="#" class="landscape-card">
+                    <div class="icon-bubble icon-yellow"><i class="fas fa-tags"></i></div>
+                    <div class="text-content">
+                        <h3>Promos</h3>
+                        <p>Special Deals</p>
+                        <span class="count-badge">New discounts</span>
+                    </div>
+                </a>
+            </div>
+            
         </div>
 
-        <div class="nav-section">
-            <div class="nav-section-title">Account</div>
+        <!-- ADMIN & LOGOUT SA ILALIM -->
+        <div class="bottom-actions">
             {% if user.is_staff %}
-            <a href="{% url 'admin:index' %}" class="sidebar-link">
+            <a href="{% url 'admin:index' %}" class="bottom-btn admin">
                 <i class="fas fa-users-cog"></i> Admin Panel
             </a>
             {% endif %}
-            <a href="{% url 'logout' %}" class="sidebar-link">
+            
+            <a href="{% url 'logout' %}" class="bottom-btn logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
 
-        <div class="sidebar-user">
-            <div class="user-avatar">
-                {{ user.username|first|upper }}
-            </div>
-            <div class="user-info">
-                <h6>{{ user.username }}</h6>
-                <p>{% if user.is_staff %}Administrator{% else %}User{% endif %}</p>
-            </div>
+        <!-- FOOTER -->
+        <div class="dashboard-footer">
+            &copy; 2026 KabankalanEats &mdash; Food Finder System. All rights reserved.
         </div>
+
     </div>
+</div>
 
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-        {% block content %}
-        {% endblock %}
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- SCRIPT PARA PILITIN ANG LAHAT NA ITIM -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Pilitin ang html at body
-            document.documentElement.style.setProperty('background-color', '#0f0f13', 'important');
-            document.body.style.setProperty('background-color', '#0f0f13', 'important');
-            document.body.style.setProperty('margin', '0', 'important');
-            document.body.style.setProperty('padding', '0', 'important');
-
-            // Hanapin lahat ng containers at gawing transparent
-            const containers = document.querySelectorAll('.container, .container-fluid, .row, .col, main, .content, .wrapper, .main-panel');
-            containers.forEach(function(el) {
-                el.style.setProperty('background-color', 'transparent', 'important');
-                el.style.setProperty('background', 'transparent', 'important');
-            });
-
-            // Hanapin ang lahat ng direct children ng body maliban sa sidebar, main-content, at overlay
-            const bodyChildren = document.body.children;
-            for (let i = 0; i < bodyChildren.length; i++) {
-                const el = bodyChildren[i];
-                if (el.tagName !== 'SCRIPT' && el.tagName !== 'STYLE' && !el.classList.contains('sidebar') && !el.classList.contains('main-content') && !el.classList.contains('dark-overlay')) {
-                    el.style.setProperty('background-color', '#0f0f13', 'important');
-                    el.style.setProperty('background', '#0f0f13', 'important');
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+{% endblock %}

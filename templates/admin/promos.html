@@ -1,0 +1,29 @@
+{% extends 'theme/base_dashboard.html' %}
+{% block content %}
+<style>
+    .page-wrapper { background: #0f0f13; position: fixed; inset: 0; padding: 3rem 2rem; overflow-y: auto; color: white; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .header-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+    .header-subtitle { color: #a1a1aa; margin-bottom: 30px; }
+    .promo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .promo-card { background: linear-gradient(135deg, #2a1b35, #1e1e26); border: 1px solid #4c1d95; border-radius: 16px; padding: 20px; position: relative; overflow: hidden; }
+    .promo-code { background: #f59e0b; color: #000; font-weight: bold; padding: 5px 10px; border-radius: 5px; display: inline-block; margin-top: 10px;}
+</style>
+<div class="page-wrapper">
+    <a href="/" style="color: #eb78bf; text-decoration: none; margin-bottom: 20px; display: inline-block;">&larr; Back to Home</a>
+    <div class="header-title"><i class="fas fa-tags" style="color: #f59e0b;"></i> Special Promos</div>
+    <p class="header-subtitle">Grab these exclusive discounts before they expire!</p>
+    
+    <div class="promo-grid">
+        <div class="promo-card">
+            <h3 style="margin: 0 0 5px 0;">50% Off First Order</h3>
+            <p style="color: #a1a1aa; font-size: 0.9rem;">Valid for new users only. Max discount of P100.</p>
+            <div class="promo-code">WELCOME50</div>
+        </div>
+        <div class="promo-card" style="border-color: #0284c7;">
+            <h3 style="margin: 0 0 5px 0;">Free Delivery</h3>
+            <p style="color: #a1a1aa; font-size: 0.9rem;">On orders above P500. Valid on weekends.</p>
+            <div class="promo-code" style="background: #06b6d4;">FREEDEL</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

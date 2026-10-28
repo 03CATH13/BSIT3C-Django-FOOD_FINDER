@@ -1,237 +1,321 @@
-{% extends "admin/base_site.html" %}
-{% load i18n static %}
+{% extends 'theme/base_dashboard.html' %}
 
 {% block content %}
 <style>
-    /* ==========================================
-       PREMIUM AESTHETIC DASHBOARD
-       ========================================== */
-
-    /* Container */
-    .app-dashboard-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 30px;
-        align-items: flex-start;
-        margin-bottom: 50px;
-        padding: 10px;
+    /* --- GLOBAL DARK THEME --- */
+    html, body {
+        background-color: #0f0f13 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    /* GLASSMORPHISM CARD */
-    .app-card {
-        flex: 1 1 30%;
-        min-width: 320px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(15px);
-        border-radius: 24px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 15px 35px rgba(69, 61, 61, 0.1);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        position: relative;
-    }
-
-    /* Hover Effect */
-    .app-card:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 25px 50px rgba(236, 72, 153, 0.2);
-        border-color: rgba(236, 72, 153, 0.4);
-    }
-
-    /* DECORATIVE TOP BORDER */
-    .app-card::before {
-        content: '';
+    .dashboard-wrapper {
+        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
+        width: 100vw;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
         position: absolute;
         top: 0;
         left: 0;
-        right: 0;
-        height: 5px;
-        background: linear-gradient(90deg, #ec4899, #f472b6);
-    }
-
-    /* HEADER */
-    .app-card-header {
-        padding: 22px 25px;
-        font-size: 1.15rem;
-        font-weight: 800;
-        color: #9399a4;
+        z-index: 10;
         display: flex;
-        align-items: center;
-        gap: 12px;
-        background: transparent;
-        border-bottom: 1px solid #f1f5f9;
+        flex-direction: column;
     }
 
-    /* ICON CIRCLE - DARK BACKGROUND */
-    .app-card-header .icon-wrapper {
+    .dashboard-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+        padding: 2rem 1rem;
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* --- HEADER --- */
+    .welcome-header-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        width: 100%;
+        margin-bottom: 2.5rem;
+    }
+
+    .welcome-header { text-align: center; margin: 0; }
+    
+    .welcome-header h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+        letter-spacing: -2px;
+        line-height: 1.1;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 45px;
-        height: 45px;
-        border-radius: 12px;
-        font-size: 1.3rem;
-        animation: float 3s ease-in-out infinite;
-        
-        background: #1e293b !important; /* Dark Blue */
-        color: white !important;
-        box-shadow: 0 4px 10px rgba(30, 41, 59, 0.3);
+        gap: 15px;
+        animation: floatGlow 3s ease-in-out infinite;
     }
-
-    @keyframes float {
+    
+    .welcome-header h1 span.gradient-text { 
+        background: linear-gradient(135deg, #eb78bf 0%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 40px rgba(235, 120, 191, 0.6), 0 0 80px rgba(167, 139, 250, 0.4);
+        display: inline-block;
+        animation: pulseGlow 2s ease-in-out infinite;
+    }
+    
+    @keyframes floatGlow {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-5px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes pulseGlow {
+        0%, 100% { filter: drop-shadow(0 0 20px rgba(235, 120, 191, 0.5)); }
+        50% { filter: drop-shadow(0 0 40px rgba(235, 120, 191, 0.9)); }
+    }
+    
+    .welcome-header p { 
+        color: #a1a1aa; 
+        font-size: 1.2rem; 
+        margin: 0; 
     }
 
-    /* BODY */
-    .app-card-body {
+    /* WAVE ANIMATION */
+    .wave {
+        display: inline-block;
+        animation: wave-animation 2.5s infinite;
+        transform-origin: 70% 70%;
+        font-size: 3.5rem;
+    }
+
+    @keyframes wave-animation {
+        0% { transform: rotate( 0.0deg) }
+        10% { transform: rotate(14.0deg) }
+        20% { transform: rotate(-8.0deg) }
+        30% { transform: rotate(14.0deg) }
+        40% { transform: rotate(-4.0deg) }
+        50% { transform: rotate(10.0deg) }
+        60% { transform: rotate( 0.0deg) }
+        100% { transform: rotate( 0.0deg) }
+    }
+
+    /* ========================================= */
+    /* --- HORIZONTAL FLEX LAYOUT --- */
+    /* ========================================= */
+    .cards-wrapper {
+        width: 100%;
+        max-width: 1300px;
+        overflow-x: auto; 
+        padding-bottom: 15px; 
+        margin-top: 3rem; /* GIDUGANGAN NAKO OG SPACE SA IBABAW SA MGA CARDS */
+        margin-bottom: 2rem;
+        scrollbar-width: none; 
+        -ms-overflow-style: none; 
+    }
+    .cards-wrapper::-webkit-scrollbar { display: none; }
+
+    .cards-container {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        width: max-content; 
+        margin: 0 auto;
+    }
+
+    /* --- CARD DESIGN --- */
+    .landscape-card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 1rem;
+        text-decoration: none !important;
+        display: flex;
+        flex-direction: row; 
+        align-items: center;
+        text-align: left;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        height: 80px;
+        width: 180px; 
+        flex-shrink: 0;
+        gap: 12px;
+        transition: all 0.2s ease;
+    }
+
+    .landscape-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(235, 120, 191, 0.4);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    /* --- ICONS --- */
+    .icon-bubble {
+        width: 40px; 
+        height: 40px; 
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .icon-bubble i { font-size: 1.1rem !important; color: white; }
+
+    /* --- TEXT --- */
+    .text-content {
         display: flex;
         flex-direction: column;
-        padding: 15px 20px 20px;
-        gap: 12px;
+        justify-content: center;
+        overflow: hidden;
     }
 
-    /* MODEL ROW - DARK BACKGROUND NA */
-    .model-row {
+    .landscape-card h3 {
+        color: #ffffff !important;
+        font-weight: 700;
+        font-size: 0.85rem;
+        margin: 0 0 2px 0;
+        white-space: nowrap;
+    }
+    .landscape-card p {
+        color: #a1a1aa !important;
+        font-size: 0.65rem;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    /* --- ICON COLORS --- */
+    .icon-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .icon-pink { background: linear-gradient(135deg, #ec4899, #be185d); }
+    .icon-cyan { background: linear-gradient(135deg, #06b6d4, #0e7490); }
+    .icon-green { background: linear-gradient(135deg, #10b981, #047857); }
+    .icon-orange { background: linear-gradient(135deg, #f97316, #c2410c); }
+    .icon-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+    .icon-yellow { background: linear-gradient(135deg, #f59e0b, #b45309); }
+
+    /* ========================================= */
+    /* --- ADMIN & LOGOUT (GIPAUBOS OG GAMAY) --- */
+    /* ========================================= */
+    .bottom-actions {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 6rem; 
+        width: 100%;
+    }
+
+    .bottom-btn {
+        display: inline-flex;
         align-items: center;
-        padding: 14px 18px;
-        background: #1e293b; /* DARK SLATE BACKGROUND */
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #d4d4d8;
+        padding: 0.8rem 1.5rem;
         border-radius: 12px;
-        border: 1px solid #334155;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
     }
 
-    .model-row:hover {
-        background: #334155; /* Mas light na dark kapag hover */
-        border-color: #ec4899;
-        transform: translateX(5px);
-        box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2);
+    .bottom-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
     }
 
-    /* MODEL NAME - PUTI NA ANG TEXT */
-    .model-name {
-        font-weight: 700;
-        font-size: 0.9rem;
-        color: #f8fafc; /* Puting text */
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+    .bottom-btn.admin { color: #a78bfa; border-color: rgba(167, 139, 250, 0.3); }
+    .bottom-btn.admin:hover { background: rgba(167, 139, 250, 0.1); }
 
-    .model-name:hover {
-        color: #f472b6; /* Pink hover */
-    }
+    .bottom-btn.logout { color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); }
+    .bottom-btn.logout:hover { background: rgba(245, 158, 11, 0.1); }
 
-    /* BUTTONS */
-    .btn-admin {
-        padding: 6px 14px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: white !important;
-        transition: all 0.2s ease;
-        display: inline-block; 
+    /* --- FOOTER --- */
+    .dashboard-footer {
+        margin-top: 3rem;
         text-align: center;
-        min-width: 65px; 
-        border: none;
-        cursor: pointer;
-        letter-spacing: 0.3px;
-    }
-
-    .btn-admin:hover {
-        opacity: 0.9;
-        transform: scale(1.08);
-    }
-
-    /* PINK GRADIENT BUTTONS */
-    .btn-add { 
-        background: linear-gradient(135deg, #ec4899, #db2777) !important; 
-        box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
-    }
-    .btn-change { 
-        background: linear-gradient(135deg, #f472b6, #ec4899) !important; 
-        box-shadow: 0 4px 12px rgba(244, 114, 182, 0.4);
-    }
-
-    /* SAYINGS */
-    .dashboard-saying {
-        text-align: center;
-        padding: 50px 20px;
-        margin-top: 40px;
-        border-top: 2px dashed #334155;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(236, 72, 153, 0.08) 100%);
-        border-radius: 24px;
-    }
-
-    .dashboard-saying p:first-child {
-        font-size: 1.8rem;
-        font-weight: 800;
-        color: #ec4899;
-        font-style: italic;
-        text-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        margin-bottom: 15px;
-        line-height: 1.4;
-    }
-
-    .dashboard-saying p:last-child {
-        font-size: 1.05rem;
-        color: #94a3b8;
-        font-weight: 600;
-        letter-spacing: 1.5px;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 992px) {
-        .app-card { flex: 1 1 100%; }
+        color: #52525b;
+        font-size: 0.85rem;
     }
 </style>
 
-<div class="app-dashboard-container">
-    {% if app_list %}
-        {% for app in app_list %}
-            {% if app.name != 'Food_Finder' %}
-            <div class="app-card">
-                <div class="app-card-header">
-                    <div class="icon-wrapper">
-                        {% if app.name == 'Authentication and Authorization' %}🔐{% endif %}
-                        {% if app.name == 'Info' %}📋{% endif %}
-                    </div>
-                    {{ app.name }}
-                </div>
-                <div class="app-card-body">
-                    {% for model in app.models %}
-                        <div class="model-row">
-                            <a href="{{ model.admin_url }}" class="model-name">
-                                {{ model.name }}
-                            </a>
-                            <div>
-                                {% if model.add_url %}
-                                    <a href="{{ model.add_url }}" class="btn-admin btn-add">Add</a>
-                                {% endif %}
-                                {% if model.admin_url %}
-                                    <a href="{{ model.admin_url }}" class="btn-admin btn-change">Change</a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+<div class="dashboard-wrapper">
+    <div class="dashboard-container">
+        
+        <div class="welcome-header-wrapper">
+            <div class="welcome-header">
+                <h1>
+                    <span class="gradient-text">Welcome!</span> 
+                    <span class="wave">👋</span>
+                </h1>
+                <p>What would you like to explore today?</p>
             </div>
+        </div>
+
+        <div class="cards-wrapper">
+            <div class="cards-container">
+                
+                <a href="{% url 'food_finder:restaurant_list' %}" class="landscape-card">
+                    <div class="icon-bubble icon-blue"><i class="fas fa-store"></i></div>
+                    <div class="text-content"><h3>Restaurants</h3><p>19 available</p></div>
+                </a>
+
+                <a href="{% url 'food_finder:my_favorites' %}" class="landscape-card">
+                    <div class="icon-bubble icon-pink"><i class="fas fa-heart"></i></div>
+                    <div class="text-content"><h3>Favorites</h3><p>0 saved</p></div>
+                </a>
+
+                <a href="{% url 'food_finder:about' %}" class="landscape-card">
+                    <div class="icon-bubble icon-cyan"><i class="fas fa-info-circle"></i></div>
+                    <div class="text-content"><h3>About</h3><p>System info</p></div>
+                </a>
+
+                <a href="{% url 'core:near_me' %}" class="landscape-card">
+                    <div class="icon-bubble icon-green"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="text-content"><h3>Near Me</h3><p>Map View</p></div>
+                </a>
+
+                <a href="{% url 'core:top_rated' %}" class="landscape-card">
+                    <div class="icon-bubble icon-orange"><i class="fas fa-fire"></i></div>
+                    <div class="text-content"><h3>Top Rated</h3><p>Trending</p></div>
+                </a>
+
+                <a href="{% url 'core:my_orders' %}" class="landscape-card">
+                    <div class="icon-bubble icon-purple"><i class="fas fa-receipt"></i></div>
+                    <div class="text-content"><h3>My Orders</h3><p>0 orders</p></div>
+                </a>
+
+                <a href="{% url 'core:promos' %}" class="landscape-card">
+                    <div class="icon-bubble icon-yellow"><i class="fas fa-tags"></i></div>
+                    <div class="text-content"><h3>Promos</h3><p>Deals</p></div>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- ADMIN & LOGOUT (GIPAUBOS NA) -->
+        <div class="bottom-actions">
+            {% if user.is_staff %}
+            <a href="{% url 'admin:index' %}" class="bottom-btn admin">
+                <i class="fas fa-users-cog"></i> Admin Panel
+            </a>
             {% endif %}
-        {% endfor %}
-    {% else %}
-        <p>You don't have permission to view or edit anything.</p>
-    {% endif %}
+            
+            <a href="{% url 'core:logout' %}" class="bottom-btn logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+
+        <div class="dashboard-footer">
+            &copy; 2026 KabankalanEats &mdash; Food Finder System. All rights reserved.
+        </div>
+
+    </div>
 </div>
 
-<!-- SAYINGS SA IBABA -->
-<div class="dashboard-saying">
-    <p>"Good food is the foundation of genuine happiness."</p>
-    <p>— Auguste Escoffier</p>
-</div>
 {% endblock %}
