@@ -2,20 +2,63 @@
 {% block content %}
 <style>
     .page-wrapper { background: #0f0f13; position: fixed; inset: 0; padding: 3rem 2rem; overflow-y: auto; color: white; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .header-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+    .back-link { color: #eb78bf; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; font-weight: 600; }
+    .header-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
     .header-subtitle { color: #a1a1aa; margin-bottom: 30px; }
-    .empty-state { background: rgba(255,255,255,0.02); border-radius: 16px; padding: 50px; text-align: center; border: 1px dashed rgba(255,255,255,0.1); }
+    .order-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; margin-bottom: 15px; }
+    .order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px; }
+    .order-id { font-size: 0.9rem; color: #a1a1aa; }
+    .order-id strong { color: white; }
+    .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+    .status-pending { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+    .status-delivered { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .order-details { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .order-info h4 { margin: 0 0 5px 0; font-size: 1.2rem; color: white; }
+    .order-info p { margin: 0; font-size: 0.85rem; color: #888; }
+    .order-info .items { font-size: 0.8rem; color: #a1a1aa; margin-top: 5px; }
+    .order-total { margin-left: auto; text-align: right; }
+    .order-total .price { font-size: 1.3rem; font-weight: bold; color: #10b981; }
+    .order-total .date { font-size: 0.75rem; color: #666; margin-top: 5px; }
+    .empty-state { text-align: center; padding: 50px; color: #888; }
 </style>
+
 <div class="page-wrapper">
-    <a href="/" style="color: #eb78bf; text-decoration: none; margin-bottom: 20px; display: inline-block;">&larr; Back to Home</a>
+    <!-- GIPALITAN NAKO PARA MOBALIK SA RESTAURANTS -->
+    <a href="{% url 'food_finder:restaurant_list' %}" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Restaurants
+    </a>
+    
     <div class="header-title"><i class="fas fa-receipt" style="color: #8b5cf6;"></i> My Orders</div>
     <p class="header-subtitle">Track your past and current food orders here.</p>
-    
-    <div class="empty-state">
-        <i class="fas fa-shopping-bag" style="font-size: 3rem; color: #333; margin-bottom: 15px;"></i>
-        <h3>No orders yet</h3>
-        <p style="color: #888;">Looks like you haven't ordered anything. Start exploring restaurants!</p>
-        <a href="{% url 'food_finder:restaurant_list' %}" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #8b5cf6; color: white; border-radius: 8px; text-decoration: none;">Browse Restaurants</a>
-    </div>
+
+    {% if orders %}
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <div class="order-id">Order ID: <strong>#ORD-{{ order.id }}</strong></div>
+                <div class="status-badge {% if order.status == 'Pending' %}status-pending{% else %}status-delivered{% endif %}">
+                    {{ order.status }}
+                </div>
+            </div>
+            <div class="order-details">
+                <div class="order-info">
+                    <h4>{{ order.restaurant_name }}</h4>
+                    <div class="items">{{ order.items }}</div>
+                </div>
+                <div class="order-total">
+                    <div class="price">₱{{ order.total_price }}</div>
+                    <div class="date">{{ order.created_at|date:"M d, Y • h:i A" }}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <i class="fas fa-shopping-bag" style="font-size: 3rem; margin-bottom: 15px;"></i>
+            <h3>No orders yet</h3>
+            <p>Looks like you haven't ordered anything. Start exploring restaurants!</p>
+            <a href="{% url 'food_finder:restaurant_list' %}" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #8b5cf6; color: white; border-radius: 8px; text-decoration: none;">Browse Restaurants</a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
