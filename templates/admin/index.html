@@ -1,0 +1,172 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<style>
+    /* Container para sa lahat ng app cards */
+    .app-dashboard-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        align-items: flex-start;
+        margin-bottom: 30px;
+    }
+
+    /* Bawat App Card */
+    .app-card {
+        flex: 1 1 30%;
+        min-width: 280px;
+        background: #f1dcdc;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #dee4ec;
+    }
+
+    /* Header ng Card - PINK AT BOUNCE */
+    .app-card-header {
+        background: #cdd3d8;
+        padding: 10px 15px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #e092b9;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-5px); }
+        60% { transform: translateY(-3px); }
+    }
+
+    /* Body ng Card */
+    .app-card-body {
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+        gap: 8px;
+    }
+
+    /* Bawat Model Row */
+    .model-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: #e4ccdf;
+        border-radius: 6px;
+        border: 1px solid #f1f5f9;
+        transition: background 0.2s;
+    }
+
+    .model-row:hover {
+        background: #efcadc;
+    }
+
+    .model-name {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #3b475c;
+        text-decoration: none;
+    }
+
+    .model-name:hover {
+        color: #d288ad;
+    }
+
+    /* BLOCK BUTTONS (Parisukat at pantay) */
+    .btn-admin {
+        padding: 4px 10px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: rgb(238, 231, 231) !important;
+        transition: all 0.2s;
+        
+        display: inline-block; 
+        text-align: center;
+        min-width: 60px; 
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-admin:hover {
+        opacity: 0.9;
+        transform: scale(1.05);
+    }
+
+    /* PINK BUTTONS */
+    .btn-add { 
+        background: #766470 !important; 
+    }
+    .btn-change { 
+        background: #af88a7 !important; 
+    }
+
+    /* SAYINGS SA IBABA - MAS MALAKI AT KITANG-KITA */
+    .dashboard-saying {
+        text-align: center;
+        padding: 40px 20px;
+        margin-top: 30px;
+        border-top: 1px dashed #334155;
+        background: rgba(211, 200, 200, 0.02);
+        border-radius: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+        .app-card { flex: 1 1 100%; }
+    }
+</style>
+
+<div class="app-dashboard-container">
+    {% if app_list %}
+        {% for app in app_list %}
+            <div class="app-card">
+                <div class="app-card-header">
+                    {% if app.name == 'Authentication and Authorization' %}🔐{% endif %}
+                    {% if app.name == 'Food_Finder' %}🍔{% endif %}
+                    {% if app.name == 'Info' %}📋{% endif %}
+                    {{ app.name }}
+                </div>
+                <div class="app-card-body">
+                    {% for model in app.models %}
+                        <div class="model-row">
+                            <a href="{{ model.admin_url }}" class="model-name">
+                                {{ model.name }}
+                            </a>
+                            <div>
+                                {% if model.add_url %}
+                                    <a href="{{ model.add_url }}" class="btn-admin btn-add">Add</a>
+                                {% endif %}
+                                {% if model.admin_url %}
+                                    <a href="{{ model.admin_url }}" class="btn-admin btn-change">Change</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You don't have permission to view or edit anything.</p>
+    {% endif %}
+</div>
+
+<!-- SAYINGS SA IBABA - MAS MALAKI AT MAY KULAY -->
+<div class="dashboard-saying">
+    <p style="font-size: 1.5rem; font-weight: 800; color: #fcb1d6; font-style: italic; text-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 10px;">
+        "Good food is the foundation of genuine happiness."
+    </p>
+    <p style="font-size: 1rem; color: #697482; font-weight: 600; margin-top: 0;">
+
+    </p>
+</div>
+{% endblock %}
