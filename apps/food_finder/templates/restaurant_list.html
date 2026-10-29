@@ -2,26 +2,31 @@
 
 {% block content %}
 <style>
-    /* --- GLOBAL DARK THEME (FIX PARA SA PUTING GILID) --- */
+    /* --- GLOBAL DARK THEME (PUGSON ANG FULL SCREEN) --- */
     html, body {
         background-color: #0f0f13 !important;
         margin: 0 !important;
         padding: 0 !important;
+        width: 100vw !important;
+        min-height: 100vh !important;
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        overflow: hidden; /* Pinipigilan ang scrollbar sa tibuok page */
+        overflow-x: hidden;
     }
 
     .restaurants-wrapper {
         background: #0f0f13;
         background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
-        position: fixed;
-        inset: 0;
+        min-height: 100vh;
+        width: 100vw;
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0;
         padding: 2rem;
-        overflow-y: auto;
-        z-index: 10;
         display: flex;
         flex-direction: column;
-        color: white;
+        box-sizing: border-box;
+        z-index: 10;
     }
 
     .restaurants-container {
@@ -64,17 +69,6 @@
         color: #fff;
     }
 
-    .back-to-dash-btn.clicked {
-        transform: scale(0.92) translateX(-8px);
-        background: rgba(235, 120, 191, 0.3);
-        color: #eb78bf;
-        border-color: #eb78bf;
-        box-shadow: 0 0 20px rgba(235, 120, 191, 0.4);
-    }
-
-    .back-to-dash-btn i { transition: transform 0.3s ease; }
-    .back-to-dash-btn:hover i { transform: translateX(-3px); }
-
     .go-near-me-btn {
         display: inline-flex;
         align-items: center;
@@ -93,8 +87,6 @@
     .go-near-me-btn:hover {
         background: rgba(16, 185, 129, 0.2);
         color: #ffffff;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
     }
 
     /* --- HEADER --- */
@@ -285,7 +277,7 @@
 <div class="restaurants-wrapper">
     <div class="restaurants-container">
         
-        <!-- TOP NAVIGATION (DUHA KA BUTTONS) -->
+        <!-- TOP NAVIGATION -->
         <div class="top-nav-container">
             <a href="{% url 'food_finder:home' %}" id="backBtn" class="back-to-dash-btn">
                 <i class="fas fa-arrow-left"></i> Back to Dashboard
