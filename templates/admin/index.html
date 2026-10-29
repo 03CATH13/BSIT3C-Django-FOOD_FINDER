@@ -113,7 +113,7 @@
         max-width: 1300px;
         overflow-x: auto; 
         padding-bottom: 15px; 
-        margin-top: 3rem; /* GIDUGANGAN NAKO OG SPACE SA IBABAW SA MGA CARDS */
+        margin-top: 3rem;
         margin-bottom: 2rem;
         scrollbar-width: none; 
         -ms-overflow-style: none; 
@@ -298,7 +298,7 @@
             </div>
         </div>
 
-        <!-- ADMIN & LOGOUT (GIPAUBOS NA) -->
+        <!-- ADMIN & LOGOUT (NAA NA ANG CORE:LOGOUT) -->
         <div class="bottom-actions">
             {% if user.is_staff %}
             <a href="{% url 'admin:index' %}" class="bottom-btn admin">

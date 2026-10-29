@@ -94,6 +94,10 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# ==========================================
+# LOGIN SETTINGS (INI ANG FIX)
+# ==========================================
+LOGIN_URL = '/login/'  # <--- IDINAGDAG ITO PARA HINDI MAG-REDIRECT SA /accounts/login/
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/'
 

@@ -23,11 +23,7 @@
 </style>
 
 <div class="page-wrapper">
-    <!-- GIPALITAN NAKO PARA MOBALIK SA RESTAURANTS -->
-    <a href="{% url 'food_finder:restaurant_list' %}" class="back-link">
-        <i class="fas fa-arrow-left"></i> Back to Restaurants
-    </a>
-    
+    <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
     <div class="header-title"><i class="fas fa-receipt" style="color: #8b5cf6;"></i> My Orders</div>
     <p class="header-subtitle">Track your past and current food orders here.</p>
 
@@ -53,10 +49,28 @@
         </div>
         {% endfor %}
     {% else %}
-        <div class="empty-state">
+        <!-- SAMPLE ORDER PARA MAKITA NIMO ANG HITSURA -->
+        <div class="order-card">
+            <div class="order-header">
+                <div class="order-id">Order ID: <strong>#ORD-SAMPLE</strong></div>
+                <div class="status-badge status-delivered">Delivered</div>
+            </div>
+            <div class="order-details">
+                <div class="order-info">
+                    <h4>Jollibee</h4>
+                    <div class="items">Chickenjoy (1pc), Jolly Spaghetti</div>
+                </div>
+                <div class="order-total">
+                    <div class="price">₱145.00</div>
+                    <div class="date">Oct 28, 2026 • 12:30 PM</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="empty-state" style="margin-top: 30px;">
             <i class="fas fa-shopping-bag" style="font-size: 3rem; margin-bottom: 15px;"></i>
-            <h3>No orders yet</h3>
-            <p>Looks like you haven't ordered anything. Start exploring restaurants!</p>
+            <h3>No real orders yet</h3>
+            <p>This is a sample order. Start exploring restaurants to place a real order!</p>
             <a href="{% url 'food_finder:restaurant_list' %}" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #8b5cf6; color: white; border-radius: 8px; text-decoration: none;">Browse Restaurants</a>
         </div>
     {% endif %}

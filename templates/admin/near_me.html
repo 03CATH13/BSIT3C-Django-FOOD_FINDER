@@ -1,144 +1,203 @@
 {% extends 'theme/base_dashboard.html' %}
 {% block content %}
-<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- Leaflet CSS para sa Mapa -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
 <style>
-    .page-wrapper { background: #0f0f13; position: fixed; inset: 0; padding: 2rem; overflow-y: auto; color: white; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; flex-direction: column; }
-    .back-link { color: #eb78bf; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 15px; font-weight: 600; }
-    .header-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 15px; }
-    .instruction-banner { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 15px; color: #dbeafe; font-size: 0.85rem; line-height: 1.5; }
-    .instruction-banner i { color: #3b82f6; font-size: 1.3rem; margin-top: 2px; }
-    .instruction-banner strong { color: #ffffff; }
-    .instruction-banner ol { margin: 5px 0 0 0; padding-left: 20px; }
-    .instruction-banner li { margin-bottom: 5px; }
-    .main-content { display: flex; flex-direction: row; gap: 20px; flex: 1; min-height: 0; }
-    .restaurant-list { flex: 1; display: flex; flex-direction: column; gap: 15px; overflow-y: auto; padding-right: 10px; height: 100%; }
+    .page-wrapper { 
+        background: #0f0f13; 
+        position: fixed; inset: 0; 
+        padding: 3rem 2rem; 
+        overflow-y: auto; 
+        color: white; 
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+    }
+    
+    .back-link {
+        color: #eb78bf; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; font-weight: 600;
+    }
+    
+    .header-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
+    .header-subtitle { color: #a1a1aa; margin-bottom: 30px; }
+
+    /* Layout Grid */
+    .near-me-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr; 
+        gap: 20px;
+        height: calc(100vh - 200px);
+        min-height: 500px;
+    }
+
+    /* --- KALIWANG BAHAGI (LISTAHAN) --- */
+    .restaurant-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        overflow-y: auto;
+        padding-right: 10px; 
+    }
+
     .restaurant-list::-webkit-scrollbar { width: 6px; }
     .restaurant-list::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-    .restaurant-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; transition: all 0.2s ease; color: white; flex-shrink: 0; }
-    .restaurant-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(16, 185, 129, 0.5); }
-    .rest-img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
-    .rest-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: white; }
-    .rest-info p { margin: 0; font-size: 0.8rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
-    .distance-badge { margin-left: auto; background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; white-space: nowrap; text-decoration: none; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: 1px solid transparent; }
-    .distance-badge:hover { background: #10b981; color: white; transform: scale(1.05); box-shadow: 0 0 15px rgba(16, 185, 129, 0.6); }
-    .map-container { flex: 1; border-radius: 16px; overflow: hidden; border: 1px solid #333; position: relative; height: 100%; }
-    #map { width: 100%; height: 100%; background: #1e1e26; }
-    .leaflet-layer, .leaflet-control-zoom-in, .leaflet-control-zoom-out, .leaflet-control-attribution { filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%); }
-    .tracker-btn-wrapper { position: fixed; bottom: 30px; right: 30px; z-index: 99999; }
-    .tracker-btn { background: #3b82f6; color: white; border: none; padding: 12px 20px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.6); display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; }
-    .tracker-btn:hover { background: #2563eb; transform: translateY(-2px); }
-    .user-location-dot { width: 20px; height: 20px; background-color: #3b82f6; border-radius: 50%; border: 4px solid white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.8); animation: pulse-ring 1.5s infinite; }
-    @keyframes pulse-ring { 0% { transform: scale(0.9); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.7; } 100% { transform: scale(0.9); opacity: 1; } }
-    @media (max-width: 768px) { .main-content { flex-direction: column-reverse; } .map-container { height: 350px; flex: none; } .restaurant-list { height: auto; flex: none; } .instruction-banner { flex-direction: column; gap: 10px; } }
+
+    .restaurant-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        text-decoration: none;
+        color: white;
+    }
+
+    .restaurant-card:hover {
+        background: rgba(255,255,255,0.06);
+        border-color: rgba(16, 185, 129, 0.5); 
+    }
+
+    /* Ginawa nating image tag ang dating emoji */
+    .rest-img {
+        width: 60px; height: 60px;
+        border-radius: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .rest-info h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: white;}
+    .rest-info p { margin: 0; font-size: 0.8rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 250px;}
+    
+    .distance-badge {
+        margin-left: auto;
+        background: rgba(16, 185, 129, 0.2);
+        color: #10b981;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    /* --- KANANG BAHAGI (MAPA) --- */
+    .map-container {
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #333;
+        position: relative;
+        z-index: 1; /* Importante para mogana ang mapa */
+    }
+
+    #map {
+        width: 100%;
+        height: 100%;
+        background: #1e1e26;
+    }
+
+    /* Dark mode filter sa mapa */
+    .leaflet-layer,
+    .leaflet-control-zoom-in,
+    .leaflet-control-zoom-out,
+    .leaflet-control-attribution {
+      filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    }
+
+    @media (max-width: 768px) {
+        .near-me-layout { grid-template-columns: 1fr; height: auto; }
+        .map-container { height: 300px; order: -1; }
+        .restaurant-list { overflow-y: visible; }
+    }
 </style>
 
 <div class="page-wrapper">
     <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-    <div class="header-title"><i class="fas fa-map-marker-alt" style="color: #10b981;"></i> Near Me</div>
     
-    <div class="instruction-banner">
-        <i class="fas fa-info-circle"></i>
-        <div>
-            <strong>How to use this map:</strong>
-            <ol>
-                <li>Click the <strong>"Track My Location"</strong> button at the bottom right.</li>
-                <li>When your browser asks for permission, click <strong>"Allow"</strong> to share your location.</li>
-                <li>Once your blue dot appears, click <strong>"Nearby"</strong> on any restaurant to see the route.</li>
-            </ol>
-        </div>
-    </div>
-
-    <div class="main-content">
+    <div class="header-title"><i class="fas fa-map-marker-alt" style="color: #10b981;"></i> Near Me</div>
+    <p class="header-subtitle">Discover top-rated restaurants around your current location in Kabankalan.</p>
+    
+    <div class="near-me-layout">
+        
+        <!-- KALIWANG BAHAGI: DYNAMIC LISTAHAN -->
         <div class="restaurant-list">
             {% for rest in restaurants %}
-            <div class="restaurant-card">
+            <a href="#" class="restaurant-card" onclick="focusMap({{ rest.lat }}, {{ rest.lng }}, '{{ rest.name }}'); return false;">
                 <img src="{{ rest.image }}" alt="{{ rest.name }}" class="rest-img">
                 <div class="rest-info">
                     <h4>{{ rest.name }}</h4>
                     <p>{{ rest.cuisine_type }} &bull; {{ rest.address|truncatechars:30 }}</p>
                     <p style="margin-top: 3px;"><i class="fas fa-clock" style="color: #10b981;"></i> {{ rest.opening_hours }}</p>
                 </div>
-                <a href="javascript:void(0)" class="distance-badge" onclick="showLocation({{ rest.lat }}, {{ rest.lng }}, '{{ rest.name|escapejs }}')">
-                    <i class="fas fa-map-marked-alt"></i> Nearby
-                </a>
-            </div>
+                <!-- Placeholder distance -->
+                <div class="distance-badge">Nearby</div>
+            </a>
             {% endfor %}
         </div>
 
+        <!-- KANANG BAHAGI: LEAFLET MAPA -->
         <div class="map-container">
             <div id="map"></div>
         </div>
+
     </div>
 </div>
 
-<div class="tracker-btn-wrapper">
-    <button class="tracker-btn" onclick="startTracking()">
-        <i class="fas fa-crosshairs"></i> Track My Location
-    </button>
-</div>
-
+<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+    // I-initialize ang mapa, naka-center sa Kabankalan
     var map = L.map('map').setView([9.9900, 122.8150], 14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
 
+    // Mag-load ng OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // I-loop ang lahat ng restaurants para maglagay ng markers
     var restaurants = [
         {% for rest in restaurants %}
-        { name: "{{ rest.name|escapejs }}", lat: parseFloat("{{ rest.lat }}"), lng: parseFloat("{{ rest.lng }}"), address: "{{ rest.address|escapejs }}", cuisine: "{{ rest.cuisine_type|escapejs }}" },
+        {
+            name: "{{ rest.name|escapejs }}",
+            lat: {{ rest.lat }},
+            lng: {{ rest.lng }},
+            address: "{{ rest.address|escapejs }}",
+            cuisine: "{{ rest.cuisine_type|escapejs }}"
+        },
         {% endfor %}
     ];
 
-    var allMarkers = [];
-    var userLat = null, userLng = null, userMarker = null, watchId = null;
+    var markers = []; // Para ma-store natin ang markers
 
     restaurants.forEach(function(rest) {
-        if (isNaN(rest.lat) || isNaN(rest.lng)) return;
-        var customIcon = L.divIcon({ className: 'custom-icon', html: '<div style="background-color: #10b981; width: 15px; height: 15px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.5);"></div>', iconSize: [20, 20], iconAnchor: [10, 10] });
+        // Gumawa ng custom marker na kulay green
+        var customIcon = L.divIcon({
+            className: 'custom-icon',
+            html: '<div style="background-color: #10b981; width: 15px; height: 15px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.5);"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
         var marker = L.marker([rest.lat, rest.lng], {icon: customIcon}).addTo(map);
+        
+        // Popup kapag clinick
         marker.bindPopup("<b>" + rest.name + "</b><br>" + rest.cuisine + "<br><small>" + rest.address + "</small>");
-        allMarkers.push({ marker: marker, lat: rest.lat, lng: rest.lng });
+        
+        markers.push(marker);
     });
 
-    function showLocation(lat, lng, name) {
-        map.flyTo([lat, lng], 17); 
-        allMarkers.forEach(function(item) {
-            if (item.lat == lat && item.lng == lng) { item.marker.openPopup(); }
+    // Function na tinatawag kapag clinick ang listahan sa kaliwa
+    function focusMap(lat, lng, name) {
+        map.flyTo([lat, lng], 17); // Mag-zoom in sa restaurant
+        // Hanapin ang tamang marker at buksan ang popup
+        markers.forEach(function(m) {
+            var mPos = m.getLatLng();
+            if (mPos.lat == lat && mPos.lng == lng) {
+                m.openPopup();
+            }
         });
-    }
-
-    function startTracking() {
-        if (!navigator.geolocation) { alert("Geolocation is not supported by your browser."); return; }
-        var btn = document.querySelector('.tracker-btn');
-        var originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Locating...';
-        if (watchId !== null) {
-            navigator.geolocation.clearWatch(watchId);
-            btn.innerHTML = originalText;
-            if(userMarker) map.removeLayer(userMarker);
-            userMarker = null; userLat = null; userLng = null;
-            return;
-        }
-        watchId = navigator.geolocation.watchPosition(
-            function(position) {
-                userLat = position.coords.latitude; userLng = position.coords.longitude;
-                var accuracy = position.coords.accuracy; 
-                if (userMarker) { userMarker.setLatLng([userLat, userLng]); } 
-                else {
-                    var userIcon = L.divIcon({ className: 'user-location', html: '<div class="user-location-dot"></div>', iconSize: [20, 20], iconAnchor: [10, 10] });
-                    userMarker = L.marker([userLat, userLng], {icon: userIcon}).addTo(map);
-                    userMarker.bindPopup(`<b>You are here!</b><br><small>Accuracy: ${accuracy.toFixed(0)} meters</small>`).openPopup();
-                    map.flyTo([userLat, userLng], 16);
-                }
-                btn.innerHTML = '<i class="fas fa-crosshairs fa-spin"></i> Tracking...';
-            },
-            function(error) {
-                btn.innerHTML = originalText;
-                alert("Unable to retrieve your location. Please allow access.");
-            },
-            { enableHighAccuracy: true, maximumAge: 0, timeout: 15000 }
-        );
     }
 </script>
 {% endblock %}

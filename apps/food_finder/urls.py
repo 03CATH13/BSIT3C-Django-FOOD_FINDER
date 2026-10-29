@@ -11,12 +11,12 @@ urlpatterns = [
     path('map/', views.restaurant_map, name='restaurant_map'),
     path('register/', views.register_view, name='register'),
     
+    # --- PLACE ORDER ---
+    path('place-order/<int:pk>/', views.place_order, name='place_order'),
+    
     # --- TOGGLE FAVORITE ---
     path('toggle-favorite/<int:pk>/', views.toggle_favorite, name='toggle_favorite'),
     
-    # --- PLACE ORDER (DAPAT NAAS TAAS SA <int:pk>) ---
-    path('place-order/<int:pk>/', views.place_order, name='place_order'),
-    
-    # --- RESTAURANT DETAIL (NAAS UBOS) ---
+    # --- RESTAURANT DETAIL (DAPAT NAAS UBOS) ---
     path('<int:pk>/', views.restaurant_detail, name='restaurant_detail'),
 ]

@@ -2,30 +2,42 @@
 {% block content %}
 <style>
     .page-wrapper { background: #0f0f13; position: fixed; inset: 0; padding: 3rem 2rem; overflow-y: auto; color: white; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .header-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+    .back-link { color: #eb78bf; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; font-weight: 600; }
+    .header-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
     .header-subtitle { color: #a1a1aa; margin-bottom: 30px; }
-    .card-list { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
-    .rank-badge { background: #f97316; color: white; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; margin-right: 15px; }
+    .top-rated-grid { display: flex; flex-direction: column; gap: 15px; max-width: 800px; margin: 0 auto; }
+    .rated-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 15px 20px; display: flex; align-items: center; gap: 20px; }
+    .rated-card img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; }
+    .rated-info h4 { margin: 0 0 5px 0; font-size: 1.2rem; color: white; }
+    .rated-info p { margin: 0; font-size: 0.85rem; color: #888; }
+    .rated-badge { margin-left: auto; text-align: right; }
+    .rated-badge .stars { color: #f59e0b; font-size: 1.2rem; }
+    .rated-badge .count { font-size: 0.75rem; color: #666; }
 </style>
+
 <div class="page-wrapper">
-    <a href="/" style="color: #eb78bf; text-decoration: none; margin-bottom: 20px; display: inline-block;">&larr; Back to Home</a>
+    <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
     <div class="header-title"><i class="fas fa-fire" style="color: #f97316;"></i> Top Rated Restaurants</div>
-    <p class="header-subtitle">The most loved spots by the community.</p>
-    
-    <!-- Placeholder Listahan (Pwede mo itong palitan ng for loop sa Django) -->
-    <div class="card-list">
-        <div style="display: flex; align-items: center;">
-            <div class="rank-badge">1</div>
-            <div><h4 style="margin:0;">Jollibee</h4><p style="color: #888; margin:0; font-size: 0.8rem;">Fast Food</p></div>
+    <p class="header-subtitle">The most loved spots in Kabankalan City.</p>
+
+    <div class="top-rated-grid">
+        {% for item in top_rated %}
+        <div class="rated-card">
+            <img src="{{ item.image }}" alt="{{ item.name }}">
+            <div class="rated-info">
+                <h4>{{ item.name }}</h4>
+                <p>{{ item.reviews }} reviews</p>
+            </div>
+            <div class="rated-badge">
+                <div class="stars">
+                    {% for i in "12345"|make_list %}
+                        {% if forloop.counter <= item.rating %}<i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}
+                    {% endfor %}
+                </div>
+                <div class="count">{{ item.rating }}</div>
+            </div>
         </div>
-        <span style="color: #f59e0b;"><i class="fas fa-star"></i> 4.8</span>
-    </div>
-    <div class="card-list">
-        <div style="display: flex; align-items: center;">
-            <div class="rank-badge" style="background: #a78bfa;">2</div>
-            <div><h4 style="margin:0;">Mang Inasal</h4><p style="color: #888; margin:0; font-size: 0.8rem;">Filipino BBQ</p></div>
-        </div>
-        <span style="color: #f59e0b;"><i class="fas fa-star"></i> 4.7</span>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

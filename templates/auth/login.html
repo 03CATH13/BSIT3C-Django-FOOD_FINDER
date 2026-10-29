@@ -63,10 +63,6 @@
      </div>
    </div>
  </div>
- <!-- <div class="text-center text-secondary mt-n1">
-  Don't have an account?
-  <a href="{% url 'register' %}" class="text-primary fw-bold">Register</a>
- </div> -->
 </div>
 
 {% include 'theme/settings.html' %}
@@ -105,6 +101,8 @@
     var url = new URL(window.location);
     var form = document.getElementById("offcanvasSettings");
     var resetButton = document.getElementById("reset-changes");
+
+    if (!form || !resetButton) return;
 
     var checkItems = function () {
       for (var key in themeConfig) {
