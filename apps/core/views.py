@@ -29,22 +29,17 @@ PROMOS_DATA = [
 def home(request):
     return render(request, 'admin/index.html') 
 
-# --- BAGONG LOGIN VIEW (NAA NA ANG AUTHENTICATE) ---
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
         user = authenticate(request, username=username, password=password)
-        
         if user is not None:
             login(request, user)
-            # Kung naa ang ?next= sa URL, mobalik didto
             next_url = request.GET.get('next', '/home/')
             return redirect(next_url)
         else:
             messages.error(request, "Invalid username or password.")
-    
     return render(request, 'auth/login.html') 
 
 def logout_view(request):
@@ -55,6 +50,15 @@ def near_me_view(request):
     context = {'restaurants': RESTAURANT_LIST_DATA}
     return render(request, 'admin/near_me.html', context)
 
+@login_required
+def restaurant_list_view(request):
+    context = {
+        'restaurants': RESTAURANT_LIST_DATA,
+        'query': request.GET.get('q', ''),
+        'current_cuisine': request.GET.get('cuisine', ''),
+    }
+    return render(request, 'restaurant_list.html', context)
+
 def top_rated_view(request):
     context = {'top_rated': TOP_RATED_DATA}
     return render(request, 'admin/top_rated.html', context)
@@ -62,7 +66,6 @@ def top_rated_view(request):
 @login_required
 def my_orders_view(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    
     if not orders.exists():
         sample_order = {
             'id': 'SAMPLE-001',
@@ -75,7 +78,6 @@ def my_orders_view(request):
         context = {'orders': orders, 'sample_order': sample_order}
     else:
         context = {'orders': orders}
-    
     return render(request, 'admin/my_orders.html', context)
 
 def promos_view(request):
@@ -98,6 +100,7 @@ def place_order(request, rest_id):
     if request.method == 'POST':
         items = request.POST.get('items', '').strip()
         total_price = request.POST.get('total_price', '').strip()
+        promo_code = request.POST.get('promo_code', '').strip().upper()
         
         if not total_price:
             total_price = '0.00'
@@ -107,6 +110,23 @@ def place_order(request, rest_id):
         except (InvalidOperation, TypeError, ValueError):
             total_price_decimal = Decimal('0.00')
         
+        # --- PROMO CODE LOGIC ---
+        discount = Decimal('0.00')
+        if promo_code == 'WELCOME50':
+            discount = total_price_decimal * Decimal('0.50')  # 50% off
+        elif promo_code == 'FREEDEL':
+            discount = Decimal('50.00')  # Fixed ₱50 off
+        elif promo_code == 'B1T1':
+            discount = total_price_decimal * Decimal('0.50')  # Buy 1 Take 1 (50% off)
+        elif promo_code == 'SAVE50':
+            discount = Decimal('50.00')  # Fixed ₱50 off
+        
+        # Kalkulahin ang bag-ong total price
+        final_price = total_price_decimal - discount
+        if final_price < Decimal('0.00'):
+            final_price = Decimal('0.00')
+        
+        # I-save ang order
         rest_name = "Unknown Restaurant"
         for rest in RESTAURANT_LIST_DATA:
             if str(rest['id']) == str(rest_id):
@@ -117,7 +137,7 @@ def place_order(request, rest_id):
             user=request.user,
             restaurant_name=rest_name,
             items=items,
-            total_price=total_price_decimal,
+            total_price=final_price,
             status='Pending'
         )
         return redirect('core:my_orders')

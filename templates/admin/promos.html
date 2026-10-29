@@ -1,15 +1,95 @@
 {% extends 'theme/base_dashboard.html' %}
 {% block content %}
 <style>
-    .page-wrapper { background: #0f0f13; position: fixed; inset: 0; padding: 3rem 2rem; overflow-y: auto; color: white; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .back-link { color: #eb78bf; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; font-weight: 600; }
-    .header-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
-    .header-subtitle { color: #a1a1aa; margin-bottom: 30px; }
-    .promo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-    .promo-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; position: relative; overflow: hidden; }
-    .promo-card h3 { margin: 0 0 5px 0; font-size: 1.3rem; color: white; }
-    .promo-card p { margin: 0 0 15px 0; font-size: 0.9rem; color: #a1a1aa; }
-    .promo-code { display: inline-block; background: rgba(255,255,255,0.1); color: #fff; font-weight: bold; padding: 8px 15px; border-radius: 8px; font-size: 1rem; letter-spacing: 1px; }
+    /* --- BACKGROUND NGA KLARO ANG PAGKAON --- */
+    .page-wrapper { 
+        background: linear-gradient(rgba(15, 15, 19, 0.6), rgba(15, 15, 19, 0.8)), 
+                    url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        position: fixed; 
+        inset: 0; 
+        padding: 2rem; 
+        overflow-y: auto; 
+        color: white; 
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .back-link { color: #eb78bf; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 15px; font-weight: 600; }
+    .header-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; gap: 15px; }
+    .header-subtitle { color: #a1a1aa; margin-bottom: 25px; font-size: 0.95rem; }
+
+    /* ========================================= */
+    /* --- HORIZONTAL LAYOUT (TANAN SA USA KA LINYA) --- */
+    /* ========================================= */
+    .promo-container {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 15px;
+        margin-bottom: 40px; 
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+    }
+    .promo-container::-webkit-scrollbar { display: none; }
+
+    /* --- CARD DESIGN --- */
+    .promo-card { 
+        background: rgba(30, 30, 38, 0.75); 
+        backdrop-filter: blur(10px); 
+        border: 1px solid rgba(255,255,255,0.1); 
+        border-radius: 12px;
+        padding: 12px 15px;
+        display: flex;
+        flex-direction: row; 
+        align-items: center;
+        gap: 12px;
+        min-width: 240px; 
+        flex-shrink: 0;
+        height: 80px;
+        transition: all 0.3s ease;
+    }
+    .promo-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.3); }
+
+    /* --- GAGMAY NGA ICONS --- */
+    .promo-icon {
+        width: 40px; height: 40px; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.1rem; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.3); flex-shrink: 0;
+    }
+
+    .promo-text-content { display: flex; flex-direction: column; justify-content: center; }
+    .promo-text-content h3 { margin: 0 0 2px 0; font-size: 0.85rem; color: white; font-weight: 700; white-space: nowrap; }
+    .promo-text-content p { margin: 0; font-size: 0.65rem; color: #a1a1aa; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+
+    /* ========================================= */
+    /* --- SAYING SECTION (WALAY BACKGROUND PARA MAKITA ANG PAGKAON) --- */
+    /* ========================================= */
+    .saying-section {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
+        background: transparent; /* Gi-transparent nako para makita ang background */
+        border: none; /* Gitangtang nako ang border */
+        margin-top: auto; 
+    }
+
+    .saying-section h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #eb78bf;
+        margin: 0;
+        font-style: italic;
+        text-shadow: 0 0 20px rgba(235, 120, 191, 0.8), 0 0 40px rgba(0,0,0,0.8); /* Mas kusog nga shadow para readable gihapon */
+    }
 </style>
 
 <div class="page-wrapper">
@@ -17,14 +97,29 @@
     <div class="header-title"><i class="fas fa-tags" style="color: #f59e0b;"></i> Promos & Discounts</div>
     <p class="header-subtitle">Grab these exclusive deals before they expire!</p>
 
-    <div class="promo-grid">
+    <!-- HORIZONTAL CARDS -->
+    <div class="promo-container">
         {% for promo in promos %}
-        <div class="promo-card" style="border-color: {{ promo.color }};">
-            <h3>{{ promo.title }}</h3>
-            <p>{{ promo.description }}</p>
-            <div class="promo-code" style="background: {{ promo.color }}; color: #0f0f13;">{{ promo.code }}</div>
+        <div class="promo-card" style="border-left: 4px solid {{ promo.color }};">
+            <div class="promo-icon" style="background: {{ promo.color }};">
+                {% if promo.code == 'WELCOME50' %}<i class="fas fa-gift"></i>
+                {% elif promo.code == 'FREEDEL' %}<i class="fas fa-truck"></i>
+                {% elif promo.code == 'B1T1' %}<i class="fas fa-burger"></i>
+                {% elif promo.code == 'SAVE50' %}<i class="fas fa-tags"></i>
+                {% else %}<i class="fas fa-percent"></i>{% endif %}
+            </div>
+            <div class="promo-text-content">
+                <h3>{{ promo.title }}</h3>
+                <p>{{ promo.description }}</p>
+            </div>
         </div>
         {% endfor %}
     </div>
+
+    <!-- SPACE PARA SA SAYING (KLARO NA ANG LUYO) -->
+    <div class="saying-section">
+        <h2>"Great food is the foundation of true happiness."</h2>
+    </div>
+
 </div>
 {% endblock %}
