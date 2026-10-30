@@ -16,7 +16,8 @@
     }
 
     .main-wrapper {
-        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
+        /* Gin-butangan sang subtle radial glow sa tunga */
+        background: radial-gradient(circle at 50% 50%, #1a1a24 0%, #0f0f13 70%);
         position: fixed; 
         inset: 0; 
         width: 100%;
@@ -25,186 +26,125 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center; 
     }
 
-    /* --- HEADER --- */
+    /* --- HEADER (FOOD FINDER) --- */
     .header-section {
         text-align: center;
-        margin-bottom: 2.5rem;
-        margin-top: 2rem;
+        margin-bottom: 4rem; 
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
     .header-section h1 {
-        font-size: 3.5rem;
+        font-size: clamp(3rem, 9vw, 5.5rem); 
         font-weight: 900;
-        margin: 0 0 10px 0;
+        margin: 0 0 15px 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 15px;
-        letter-spacing: -2px;
+        letter-spacing: 2px; 
+        text-transform: uppercase;
+        line-height: 1.1;
     }
 
+    /* --- NAMI NGA DESIGN SANG TEXT --- */
     .gradient-text {
-        background: linear-gradient(135deg, #eb78bf 0%, #a78bfa 100%);
+        background: linear-gradient(135deg, #eb78bf 0%, #a78bfa 100%); 
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 30px rgba(235, 120, 191, 0.4);
+        
+        /* SUBTLE GLOW: Ginhimo nga soft lang, indi sobra ka siga */
+        filter: drop-shadow(0 0 15px rgba(235, 120, 191, 0.3));
+        
+        display: inline-block;
+        max-width: 100%;
     }
 
     .header-section p {
         color: #a1a1aa;
-        font-size: 1.1rem;
+        font-size: clamp(1.1rem, 2vw, 1.3rem);
         margin: 0;
+        text-align: center;
+        letter-spacing: 1px;
+        font-weight: 500;
     }
 
-    /* ========================================= */
-    /* --- PAHIGDA UG SUNOD-SUNOD NGA CARDS --- */
-    /* ========================================= */
-    .cards-scroll-wrapper {
-        width: 100%;
-        max-width: 1000px;
-        overflow-x: auto; /* Mag-scroll pahigda kung manghuot */
-        padding: 10px 0 20px 0;
-        
-        /* Tinagoan ang scrollbar design */
-        scrollbar-width: none; 
-        -ms-overflow-style: none; 
-    }
-    .cards-scroll-wrapper::-webkit-scrollbar {
-        display: none; 
-    }
-
-    .cards-container {
+    /* --- BUTTONS CONTAINER --- */
+    .button-container {
         display: flex;
-        flex-direction: row;
-        gap: 1rem;
-        width: max-content;
-        margin: 0 auto;
-    }
-
-    /* --- CARD DESIGN (Compact Pahigda) --- */
-    .dashboard-card {
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 12px;
-        padding: 1rem 1.2rem;
-        text-decoration: none !important;
-        
-        display: flex;
-        flex-direction: row; /* Magkatabi ang icon ug text */
-        align-items: center;
-        text-align: left;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        height: 85px;
-        width: 230px; /* Fixed width */
-        flex-shrink: 0;
-        gap: 1rem;
-        transition: all 0.2s ease;
-    }
-
-    .dashboard-card:hover {
-        transform: translateY(-5px);
-        border-color: rgba(235, 120, 191, 0.4);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-    }
-
-    /* --- ICONS --- */
-    .icon-box {
-        width: 45px;
-        height: 45px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap; 
         justify-content: center;
-        flex-shrink: 0;
-    }
-    
-    .icon-box i {
-        font-size: 1.2rem !important;
-        color: white;
+        align-items: center;
     }
 
-    /* Icon Colors */
-    .bg-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    .bg-pink { background: linear-gradient(135deg, #ec4899, #be185d); }
-    .bg-cyan { background: linear-gradient(135deg, #06b6d4, #0e7490); }
-    .bg-green { background: linear-gradient(135deg, #10b981, #047857); }
-    .bg-orange { background: linear-gradient(135deg, #f97316, #c2410c); }
-    .bg-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-    .bg-yellow { background: linear-gradient(135deg, #f59e0b, #b45309); }
-
-    /* --- TEXT & BADGES --- */
-    .text-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        overflow: hidden;
-    }
-
-    .dashboard-card h3 {
-        color: #ffffff !important;
-        font-weight: 700;
-        font-size: 1rem;
-        margin: 0 0 2px 0;
-        white-space: nowrap;
-    }
-
-    .dashboard-card p {
-        color: #a1a1aa !important;
-        font-size: 0.75rem;
-        margin: 0 0 6px 0;
-        white-space: nowrap;
-    }
-
-    .badge {
-        background: rgba(255, 255, 255, 0.1);
-        color: #e5e7eb;
-        font-size: 0.65rem;
-        font-weight: 600;
-        padding: 2px 8px;
-        border-radius: 20px;
-        width: fit-content;
-    }
-
-    /* --- BOTTOM BUTTONS --- */
-    .bottom-buttons {
-        display: flex;
-        gap: 1rem;
-        margin-top: 3rem;
-        margin-bottom: 2rem;
-    }
-
+    /* --- GLASSMORPHISM BUTTONS --- */
     .action-btn {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 0.8rem 1.5rem;
-        border-radius: 12px;
+        gap: 12px;
+        padding: 1.2rem 3rem; 
+        border-radius: 16px;
         text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 600;
-        transition: all 0.2s ease;
+        font-size: 1.1rem;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(12px); /* Glass effect */
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Shadow */
     }
 
     .btn-admin {
         color: #a78bfa;
-        border: 1px solid rgba(167, 139, 250, 0.3);
-        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(167, 139, 250, 0.4);
+        background: rgba(167, 139, 250, 0.05); /* Subtle purple tint */
     }
-    .btn-admin:hover { background: rgba(167, 139, 250, 0.1); }
+    .btn-admin:hover { 
+        background: rgba(167, 139, 250, 0.15); 
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 12px 40px rgba(167, 139, 250, 0.2); /* Purple glow on hover */
+    }
 
     .btn-logout {
         color: #f59e0b;
-        border: 1px solid rgba(245, 158, 11, 0.3);
-        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(245, 158, 11, 0.4);
+        background: rgba(245, 158, 11, 0.05); /* Subtle orange tint */
     }
-    .btn-logout:hover { background: rgba(245, 158, 11, 0.1); }
+    .btn-logout:hover { 
+        background: rgba(245, 158, 11, 0.15); 
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 12px 40px rgba(245, 158, 11, 0.2); /* Orange glow on hover */
+    }
 
     /* --- FOOTER --- */
     .footer-text {
         color: #52525b;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         text-align: center;
+        margin-top: 5rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* RESPONSIVE PARA SA GAMAY NGA SCREEN */
+    @media (max-width: 768px) {
+        .header-section {
+            margin-bottom: 3rem;
+        }
+        .action-btn {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            width: 100%; /* Full width kung mobile */
+            justify-content: center;
+        }
+        .button-container {
+            flex-direction: column;
+            width: 100%;
+            max-width: 300px;
+        }
     }
 </style>
 
@@ -213,97 +153,22 @@
     <!-- HEADER -->
     <div class="header-section">
         <h1>
-            <span class="gradient-text">Welcome!</span> 👋
+            <span class="gradient-text">FOOD FINDER</span> 
         </h1>
         <p>What would you like to explore today?</p>
     </div>
 
-    <!-- PAHIGDA NGA MGA CARDS -->
-    <div class="cards-scroll-wrapper">
-        <div class="cards-container">
-            
-            <!-- 1. RESTAURANTS -->
-            <a href="{% url 'food_finder:restaurant_list' %}" class="dashboard-card">
-                <div class="icon-box bg-blue"><i class="fas fa-store"></i></div>
-                <div class="text-content">
-                    <h3>Restaurants</h3>
-                    <p>Browse all</p>
-                    <span class="badge">{{ total_restaurants|default:"19" }} available</span>
-                </div>
-            </a>
-
-            <!-- 2. FAVORITES -->
-            <a href="{% url 'food_finder:my_favorites' %}" class="dashboard-card">
-                <div class="icon-box bg-pink"><i class="fas fa-heart"></i></div>
-                <div class="text-content">
-                    <h3>Favorites</h3>
-                    <p>Your saved list</p>
-                    <span class="badge">{{ total_favorites|default:"0" }} saved</span>
-                </div>
-            </a>
-
-            <!-- 3. ABOUT -->
-            <a href="{% url 'food_finder:about' %}" class="dashboard-card">
-                <div class="icon-box bg-cyan"><i class="fas fa-info-circle"></i></div>
-                <div class="text-content">
-                    <h3>About</h3>
-                    <p>System info</p>
-                    <span class="badge">v1.0</span>
-                </div>
-            </a>
-
-            <!-- 4. NEAR ME -->
-            <a href="{% url 'core:near_me' %}" class="dashboard-card">
-                <div class="icon-box bg-green"><i class="fas fa-map-marker-alt"></i></div>
-                <div class="text-content">
-                    <h3>Near Me</h3>
-                    <p>Map View</p>
-                    <span class="badge">Find location</span>
-                </div>
-            </a>
-
-            <!-- 5. TOP RATED -->
-            <a href="{% url 'core:top_rated' %}" class="dashboard-card">
-                <div class="icon-box bg-orange"><i class="fas fa-fire"></i></div>
-                <div class="text-content">
-                    <h3>Top Rated</h3>
-                    <p>Trending spots</p>
-                    <span class="badge">Popular now</span>
-                </div>
-            </a>
-
-            <!-- 6. MY ORDERS -->
-            <a href="{% url 'core:my_orders' %}" class="dashboard-card">
-                <div class="icon-box bg-purple"><i class="fas fa-receipt"></i></div>
-                <div class="text-content">
-                    <h3>My Orders</h3>
-                    <p>Order History</p>
-                    <span class="badge">0 orders</span>
-                </div>
-            </a>
-
-            <!-- 7. PROMOS -->
-            <a href="{% url 'core:promos' %}" class="dashboard-card">
-                <div class="icon-box bg-yellow"><i class="fas fa-tags"></i></div>
-                <div class="text-content">
-                    <h3>Promos</h3>
-                    <p>Special Deals</p>
-                    <span class="badge">New discounts</span>
-                </div>
-            </a>
-
-        </div>
-    </div>
-
-    <!-- BOTTOM BUTTONS -->
-    <div class="bottom-buttons">
+    <!-- BUTTONS (Naka-center na) -->
+    <div class="button-container">
+        
+        <!-- 1. ADMIN PANEL (Staff only) -->
         {% if user.is_staff %}
         <a href="{% url 'admin:index' %}" class="action-btn btn-admin">
             <i class="fas fa-users-cog"></i> Admin Panel
         </a>
         {% endif %}
         
-        <!-- INI ANG GIPALITAN PARA MAWALA ANG ERROR -->
+        <!-- 2. LOGOUT -->
         <a href="{% url 'core:logout' %}" class="action-btn btn-logout">
             <i class="fas fa-sign-out-alt"></i> Logout
         </a>

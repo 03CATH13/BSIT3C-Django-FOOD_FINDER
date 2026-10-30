@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 import urllib.parse
 from .forms import RestaurantForm, RegisterForm
 from .models import Favorite, Restaurant
 from django.contrib.auth.models import User
-from apps.core.models import Order  # <--- IMPORTANTE: Import para sa Order
+from apps.core.models import Order 
 
 # ==========================================
 # RESTAURANT DATA
@@ -185,24 +185,63 @@ def about_view(request):
     return render(request, 'about.html')
 
 # ==========================================
-# PLACE ORDER (BAGONG DUGANG)
+# PLACE ORDER (GIN-UPDATE PARA MA-LINK SA RESTAURANT MODEL)
 # ==========================================
 @login_required
 def place_order(request, pk):
     if request.method == 'POST':
         items = request.POST.get('items')
         total_price = request.POST.get('total_price')
-        rest_name = "Unknown Restaurant"
-        for rest in RESTAURANT_LIST_DATA:
-            if rest['id'] == int(pk):
-                rest_name = rest['name']
-                break
+        
+        # Kuhaon ang Restaurant object base sa ID
+        restaurant_obj = get_object_or_404(Restaurant, id=pk)
+        
         Order.objects.create(
-            user=request.user,
-            restaurant_name=rest_name,
+            customer=request.user, # Siguraduhon nga 'customer' ang field name sa imo Order model
+            restaurant=restaurant_obj, # Gin-link na sa Restaurant Model
+            restaurant_name=restaurant_obj.name,
             items=items,
             total_price=total_price,
             status='Pending'
         )
         return redirect('core:my_orders')
     return redirect('food_finder:restaurant_list')
+
+# ==========================================
+# OWNER DASHBOARD & ORDER MANAGEMENT (BAG-O!)
+# ==========================================
+@login_required
+def owner_dashboard(request):
+    # Kuhaon ang mga restaurant nga tag-iya sang naka-login nga user
+    my_restaurants = Restaurant.objects.filter(owner=request.user)
+    
+    # Kuhaon ang mga orders para sa iya mga restaurant
+    orders = Order.objects.filter(restaurant__in=my_restaurants).order_by('-created_at')
+
+    return render(request, 'owner_dashboard.html', {'orders': orders})
+
+@login_required
+def accept_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    # Siguraduhon nga ang nag-accept is ang owner sang restaurant
+    if order.restaurant.owner == request.user and request.method == 'POST':
+        order.status = 'Preparing'
+        order.save()
+    return redirect('core:owner_dashboard')
+
+@login_required
+def mark_delivered(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if order.restaurant.owner == request.user and request.method == 'POST':
+        order.status = 'Delivered'
+        order.save()
+    return redirect('core:owner_dashboard')
+
+# ==========================================
+# CUSTOMER MY ORDERS
+# ==========================================
+@login_required
+def my_orders(request):
+    # Kuhaon ang orders sang naka-login nga customer
+    orders = Order.objects.filter(customer=request.user).order_by('-created_at')
+    return render(request, 'my_orders.html', {'orders': orders})
