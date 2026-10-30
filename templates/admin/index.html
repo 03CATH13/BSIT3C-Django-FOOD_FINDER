@@ -2,7 +2,7 @@
 
 {% block content %}
 <style>
-    /* --- GLOBAL DARK THEME --- */
+    /* --- GLOBAL DARK THEME KAG BACKGROUND --- */
     html, body {
         background-color: #0f0f13 !important;
         margin: 0 !important;
@@ -11,7 +11,6 @@
     }
 
     .dashboard-wrapper {
-        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
         width: 100vw;
         min-height: 100vh;
         margin: 0;
@@ -22,8 +21,52 @@
         z-index: 10;
         display: flex;
         flex-direction: column;
+        background-color: #0f0f13;
+        overflow: hidden;
     }
 
+    /* ========================================= */
+    /* --- BACKGROUND COLLAGE (DAMO NGA PAGKAON) --- */
+    /* ========================================= */
+    .bg-collage {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 2 ka column */
+        grid-template-rows: 1fr 1fr;    /* 2 ka row */
+        gap: 10px;
+        padding: 10px;
+        filter: brightness(0.8) contrast(1.1); /* Ginhimo nga mas vibrant */
+    }
+
+    .bg-collage img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 15px;
+        /* Gin-zoom in para magalapaw sa kilid */
+        transform: scale(1.1); 
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    /* Ginahatagan sang gamay nga pag-lain-lain sang posisyon para mag-mix gid */
+    .bg-collage img:nth-child(1) { transform: scale(1.1) translate(-10px, -10px); }
+    .bg-collage img:nth-child(2) { transform: scale(1.1) translate(10px, -10px); }
+    .bg-collage img:nth-child(3) { transform: scale(1.1) translate(-10px, 10px); }
+    .bg-collage img:nth-child(4) { transform: scale(1.1) translate(10px, 10px); }
+
+    /* Dark overlay para klaro ang text kag cards */
+    .bg-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(10, 10, 12, 0.75), rgba(10, 10, 12, 0.85));
+        z-index: 2;
+    }
+
+    /* ========================================= */
+    /* --- MAIN CONTENT --- */
+    /* ========================================= */
     .dashboard-container {
         flex: 1;
         display: flex;
@@ -34,6 +77,8 @@
         width: 100%;
         max-width: 1400px;
         margin: 0 auto;
+        position: relative;
+        z-index: 10; /* Para naa sa ibabaw sang background */
     }
 
     /* --- HEADER --- */
@@ -59,6 +104,7 @@
         justify-content: center;
         gap: 15px;
         animation: floatGlow 3s ease-in-out infinite;
+        text-shadow: 0 4px 20px rgba(0,0,0,0.9);
     }
     
     .welcome-header h1 span.gradient-text { 
@@ -81,9 +127,11 @@
     }
     
     .welcome-header p { 
-        color: #a1a1aa; 
+        color: #ffffff; 
         font-size: 1.2rem; 
         margin: 0; 
+        text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+        font-weight: 500;
     }
 
     /* WAVE ANIMATION */
@@ -128,8 +176,8 @@
 
     /* --- CARD DESIGN --- */
     .landscape-card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
+        background: rgba(15, 15, 20, 0.85); 
+        backdrop-filter: blur(15px);
         border-radius: 12px;
         padding: 1rem;
         text-decoration: none !important;
@@ -137,18 +185,20 @@
         flex-direction: row; 
         align-items: center;
         text-align: left;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         height: 80px;
         width: 180px; 
         flex-shrink: 0;
         gap: 12px;
         transition: all 0.2s ease;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     }
 
     .landscape-card:hover {
-        transform: translateY(-4px);
-        border-color: rgba(235, 120, 191, 0.4);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        transform: translateY(-4px) scale(1.02);
+        border-color: rgba(235, 120, 191, 0.8);
+        box-shadow: 0 10px 25px rgba(235, 120, 191, 0.3);
+        background: rgba(20, 20, 25, 0.95);
     }
 
     /* --- ICONS --- */
@@ -195,7 +245,7 @@
     .icon-yellow { background: linear-gradient(135deg, #f59e0b, #b45309); }
 
     /* ========================================= */
-    /* --- ADMIN & LOGOUT (GIFIX PARA MA-CLICK) --- */
+    /* --- ADMIN & LOGOUT BUTTONS --- */
     /* ========================================= */
     .bottom-actions {
         display: flex;
@@ -208,47 +258,68 @@
     }
 
     .bottom-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(15, 15, 20, 0.90);
+        backdrop-filter: blur(10px);
         color: #d4d4d8;
         padding: 0.8rem 1.5rem;
         border-radius: 12px;
         text-decoration: none;
         font-size: 0.9rem;
         font-weight: 600;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         transition: all 0.3s ease;
         position: relative;
         z-index: 9999;
         pointer-events: auto;
         cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
     .bottom-btn:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(35, 35, 45, 0.95);
         color: #fff;
-        border-color: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
         transform: translateY(-2px);
     }
 
-    .bottom-btn.admin { color: #a78bfa; border-color: rgba(167, 139, 250, 0.3); }
-    .bottom-btn.admin:hover { background: rgba(167, 139, 250, 0.1); }
+    .bottom-btn.admin { color: #a78bfa; border-color: rgba(167, 139, 250, 0.5); }
+    .bottom-btn.admin:hover { background: rgba(167, 139, 250, 0.2); }
 
-    .bottom-btn.logout { color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); }
-    .bottom-btn.logout:hover { background: rgba(245, 158, 11, 0.1); }
+    .bottom-btn.owner { color: #fb923c; border-color: rgba(251, 146, 60, 0.5); }
+    .bottom-btn.owner:hover { background: rgba(251, 146, 60, 0.2); }
+
+    .bottom-btn.logout { color: #f59e0b; border-color: rgba(245, 158, 11, 0.5); }
+    .bottom-btn.logout:hover { background: rgba(245, 158, 11, 0.2); }
 
     /* --- FOOTER --- */
     .dashboard-footer {
         margin-top: 3rem;
         text-align: center;
-        color: #52525b;
+        color: #ffffff;
         font-size: 0.85rem;
+        text-shadow: 0 1px 5px rgba(0,0,0,0.9);
+        font-weight: 500;
     }
 </style>
 
 <div class="dashboard-wrapper">
+    
+    <!-- BACKGROUND COLLAGE (DAMO NGA PAGKAON) -->
+    <div class="bg-collage">
+        <!-- 1. Pizza / Pasta -->
+        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=800&auto=format&fit=crop" alt="Pizza">
+        <!-- 2. Burger kag Fries -->
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop" alt="Burger">
+        <!-- 3. Fried Chicken / Inasal -->
+        <img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop" alt="Chicken">
+        <!-- 4. Salad / Healthy Food -->
+        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=800&auto=format&fit=crop" alt="Salad">
+    </div>
+    
+    <!-- DARK OVERLAY -->
+    <div class="bg-overlay"></div>
+
+    <!-- MAIN CONTENT -->
     <div class="dashboard-container">
         
         <div class="welcome-header-wrapper">
@@ -302,12 +373,21 @@
             </div>
         </div>
 
-        <!-- ADMIN & LOGOUT -->
+        <!-- ADMIN, OWNER & LOGOUT -->
         <div class="bottom-actions">
+            
+            {% if user.is_superuser %}
             <a href="{% url 'admin:index' %}" class="bottom-btn admin">
                 <i class="fas fa-users-cog"></i> Admin Panel
             </a>
-            
+            {% endif %}
+
+            {% if user.is_restaurant_owner %}
+            <a href="{% url 'core:owner_dashboard' %}" class="bottom-btn owner">
+                <i class="fas fa-utensils"></i> Restaurant Dashboard
+            </a>
+            {% endif %}
+
             <a href="{% url 'core:logout' %}" class="bottom-btn logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>

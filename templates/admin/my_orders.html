@@ -1,30 +1,110 @@
 {% extends 'theme/base_dashboard.html' %}
 {% block content %}
 <style>
-    .page-wrapper { background: #0f0f13; position: fixed; inset: 0; padding: 3rem 2rem; overflow-y: auto; color: white; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .back-link { color: #eb78bf; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; font-weight: 600; }
+    /* --- GLOBAL PAGE WRAPPER --- */
+    .page-wrapper { 
+        background: #11000d; /* Dark background base sa imo code */
+        position: fixed; 
+        inset: 0; 
+        padding: 3rem 2rem; 
+        overflow-y: auto; 
+        color: rgb(253, 249, 252); 
+        font-family: 'Plus Jakarta Sans', sans-serif; 
+    }
+
+    /* --- BACK BUTTON (GIN-ILISAN: Back to Admin) --- */
+    .back-link { 
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #d4d4d8;
+        padding: 0.6rem 1.2rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        margin-bottom: 2rem;
+        align-self: flex-start; 
+    }
+    .back-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateX(-3px);
+    }
+
+    /* --- HEADER --- */
     .header-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; }
-    .header-subtitle { color: #a1a1aa; margin-bottom: 30px; }
-    .order-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; margin-bottom: 15px; }
+    .header-title i { color: #8b5cf6; }
+    .header-subtitle { color: hsl(240, 5%, 65%); margin-bottom: 30px; }
+
+    /* ========================================= */
+    /* --- ORDER CARD BOX DESIGN & BOUNCE --- */
+    /* ========================================= */
+    .order-card { 
+        background: rgba(255, 255, 255, 0.03); 
+        border: 1px solid rgba(255, 255, 255, 0.08); 
+        border-radius: 16px; 
+        padding: 20px; 
+        margin-bottom: 15px; 
+        transition: all 0.3s ease;
+
+        /* BOUNCE ANIMATION SA PAG-LOAD */
+        animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+
+    /* Delay para sunod-sunod ang bounce */
+    .order-card:nth-child(2) { animation-delay: 0.1s; }
+    .order-card:nth-child(3) { animation-delay: 0.2s; }
+    .order-card:nth-child(4) { animation-delay: 0.3s; }
+    .order-card:nth-child(5) { animation-delay: 0.4s; }
+
+    .order-card:hover {
+        border-color: rgba(139, 92, 246, 0.4);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transform: translateY(-3px);
+    }
+
+    @keyframes bounceIn {
+        0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+        50% { opacity: 1; transform: scale(1.02) translateY(-5px); }
+        100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* --- ORDER HEADER (ID & STATUS) --- */
     .order-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px; }
     .order-id { font-size: 0.9rem; color: #a1a1aa; }
-    .order-id strong { color: white; }
+    .order-id strong { color: rgb(241, 134, 179); }
+    
     .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
-    .status-pending { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-    .status-delivered { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+    .status-pending { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .status-delivered { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    /* --- ORDER DETAILS --- */
     .order-details { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-    .order-info h4 { margin: 0 0 5px 0; font-size: 1.2rem; color: white; }
+    .order-info h4 { margin: 0 0 5px 0; font-size: 1.2rem; color: rgb(236, 230, 235); font-weight: 700; }
     .order-info p { margin: 0; font-size: 0.85rem; color: #888; }
     .order-info .items { font-size: 0.8rem; color: #a1a1aa; margin-top: 5px; }
+    
     .order-total { margin-left: auto; text-align: right; }
     .order-total .price { font-size: 1.3rem; font-weight: bold; color: #10b981; }
     .order-total .date { font-size: 0.75rem; color: #666; margin-top: 5px; }
+
+    /* --- EMPTY STATE --- */
     .empty-state { text-align: center; padding: 50px; color: #888; }
 </style>
 
 <div class="page-wrapper">
-    <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Back to Home</a>
-    <div class="header-title"><i class="fas fa-receipt" style="color: #8b5cf6;"></i> My Orders</div>
+    <!-- GIN-ILISAN: Back to Admin na kag naka-link sa admin:index -->
+    <a href="{% url 'admin:index' %}" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to Admin
+    </a>
+    
+    <div class="header-title"><i class="fas fa-receipt"></i> My Orders</div>
     <p class="header-subtitle">Track your past and current food orders here.</p>
 
     {% if orders %}
@@ -68,10 +148,12 @@
         </div>
 
         <div class="empty-state" style="margin-top: 30px;">
-            <i class="fas fa-shopping-bag" style="font-size: 3rem; margin-bottom: 15px;"></i>
-            <h3>No real orders yet</h3>
+            <i class="fas fa-shopping-bag" style="font-size: 3rem; margin-bottom: 15px; color: #3f3f46;"></i>
+            <h3 style="color: #fff;">No real orders yet</h3>
             <p>This is a sample order. Start exploring restaurants to place a real order!</p>
-            <a href="{% url 'food_finder:restaurant_list' %}" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #8b5cf6; color: white; border-radius: 8px; text-decoration: none;">Browse Restaurants</a>
+            <a href="{% url 'food_finder:restaurant_list' %}" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #8b5cf6; color: white; border-radius: 8px; text-decoration: none; font-weight: 600;">
+                Browse Restaurants
+            </a>
         </div>
     {% endif %}
 </div>

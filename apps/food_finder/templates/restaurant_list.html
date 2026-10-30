@@ -279,9 +279,11 @@
         
         <!-- TOP NAVIGATION -->
         <div class="top-nav-container">
-            <a href="{% url 'food_finder:home' %}" id="backBtn" class="back-to-dash-btn">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            <!-- GIN-ILISAN: Back to Admin na, kag diretso sa admin panel -->
+            <a href="{% url 'admin:index' %}" id="backAdminBtn" class="back-to-dash-btn">
+                <i class="fas fa-arrow-left"></i> Back to Admin
             </a>
+            
             <a href="{% url 'core:near_me' %}" class="go-near-me-btn">
                 <i class="fas fa-map-marker-alt"></i> Go to Near Me
             </a>
@@ -367,8 +369,9 @@
 <!-- JAVASCRIPT PARA SA CLICK SOUND AT ANIMATION -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const backBtn = document.getElementById('backBtn');
-        if (backBtn) {
+        // Gin-ilisan ang ID pakadto sa backAdminBtn
+        const backAdminBtn = document.getElementById('backAdminBtn');
+        if (backAdminBtn) {
             function playClickSound() {
                 try {
                     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -385,12 +388,12 @@
                     oscillator.stop(audioCtx.currentTime + 0.1);
                 } catch(e) {}
             }
-            backBtn.addEventListener('mousedown', function() {
+            backAdminBtn.addEventListener('mousedown', function() {
                 playClickSound();
-                backBtn.classList.add('clicked');
+                backAdminBtn.classList.add('clicked');
             });
-            backBtn.addEventListener('mouseup', function() {
-                backBtn.classList.remove('clicked');
+            backAdminBtn.addEventListener('mouseup', function() {
+                backAdminBtn.classList.remove('clicked');
             });
         }
     });
