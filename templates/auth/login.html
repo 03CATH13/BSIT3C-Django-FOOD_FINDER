@@ -5,9 +5,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>
-    Sign in - Azuelo Technology
-  </title>
+  <title>Sign in - KabankalanEats</title>
+  
   <link href="{% static 'libs/jsvectormap/dist/jsvectormap.css' %}" rel="stylesheet" />
   <link href="{% static 'css/tabler.css' %}" rel="stylesheet" />
   <link href="{% static 'css/tabler-flags.css' %}" rel="stylesheet" />
@@ -17,58 +16,199 @@
   <link href="{% static 'css/tabler-marketing.css' %}" rel="stylesheet" />
   <link href="{% static 'css/tabler-themes.css' %}" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- BAGONG DARK THEME OVERRIDE -->
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+        background-color: #0f0f13 !important;
+        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%) !important;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        padding: 1rem;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 20px !important;
+        padding: 2.5rem 2rem !important;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+        color: white !important;
+    }
+
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #eb78bf, #a78bfa);
+    }
+
+    .card-body {
+        padding: 0 !important;
+    }
+
+    .login-header-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(235, 120, 191, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px auto;
+    }
+
+    .login-header-icon i {
+        font-size: 1.8rem;
+        color: #eb78bf;
+    }
+
+    h2.h3 {
+        color: #ffffff !important;
+        font-size: 1.8rem !important;
+        font-weight: 800 !important;
+        margin-bottom: 5px !important;
+        text-align: center;
+    }
+
+    .subtitle {
+        color: #a1a1aa;
+        font-size: 0.9rem;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .form-label {
+        color: #a1a1aa !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        margin-bottom: 6px !important;
+    }
+
+    .form-control {
+        background: rgba(0, 0, 0, 0.3) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px !important;
+        color: white !important;
+        padding: 12px 15px !important;
+        font-size: 1rem !important;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #eb78bf !important;
+        box-shadow: 0 0 15px rgba(235, 120, 191, 0.2) !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+    }
+
+    .form-control::placeholder {
+        color: #555 !important;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #eb78bf 0%, #a78bfa 100%) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        color: white !important;
+        font-weight: bold !important;
+        font-size: 1rem !important;
+        padding: 12px !important;
+        transition: all 0.3s ease;
+        width: 100% !important;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(235, 120, 191, 0.4) !important;
+    }
+
+    .alert-danger {
+        background: rgba(239, 68, 68, 0.1) !important;
+        border: 1px solid rgba(239, 68, 68, 0.3) !important;
+        color: #fca5a5 !important;
+        padding: 10px 15px !important;
+        border-radius: 8px !important;
+        font-size: 0.85rem !important;
+        margin-bottom: 1rem !important;
+        text-align: center;
+    }
+
+    .form-footer {
+        justify-content: center !important;
+        margin-top: 1rem;
+    }
+  </style>
 </head>
 
 <body>
   <script src="{% static 'js/tabler-theme.js' %}"></script>
-  <div class="page page-center">
-    <div class="container container-tight py-4">
+  
+  <div class="card card-md">
+    <div class="card-body">
 
-     <div class="card card-md">
-      <div class="card-body">
+      <div class="login-header-icon">
+        <i class="fas fa-utensils"></i>
+      </div>
+      
+      <h2 class="h3 text-center mb-2">Welcome Back</h2>
+      <p class="subtitle">Sign in to KabankalanEats</p>
 
-        <center class="mt-n4">
-        <i class='far fa-calendar' style='font-size:40px'></i>
-        </center>
-        <h2 class="h3 text-center mb-4">Sign in to start your session</h2>
+      <form method="post">
+        {% csrf_token %}
 
-        <form method="post">
-          {% csrf_token %}
-
-          {% if messages %}
-          {% for message in messages %}
-          <div id="error-message" class="alert alert-danger">
-            {{ message }}
-          </div>
-          {% endfor %}
-          {% endif %}
-          <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input type="text" class="form-control" name="username" autocomplete="off" {% if locked %}disabled{% endif %}>
-          </div>
-          <div class="mb-2">
-            <label class="form-label">
-              Password
-            </label>
-            <div class="input-group input-group-flat">
-              <input type="password" class="form-control" name="password" autocomplete="off" {% if locked %}disabled{% endif %}>
-            </div>
-          </div>
-          <div class="form-footer d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary w-50">
-              <i class="fas fa-sign-in-alt me-1"></i> Sign in
-            </button>
-          </div>
-       </form>
+        {% if messages %}
+        {% for message in messages %}
+        <div id="error-message" class="alert alert-danger">
+          <i class="fas fa-exclamation-circle me-1"></i> {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input type="text" class="form-control" name="username" autocomplete="off" placeholder="Enter your username" {% if locked %}disabled{% endif %}>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" name="password" autocomplete="off" placeholder="Enter your password" {% if locked %}disabled{% endif %}>
+        </div>
+        
+        <div class="form-footer d-flex justify-content-center mt-4">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="fas fa-sign-in-alt me-2"></i> Sign In
+          </button>
+        </div>
+     </form>
+     
+     <div class="text-center mt-4" style="color: #52525b; font-size: 0.8rem;">
+        &copy; 2026 KabankalanEats &mdash; Food Finder System
      </div>
+     
    </div>
  </div>
-</div>
 
 {% include 'theme/settings.html' %}
 
 <script src="{% static 'js/tabler.js' %}" defer></script>
 <script src="{% static 'js/demo.js' %}" defer></script>
+
 {% if locked %}
 <script>
   let remaining = {{ remaining }};
@@ -78,8 +218,7 @@
     remaining--;
 
     if (remaining > 0) {
-      messageBox.innerHTML =
-      "Too many failed attempts. Try again in " + remaining + " seconds.";
+      messageBox.innerHTML = "Too many failed attempts. Try again in " + remaining + " seconds.";
     } else {
       clearInterval(interval);
       window.location.href = "{% url 'login' %}";
@@ -88,6 +227,7 @@
   }, 1000);
 </script>
 {% endif %}
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     var themeConfig = {
@@ -106,12 +246,10 @@
 
     var checkItems = function () {
       for (var key in themeConfig) {
-        var value =
-        window.localStorage["tabler-" + key] || themeConfig[key];
+        var value = window.localStorage["tabler-" + key] || themeConfig[key];
 
         if (!!value) {
           var radios = form.querySelectorAll(`[name="${key}"]`);
-
           if (!!radios) {
             radios.forEach((radio) => {
               radio.checked = radio.value === value;

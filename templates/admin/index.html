@@ -105,9 +105,7 @@
         100% { transform: rotate( 0.0deg) }
     }
 
-    /* ========================================= */
     /* --- HORIZONTAL FLEX LAYOUT --- */
-    /* ========================================= */
     .cards-wrapper {
         width: 100%;
         max-width: 1300px;
@@ -197,7 +195,7 @@
     .icon-yellow { background: linear-gradient(135deg, #f59e0b, #b45309); }
 
     /* ========================================= */
-    /* --- ADMIN & LOGOUT (GIPAUBOS OG GAMAY) --- */
+    /* --- ADMIN & LOGOUT (GIFIX PARA MA-CLICK) --- */
     /* ========================================= */
     .bottom-actions {
         display: flex;
@@ -205,6 +203,8 @@
         gap: 1rem;
         margin-top: 6rem; 
         width: 100%;
+        position: relative;
+        z-index: 9999;
     }
 
     .bottom-btn {
@@ -220,6 +220,10 @@
         font-weight: 600;
         border: 1px solid rgba(255, 255, 255, 0.1);
         transition: all 0.3s ease;
+        position: relative;
+        z-index: 9999;
+        pointer-events: auto;
+        cursor: pointer;
     }
 
     .bottom-btn:hover {
@@ -287,7 +291,7 @@
 
                 <a href="{% url 'core:my_orders' %}" class="landscape-card">
                     <div class="icon-bubble icon-purple"><i class="fas fa-receipt"></i></div>
-                    <div class="text-content"><h3>My Orders</h3><p>0 orders</p></div>
+                    <div class="text-content"><h3>My Orders</h3><p>{{ total_orders|default:"0" }} orders</p></div>
                 </a>
 
                 <a href="{% url 'core:promos' %}" class="landscape-card">
@@ -298,13 +302,11 @@
             </div>
         </div>
 
-        <!-- ADMIN & LOGOUT (NAA NA ANG CORE:LOGOUT) -->
+        <!-- ADMIN & LOGOUT -->
         <div class="bottom-actions">
-            {% if user.is_staff %}
             <a href="{% url 'admin:index' %}" class="bottom-btn admin">
                 <i class="fas fa-users-cog"></i> Admin Panel
             </a>
-            {% endif %}
             
             <a href="{% url 'core:logout' %}" class="bottom-btn logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
