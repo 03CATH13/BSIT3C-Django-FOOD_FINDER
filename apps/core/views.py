@@ -159,7 +159,14 @@ PROMOS_DATA = [
 ]
 
 def home(request):
-    return render(request, 'admin/index.html') 
+    total_orders = 0
+    if request.user.is_authenticated:
+        total_orders = Order.objects.filter(user=request.user).count()
+
+    context = {
+        'total_orders': total_orders,
+    }
+    return render(request, 'admin/index.html', context) 
 
 def login_view(request):
     if request.method == 'POST':
