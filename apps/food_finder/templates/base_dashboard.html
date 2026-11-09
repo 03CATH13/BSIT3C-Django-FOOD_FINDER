@@ -1,374 +1,74 @@
-{% extends 'theme/base_dashboard.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kabankalan City Food Finder</title>
+</head>
+<body style="margin: 0; font-family: Arial, sans-serif; background-color: #f8f9fa;">
 
-{% block content %}
-<style>
-    /* --- GLOBAL DARK THEME --- */
-    html, body {
-        background-color: #0f0f13 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
+    <!-- Navbar -->
+    <nav style="background: #212529; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;">
+        <h2 style="margin: 0; color: #ffc107;">Kabankalan Food Finder</h2>
+        <div>
+            <a href="/" style="color: white; text-decoration: none; margin-right: 20px;">Home</a>
+            <a href="/logout/" style="color: white; text-decoration: none; background: #dc3545; padding: 8px 15px; border-radius: 5px;">Logout</a>
+        </div>
+    </nav>
 
-    .dashboard-wrapper {
-        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
-        width: 100vw;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 10;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .dashboard-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center; 
-        align-items: center;
-        padding: 2rem 1rem;
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    /* --- HEADER --- */
-    .welcome-header-wrapper {
-        display: flex;
-        justify-content: center;
-        align-items: center; 
-        width: 100%;
-        margin-bottom: 2.5rem;
-    }
-
-    .welcome-header { text-align: center; margin: 0; }
-    
-    .welcome-header h1 {
-        font-size: 4rem;
-        font-weight: 900;
-        color: #ffffff;
-        margin-bottom: 0.5rem;
-        letter-spacing: -2px;
-        line-height: 1.1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-        animation: floatGlow 3s ease-in-out infinite;
-    }
-    
-    .welcome-header h1 span.gradient-text { 
-        background: linear-gradient(135deg, #eb78bf 0%, #a78bfa 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 40px rgba(235, 120, 191, 0.6), 0 0 80px rgba(167, 139, 250, 0.4);
-        display: inline-block;
-        animation: pulseGlow 2s ease-in-out infinite;
-    }
-    
-    @keyframes floatGlow {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
-    
-    @keyframes pulseGlow {
-        0%, 100% { filter: drop-shadow(0 0 20px rgba(235, 120, 191, 0.5)); }
-        50% { filter: drop-shadow(0 0 40px rgba(235, 120, 191, 0.9)); }
-    }
-    
-    .welcome-header p { 
-        color: #a1a1aa; 
-        font-size: 1.2rem; 
-        margin: 0; 
-    }
-
-    /* WAVE ANIMATION */
-    .wave {
-        display: inline-block;
-        animation: wave-animation 2.5s infinite;
-        transform-origin: 70% 70%;
-        font-size: 3.5rem;
-    }
-
-    @keyframes wave-animation {
-        0% { transform: rotate( 0.0deg) }
-        10% { transform: rotate(14.0deg) }
-        20% { transform: rotate(-8.0deg) }
-        30% { transform: rotate(14.0deg) }
-        40% { transform: rotate(-4.0deg) }
-        50% { transform: rotate(10.0deg) }
-        60% { transform: rotate( 0.0deg) }
-        100% { transform: rotate( 0.0deg) }
-    }
-
-    /* --- CARDS STYLING --- */
-    .landscape-card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
-        border-radius: 16px;
-        padding: 1.2rem 1rem;
-        text-decoration: none !important;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        width: 100%;
-        height: 140px;
-        gap: 10px;
-        position: relative;
-    }
-
-    .landscape-card:hover {
-        transform: translateY(-6px) scale(1.03);
-        border-color: rgba(235, 120, 191, 0.4);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(235, 120, 191, 0.1);
-    }
-
-    /* --- ICON STYLING --- */
-    .icon-bubble {
-        width: 45px; 
-        height: 45px; 
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        margin-bottom: 5px;
-    }
-    .icon-bubble i { font-size: 1.2rem !important; transition: all 0.3s ease; }
-    .landscape-card:hover .icon-bubble i { transform: scale(1.15) rotate(-5deg); }
-
-    /* --- TEXT & BADGE STYLING --- */
-    .text-content {
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-        width: 100%;
-    }
-
-    .landscape-card h3 {
-        color: #ffffff !important;
-        font-weight: 700;
-        font-size: 1.05rem;
-        margin: 0;
-    }
-    .landscape-card p {
-        color: #a1a1aa !important;
-        font-size: 0.75rem;
-        line-height: 1.2;
-        margin: 0;
-    }
-
-    .count-badge {
-        display: inline-block;
-        background: rgba(255, 255, 255, 0.1);
-        color: #e5e7eb;
-        font-size: 0.65rem;
-        font-weight: 600;
-        padding: 3px 8px;
-        border-radius: 20px;
-        margin-top: 4px;
-        width: fit-content;
-        align-self: center;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    /* --- ICON COLORS --- */
-    .icon-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
-    .icon-pink { background: linear-gradient(135deg, #ec4899, #be185d); color: white; }
-    .icon-cyan { background: linear-gradient(135deg, #06b6d4, #0e7490); color: white; }
-    /* BAGONG KULAY PARA SA MGA BAGONG CARDS */
-    .icon-green { background: linear-gradient(135deg, #10b981, #047857); color: white; }
-    .icon-orange { background: linear-gradient(135deg, #f97316, #c2410c); color: white; }
-    .icon-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: white; }
-    .icon-yellow { background: linear-gradient(135deg, #f59e0b, #b45309); color: white; }
-
-    /* --- ADMIN & LOGOUT SA ILALIM --- */
-    .bottom-actions {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 3rem;
-        width: 100%;
-    }
-
-    .bottom-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(255, 255, 255, 0.05);
-        color: #d4d4d8;
-        padding: 0.8rem 1.5rem;
-        border-radius: 12px;
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 600;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transition: all 0.3s ease;
-    }
-
-    .bottom-btn:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: #fff;
-        border-color: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
-    }
-
-    .bottom-btn.admin {
-        color: #a78bfa;
-        border-color: rgba(167, 139, 250, 0.3);
-    }
-    .bottom-btn.admin:hover {
-        background: rgba(167, 139, 250, 0.1);
-    }
-
-    .bottom-btn.logout {
-        color: #f59e0b;
-        border-color: rgba(245, 158, 11, 0.3);
-    }
-    .bottom-btn.logout:hover {
-        background: rgba(245, 158, 11, 0.1);
-    }
-
-    /* --- FOOTER --- */
-    .dashboard-footer {
-        margin-top: 3rem;
-        text-align: center;
-        color: #52525b;
-        font-size: 0.85rem;
-    }
-</style>
-
-<div class="dashboard-wrapper">
-    <div class="dashboard-container">
+    <!-- Content Area -->
+    <main style="padding: 20px; max-width: 1200px; margin: 0 auto;">
         
-        <!-- HEADER -->
-        <div class="welcome-header-wrapper">
-            <div class="welcome-header">
-                <h1>
-                    <span class="gradient-text">Welcome!</span> 
-                    <span class="wave">👋</span>
-                </h1>
-                <p>What would you like to explore today?</p>
-            </div>
-        </div>
-
-        <!-- MAIN CARDS (7 CARDS TOTAL) -->
-        <div class="row row-cols-2 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center w-100 px-4">
+        <!-- Search Section -->
+        <div style="text-align: center; padding: 40px 20px; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 30px;">
+            <h1 style="color: #212529; margin-bottom: 10px;">Discover the Best Food in Kabankalan</h1>
+            <p style="color: #6c757d; margin-bottom: 20px;">Search for restaurants, dishes, and cuisines near you.</p>
             
-            <!-- 1. RESTAURANTS -->
-            <div class="col">
-                <a href="{% url 'food_finder:restaurant_list' %}" class="landscape-card">
-                    <div class="icon-bubble icon-blue"><i class="fas fa-store"></i></div>
-                    <div class="text-content">
-                        <h3>Restaurants</h3>
-                        <p>Browse all</p>
-                        <span class="count-badge">{{ total_restaurants|default:"19" }} available</span>
-                    </div>
-                </a>
-            </div>
+            <form method="GET" action="/search/">
+                <input type="text" placeholder="Search for restaurants, dishes, cuisines..." 
+                       style="width: 60%; padding: 15px; border-radius: 30px; border: 1px solid #ced4da; font-size: 16px;">
+                <button type="submit" style="padding: 15px 30px; border-radius: 30px; background: #0d6efd; color: white; border: none; font-size: 16px; cursor: pointer; margin-left: 10px;">
+                    Search
+                </button>
+            </form>
+        </div>
 
-            <!-- 2. FAVORITES -->
-            <div class="col">
-                <a href="{% url 'food_finder:my_favorites' %}" class="landscape-card">
-                    <div class="icon-bubble icon-pink"><i class="fas fa-heart"></i></div>
-                    <div class="text-content">
-                        <h3>Favorites</h3>
-                        <p>Your saved list</p>
-                        <span class="count-badge">{{ total_favorites|default:"0" }} saved</span>
-                    </div>
-                </a>
-            </div>
+        <!-- Categories Section -->
+        <h2 style="color: #212529;">Explore Categories</h2>
+        <div style="display: flex; gap: 15px; margin-bottom: 40px; overflow-x: auto; padding-bottom: 10px;">
+            <button style="padding: 12px 25px; border-radius: 10px; background: #ffc107; color: #212529; border: none; font-weight: bold; cursor: pointer;">Fast Food</button>
+            <button style="padding: 12px 25px; border-radius: 10px; background: #198754; color: white; border: none; font-weight: bold; cursor: pointer;">Local & Carinderia</button>
+            <button style="padding: 12px 25px; border-radius: 10px; background: #0dcaf0; color: #212529; border: none; font-weight: bold; cursor: pointer;">Cafe & Snacks</button>
+            <button style="padding: 12px 25px; border-radius: 10px; background: #d63384; color: white; border: none; font-weight: bold; cursor: pointer;">Desserts</button>
+        </div>
 
-            <!-- 3. ABOUT -->
-            <div class="col">
-                <a href="{% url 'food_finder:about' %}" class="landscape-card">
-                    <div class="icon-bubble icon-cyan"><i class="fas fa-info-circle"></i></div>
-                    <div class="text-content">
-                        <h3>About</h3>
-                        <p>System info</p>
-                    </div>
-                </a>
-            </div>
-
-            <!-- 4. NEAR ME -->
-            <div class="col">
-                <!-- Palitan ang '#' ng tamang URL kung meron ka na -->
-                <a href="#" class="landscape-card">
-                    <div class="icon-bubble icon-green"><i class="fas fa-map-marker-alt"></i></div>
-                    <div class="text-content">
-                        <h3>Near Me</h3>
-                        <p>Map View</p>
-                        <span class="count-badge">Find location</span>
-                    </div>
-                </a>
-            </div>
-
-            <!-- 5. TOP RATED -->
-            <div class="col">
-                <a href="#" class="landscape-card">
-                    <div class="icon-bubble icon-orange"><i class="fas fa-fire"></i></div>
-                    <div class="text-content">
-                        <h3>Top Rated</h3>
-                        <p>Trending spots</p>
-                        <span class="count-badge">Popular now</span>
-                    </div>
-                </a>
-            </div>
-
-            <!-- 6. MY ORDERS -->
-            <div class="col">
-                <a href="#" class="landscape-card">
-                    <div class="icon-bubble icon-purple"><i class="fas fa-receipt"></i></div>
-                    <div class="text-content">
-                        <h3>My Orders</h3>
-                        <p>Order History</p>
-                        <span class="count-badge">0 orders</span>
-                    </div>
-                </a>
-            </div>
-
-            <!-- 7. PROMOS -->
-            <div class="col">
-                <a href="#" class="landscape-card">
-                    <div class="icon-bubble icon-yellow"><i class="fas fa-tags"></i></div>
-                    <div class="text-content">
-                        <h3>Promos</h3>
-                        <p>Special Deals</p>
-                        <span class="count-badge">New discounts</span>
-                    </div>
-                </a>
-            </div>
+        <!-- Trending Section -->
+        <h2 style="color: #212529;">Trending Nearby You</h2>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap;">
             
+            <!-- Card 1 -->
+            <div style="background: white; border-radius: 10px; width: 280px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
+                <div style="height: 150px; background: #e9ecef; display: flsex; align-items: center; justify-content: center; color: #adb5bd;">[Restaurant Image Here]</div>
+                <div style="padding: 15px;">
+                    <h3 style="margin: 0 0 10px 0; color: #212529;">Jollibee Kabankalan</h3>
+                    <p style="margin: 0; color: #6c757d; font-size: 14px;">Fast Food • Chickenjoy</p>
+                    <p style="margin: 10px 0; color: #ffc107; font-weight: bold;">⭐ 4.5 (120 Reviews)</p>
+                    <a href="#" style="display: block; text-align: center; background: #0d6efd; color: white; padding: 10px; text-decoration: none; border-radius: 5px;">View Map</a>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div style="background: white; border-radius: 10px; width: 280px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
+                <div style="height: 150px; background: #e9ecef; display: flex; align-items: center; justify-content: center; color: #adb5bd;">[Restaurant Image Here]</div>
+                <div style="padding: 15px;">
+                    <h3 style="margin: 0 0 10px 0; color: #212529;">Mang Inasal</h3>
+                    <p style="margin: 0; color: #6c757d; font-size: 14px;">Local • Inasal, Rice</p>
+                    <p style="margin: 10px 0; color: #ffc107; font-weight: bold;">⭐ 4.8 (85 Reviews)</p>
+                    <a href="#" style="display: block; text-align: center; background: #0d6efd; color: white; padding: 10px; text-decoration: none; border-radius: 5px;">View Map</a>
+                </div>
+            </div>
+
         </div>
-
-        <!-- ADMIN & LOGOUT SA ILALIM -->
-        <div class="bottom-actions">
-            {% if user.is_staff %}
-            <a href="{% url 'admin:index' %}" class="bottom-btn admin">
-                <i class="fas fa-users-cog"></i> Admin Panel
-            </a>
-            {% endif %}
-            
-            <a href="{% url 'logout' %}" class="bottom-btn logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-        </div>
-
-        <!-- FOOTER -->
-        <div class="dashboard-footer">
-            &copy; 2026 KabankalanEats &mdash; Food Finder System. All rights reserved.
-        </div>
-
-    </div>
-</div>
-
-{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,413 +1,359 @@
-{% extends 'theme/base_dashboard.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kabankalan City Food Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #0f0f13;
+            --card-bg: #1c1c24;
+            --primary: #ff4757;
+            --text-light: #ffffff;
+            --text-muted: #a4b0be;
+            --hover-glow: rgba(255, 71, 87, 0.4);
+        }
 
-{% block content %}
-<style>
-    /* --- GLOBAL DARK THEME KAG BACKGROUND --- */
-    html, body {
-        background-color: #0f0f13 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .dashboard-wrapper {
-        background: linear-gradient(rgba(15, 15, 19, 0.75), rgba(15, 15, 19, 0.85)), 
-                    url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat fixed !important;
-        width: 100vw;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 10;
-        display: flex;
-        flex-direction: column;
-    }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
 
-    .dashboard-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start; 
-        align-items: center;
-        padding: 1rem; 
-        padding-top: 3rem; 
-        width: 100%;
-        max-width: 1400px;
-        margin: 0 auto;
-        position: relative; 
-    }
+        a { text-decoration: none; color: inherit; }
 
-    /* ========================================= */
-    /* --- HEADER AREA (WELCOME & BACK BUTTON) --- */
-    /* ========================================= */
-    .header-area {
-        width: 100%;
-        max-width: 1300px;
-        position: relative; 
-        display: flex;
-        justify-content: center; 
-        align-items: flex-start; /* GIN-BAG-O: Gina-align sa ibabaw */
-        margin-bottom: 3rem;
-        padding-top: 10px; /* GIN-DUGANG: Space sa ibabaw */
-    }
+        /* Navbar */
+        .navbar {
+            background: rgba(15, 15, 19, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #2d2d35;
+        }
 
-    /* BACK TO HOME (Ibutang sa tuo, ibabaw-babaw) */
-    .back-home-btn {
-        position: absolute;
-        right: 0; 
-        top: 0; /* GIN-BAG-O: Dikit sa pinaka-ibabaw sang header-area */
+        .navbar h2 { color: var(--primary); font-weight: 700; font-size: 1.5rem; }
+
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
         
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: rgba(20, 20, 25, 0.8);
-        backdrop-filter: blur(10px);
-        color: #d4d4d8;
-        padding: 0.6rem 1.2rem;
-        border-radius: 12px;
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 600;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        transition: all 0.3s ease;
-        z-index: 20;
-    }
-
-    .back-home-btn:hover {
-        background: rgba(40, 40, 50, 0.9);
-        color: #fff;
-        transform: translateX(-5px); 
-        border-color: rgba(235, 120, 191, 0.4);
-    }
-
-    /* WELCOME TEXT */
-    .welcome-header { 
-        text-align: center; 
-        margin: 0; 
-        z-index: 10;
-        padding-top: 0; /* Gin-adjust para magtupong sa button */
-    }
-    
-    .welcome-header h1 {
-        font-size: 4.5rem; 
-        font-weight: 900;
-        color: #ffffff;
-        margin-bottom: 0.5rem;
-        letter-spacing: -2px;
-        line-height: 1.1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-        animation: floatGlow 3s ease-in-out infinite;
-        text-shadow: 0 4px 20px rgba(0,0,0,0.5);
-    }
-    
-    .welcome-header h1 span.gradient-text { 
-        background: linear-gradient(135deg, #eb78bf 0%, #a78bfa 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 40px rgba(235, 120, 191, 0.6), 0 0 80px rgba(167, 139, 250, 0.4);
-        display: inline-block;
-        animation: pulseGlow 2s ease-in-out infinite;
-    }
-    
-    @keyframes floatGlow {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
-    
-    @keyframes pulseGlow {
-        0%, 100% { filter: drop-shadow(0 0 20px rgba(235, 120, 191, 0.5)); }
-        50% { filter: drop-shadow(0 0 40px rgba(235, 120, 191, 0.9)); }
-    }
-    
-    .welcome-header p { 
-        color: #e4e4e7; 
-        font-size: 1.2rem; 
-        margin: 0; 
-        text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    }
-
-    /* WAVE ANIMATION */
-    .wave {
-        display: inline-block;
-        animation: wave-animation 2.5s infinite;
-        transform-origin: 70% 70%;
-        font-size: 3.5rem;
-    }
-
-    @keyframes wave-animation {
-        0% { transform: rotate( 0.0deg) }
-        10% { transform: rotate(14.0deg) }
-        20% { transform: rotate(-8.0deg) }
-        30% { transform: rotate(14.0deg) }
-        40% { transform: rotate(-4.0deg) }
-        50% { transform: rotate(10.0deg) }
-        60% { transform: rotate( 0.0deg) }
-        100% { transform: rotate( 0.0deg) }
-    }
-
-    /* --- HORIZONTAL FLEX LAYOUT --- */
-    .cards-wrapper {
-        width: 100%;
-        max-width: 1300px;
-        overflow-x: auto; 
-        padding-bottom: 15px; 
-        margin-top: 1rem;
-        margin-bottom: 2rem;
-        scrollbar-width: none; 
-        -ms-overflow-style: none; 
-    }
-    .cards-wrapper::-webkit-scrollbar { display: none; }
-
-    .cards-container {
-        display: flex;
-        flex-direction: row;
-        gap: 12px;
-        width: max-content; 
-        margin: 0 auto;
-    }
-
-    /* --- CARD DESIGN --- */
-    .landscape-card {
-        background: rgba(20, 20, 25, 0.65); 
-        backdrop-filter: blur(12px);
-        border-radius: 12px;
-        padding: 1rem;
-        text-decoration: none !important;
-        display: flex;
-        flex-direction: row; 
-        align-items: center;
-        text-align: left;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        height: 80px;
-        width: 180px; 
-        flex-shrink: 0;
-        gap: 12px;
-        transition: all 0.2s ease;
-    }
-
-    .landscape-card:hover {
-        transform: translateY(-4px);
-        border-color: rgba(235, 120, 191, 0.6);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-        background: rgba(20, 20, 25, 0.85);
-    }
-
-    /* --- ICONS --- */
-    .icon-bubble {
-        width: 40px; 
-        height: 40px; 
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-    .icon-bubble i { font-size: 1.1rem !important; color: white; }
-
-    /* --- TEXT --- */
-    .text-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        overflow: hidden;
-    }
-
-    .landscape-card h3 {
-        color: #ffffff !important;
-        font-weight: 700;
-        font-size: 0.85rem;
-        margin: 0 0 2px 0;
-        white-space: nowrap;
-    }
-    .landscape-card p {
-        color: #a1a1aa !important;
-        font-size: 0.65rem;
-        margin: 0;
-        white-space: nowrap;
-    }
-
-    /* --- ICON COLORS --- */
-    .icon-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    .icon-pink { background: linear-gradient(135deg, #ec4899, #be185d); }
-    .icon-cyan { background: linear-gradient(135deg, #06b6d4, #0e7490); }
-    .icon-green { background: linear-gradient(135deg, #10b981, #047857); }
-    .icon-orange { background: linear-gradient(135deg, #f97316, #c2410c); }
-    .icon-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-    .icon-yellow { background: linear-gradient(135deg, #f59e0b, #b45309); }
-
-    /* ========================================= */
-    /* --- ADMIN & LOGOUT BUTTONS --- */
-    /* ========================================= */
-    .bottom-actions {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: auto; 
-        padding-bottom: 2rem; 
-        width: 100%;
-        position: relative;
-        z-index: 9999;
-    }
-
-    .bottom-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(20, 20, 25, 0.8); 
-        backdrop-filter: blur(10px);
-        color: #d4d4d8;
-        padding: 0.8rem 1.5rem;
-        border-radius: 12px;
-        text-decoration: none;
-        font-size: 0.9rem;
-        font-weight: 600;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        transition: all 0.3s ease;
-        position: relative;
-        z-index: 9999;
-        pointer-events: auto;
-        cursor: pointer;
-    }
-
-    .bottom-btn:hover {
-        background: rgba(40, 40, 50, 0.9);
-        color: #fff;
-        border-color: rgba(255, 255, 255, 0.3);
-        transform: translateY(-2px);
-    }
-
-    .bottom-btn.admin { color: #a78bfa; border-color: rgba(167, 139, 250, 0.4); }
-    .bottom-btn.admin:hover { background: rgba(167, 139, 250, 0.2); }
-
-    .bottom-btn.owner { color: #fb923c; border-color: rgba(251, 146, 60, 0.4); }
-    .bottom-btn.owner:hover { background: rgba(251, 146, 60, 0.2); }
-
-    .bottom-btn.logout { color: #f59e0b; border-color: rgba(245, 158, 11, 0.4); }
-    .bottom-btn.logout:hover { background: rgba(245, 158, 11, 0.2); }
-
-    /* --- FOOTER --- */
-    .dashboard-footer {
-        margin-top: 2rem;
-        text-align: center;
-        color: #d4d4d8;
-        font-size: 0.85rem;
-        text-shadow: 0 1px 5px rgba(0,0,0,0.8);
-    }
-
-    /* RESPONSIVE PARA SA MOBILE */
-    @media (max-width: 768px) {
-        .header-area {
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            align-items: center; /* Center ang tanan sa mobile */
+        .nav-icon {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            transition: color 0.3s;
+            position: relative;
         }
-        .back-home-btn {
-            position: relative; /* Ibalik sa normal flow */
-            right: auto;
-            top: auto;
-            margin-bottom: 10px;
-        }
-        .welcome-header h1 {
-            font-size: 3rem;
-        }
-    }
-</style>
-
-<div class="dashboard-wrapper">
-    
-    <div class="dashboard-container">
+        .nav-icon:hover { color: var(--primary); }
         
-        <!-- HEADER AREA (WELCOME & BACK BUTTON) -->
-        <div class="header-area">
-            
-            <!-- WELCOME TEXT -->
-            <div class="welcome-header">
-                <h1>
-                    <span class="gradient-text">Welcome!</span> 
-                    <span class="wave">👋</span>
-                </h1>
-                <p>Find your Favorites Food!</p>
-            </div>
+        .cart-badge {
+            position: absolute; top: -5px; right: -8px;
+            background: var(--primary); font-size: 0.6rem;
+            padding: 2px 5px; border-radius: 50%; font-weight: bold;
+        }
 
-            <!-- BACK TO HOME BUTTON (Gin-butang sa ibabaw-babaw sa tuo) -->
-            <a href="{% url 'food_finder:home' %}" class="back-home-btn">
-                <i class="fas fa-home"></i> Back to Home
+        .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
+
+        /* Hero Section */
+        .hero {
+            text-align: center; padding: 60px 20px 80px;
+            background: linear-gradient(135deg, #1c1c24 0%, #2a2a35 100%);
+            border-radius: 25px; margin-bottom: -40px;
+            border: 1px solid #2d2d35; position: relative; z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem; margin-bottom: 10px;
+            background: linear-gradient(to right, #ff4757, #ff7f50);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .search-box { position: relative; max-width: 600px; margin: 20px auto 0; }
+
+        .search-box input {
+            width: 100%; padding: 18px 25px; padding-right: 120px;
+            border-radius: 50px; border: 1px solid #3d3d4a;
+            background: #141419; color: white; font-size: 1rem; outline: none;
+        }
+
+        .search-box button {
+            position: absolute; right: 5px; top: 5px; bottom: 5px;
+            background: var(--primary); color: white; border: none;
+            padding: 0 30px; border-radius: 50px; font-weight: 600; cursor: pointer;
+        }
+
+        /* Sections */
+        .section-title { font-size: 1.5rem; margin: 40px 0 20px; display: flex; align-items: center; gap: 10px; }
+
+        /* Categories */
+        .categories {
+            display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;
+        }
+
+        .cat-btn {
+            padding: 12px 25px; border-radius: 30px; border: 1px solid #2d2d35;
+            background: var(--card-bg); color: var(--text-light);
+            font-weight: 500; cursor: pointer; transition: all 0.3s;
+            display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+
+        .cat-btn:hover, .cat-btn.active {
+            border-color: var(--primary); background: rgba(255, 71, 87, 0.1);
+            color: var(--primary);
+        }
+
+        /* Cards Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+
+        .card {
+            background: var(--card-bg); border-radius: 20px; overflow: hidden;
+            border: 1px solid #2d2d35; transition: 0.3s;
+        }
+
+        .card:hover { transform: translateY(-5px); border-color: rgba(255, 71, 87, 0.4); }
+
+        .card-img {
+            height: 180px; background-size: cover; background-position: center; position: relative;
+        }
+
+        .card-content { padding: 20px; }
+
+        .header-row { display: flex; justify-content: space-between; align-items: flex-start; }
+        
+        .header-row h3 { font-size: 1.2rem; margin-bottom: 5px; }
+        
+        .rating { color: #f1c40f; font-weight: 600; font-size: 0.9rem; }
+        
+        .details-row { color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 15px; }
+        
+        .quick-actions { display: flex; gap: 10px; margin-bottom: 15px; font-size: 0.8rem; color: var(--primary); }
+        .quick-actions a { cursor: pointer; }
+        .quick-actions a:hover { text-decoration: underline; }
+
+        .card-buttons { display: flex; gap: 10px; }
+        .btn-primary {
+            flex: 1; text-align: center; background: var(--primary); color: white;
+            padding: 10px; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
+        }
+        .btn-secondary {
+            flex: 1; text-align: center; background: rgba(255, 71, 87, 0.1); color: var(--primary);
+            padding: 10px; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        /* All Restaurants Section */
+        .all-restaurants-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+        }
+        .sort-select {
+            background: var(--card-bg); color: white; padding: 10px 15px;
+            border: 1px solid #2d2d35; border-radius: 10px; outline: none;
+        }
+
+        .list-item {
+            background: var(--card-bg); border-radius: 15px; padding: 15px;
+            margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;
+            border: 1px solid #2d2d35;
+        }
+        .list-info { display: flex; align-items: center; gap: 15px; }
+        .list-img {
+            width: 60px; height: 60px; border-radius: 10px; background-size: cover; background-position: center;
+        }
+
+        /* Review Section */
+        .review-box {
+            background: var(--card-bg); padding: 30px; border-radius: 20px; text-align: center;
+            border: 1px solid #2d2d35; margin-top: 20px;
+        }
+        .stars { font-size: 2rem; color: #f1c40f; margin-bottom: 15px; }
+        .review-input {
+            width: 100%; padding: 15px; border-radius: 10px; background: #141419;
+            border: 1px solid #3d3d4a; color: white; margin-bottom: 15px; resize: none;
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0d; padding: 40px 20px; text-align: center;
+            border-top: 1px solid #2d2d35; margin-top: 60px;
+        }
+        .footer-links { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap; }
+        .footer-links a { color: var(--text-muted); transition: color 0.3s; }
+        .footer-links a:hover { color: var(--primary); }
+        .copyright { color: #555; font-size: 0.9rem; }
+
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <h2>🍔 Kabankalan Eats</h2>
+        <div class="nav-actions">
+            <a href="#" class="nav-icon"><i class="fas fa-search"></i></a>
+            <a href="#" class="nav-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge">2</span>
             </a>
-            
+            <a href="#" class="nav-icon"><i class="fas fa-user-circle"></i></a>
         </div>
+    </nav>
 
-        <div class="cards-wrapper">
-            <div class="cards-container">
-                
-                <a href="{% url 'food_finder:restaurant_list' %}" class="landscape-card">
-                    <div class="icon-bubble icon-blue"><i class="fas fa-store"></i></div>
-                    <div class="text-content"><h3>Restaurants</h3><p>19 available</p></div>
-                </a>
-
-                <a href="{% url 'food_finder:my_favorites' %}" class="landscape-card">
-                    <div class="icon-bubble icon-pink"><i class="fas fa-heart"></i></div>
-                    <div class="text-content"><h3>Favorites</h3><p>0 saved</p></div>
-                </a>
-
-                <a href="{% url 'food_finder:about' %}" class="landscape-card">
-                    <div class="icon-bubble icon-cyan"><i class="fas fa-info-circle"></i></div>
-                    <div class="text-content"><h3>About</h3><p>System info</p></div>
-                </a>
-
-                <a href="{% url 'core:near_me' %}" class="landscape-card">
-                    <div class="icon-bubble icon-green"><i class="fas fa-map-marker-alt"></i></div>
-                    <div class="text-content"><h3>Near Me</h3><p>Map View</p></div>
-                </a>
-
-                <a href="{% url 'core:top_rated' %}" class="landscape-card">
-                    <div class="icon-bubble icon-orange"><i class="fas fa-fire"></i></div>
-                    <div class="text-content"><h3>Top Rated</h3><p>Trending</p></div>
-                </a>
-
-                <a href="{% url 'core:my_orders' %}" class="landscape-card">
-                    <div class="icon-bubble icon-purple"><i class="fas fa-receipt"></i></div>
-                    <div class="text-content"><h3>My Orders</h3><p>{{ total_orders|default:"0" }} orders</p></div>
-                </a>
-
-                <a href="{% url 'core:promos' %}" class="landscape-card">
-                    <div class="icon-bubble icon-yellow"><i class="fas fa-tags"></i></div>
-                    <div class="text-content"><h3>Promos</h3><p>Deals</p></div>
-                </a>
-
+    <main class="container">
+        
+        <!-- HERO -->
+        <div class="hero">
+            <h1>Discover the Best Food</h1>
+            <p>Search for restaurants, dishes, and cuisines in Kabankalan City.</p>
+            <div class="search-box">
+                <input type="text" placeholder="Try searching 'Chicken Inasal' or 'Milk Tea'...">
+                <button type="submit">Search</button>
             </div>
         </div>
 
-        <!-- ADMIN, OWNER & LOGOUT -->
-        <div class="bottom-actions">
+        <!-- CATEGORIES (NAA NA ANG MILK TEA) -->
+        <h2 class="section-title"><i class="fas fa-utensils" style="color: var(--primary);"></i> Explore Categories</h2>
+        <div class="categories">
+            <button class="cat-btn"><i class="fas fa-burger"></i> Fast Food</button>
+            <button class="cat-btn"><i class="fas fa-bowl-rice"></i> Local & Carinderia</button>
+            <button class="cat-btn"><i class="fas fa-mug-hot"></i> Cafe & Snacks</button>
+            <button class="cat-btn"><i class="fas fa-ice-cream"></i> Desserts</button>
+            <button class="cat-btn"><i class="fas fa-hotdog"></i> Street Food</button>
+            <button class="cat-btn active"><i class="fas fa-coffee"></i> Milk Tea</button>
+        </div>
+
+        <!-- TRENDING -->
+        <h2 class="section-title"><i class="fas fa-fire" style="color: #e67e22;"></i> Trending Nearby You</h2>
+        <div class="grid">
             
-            {% if user.is_superuser %}
-            <a href="{% url 'admin:index' %}" class="bottom-btn admin">
-                <i class="fas fa-users-cog"></i> Admin Panel
-            </a>
-            {% endif %}
+            <!-- Card 1 -->
+            <div class="card">
+                <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop');"></div>
+                <div class="card-content">
+                    <div class="header-row">
+                        <h3>Jollibee Kabankalan</h3>
+                        <div class="rating"><i class="fas fa-star"></i> 4.5</div>
+                    </div>
+                    <div class="details-row">₱100–₱200</div>
+                    <div class="quick-actions">
+                        <a href="#">Menu</a> • <a href="#">Reviews</a> • <a href="#">Location</a> • <a href="#">Map</a>
+                    </div>
+                    <div class="card-buttons">
+                        <a href="#" class="btn-primary">View Details</a>
+                        <a href="#" class="btn-secondary"><i class="fas fa-heart"></i></a>
+                    </div>
+                </div>
+            </div>
 
-            {% if user.is_restaurant_owner %}
-            <a href="{% url 'core:owner_dashboard' %}" class="bottom-btn owner">
-                <i class="fas fa-utensils"></i> Restaurant Dashboard
-            </a>
-            {% endif %}
+            <!-- Card 2 -->
+            <div class="card">
+                <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?q=80&w=800&auto=format&fit=crop');"></div>
+                <div class="card-content">
+                    <div class="header-row">
+                        <h3>Mang Inasal</h3>
+                        <div class="rating"><i class="fas fa-star"></i> 4.8</div>
+                    </div>
+                    <div class="details-row">₱150–₱250</div>
+                    <div class="quick-actions">
+                        <a href="#">Menu</a> • <a href="#">Reviews</a> • <a href="#">Location</a> • <a href="#">Map</a>
+                    </div>
+                    <div class="card-buttons">
+                        <a href="#" class="btn-primary">View Details</a>
+                        <a href="#" class="btn-secondary"><i class="fas fa-heart"></i></a>
+                    </div>
+                </div>
+            </div>
 
-            <a href="{% url 'core:logout' %}" class="bottom-btn logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
+            <!-- Card 3: MILK TEA -->
+            <div class="card">
+                <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=800&auto=format&fit=crop');"></div>
+                <div class="card-content">
+                    <div class="header-row">
+                        <h3>Macao Imperial Tea</h3>
+                        <div class="rating"><i class="fas fa-star"></i> 4.7</div>
+                    </div>
+                    <div class="details-row">₱80–₱150</div>
+                    <div class="quick-actions">
+                        <a href="#">Menu</a> • <a href="#">Reviews</a> • <a href="#">Location</a> • <a href="#">Map</a>
+                    </div>
+                    <div class="card-buttons">
+                        <a href="#" class="btn-primary">View Details</a>
+                        <a href="#" class="btn-secondary"><i class="fas fa-heart"></i></a>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="dashboard-footer">
-            &copy; 2026 KabankalanEats &mdash; Food Finder System. All rights reserved.
+        <!-- ALL RESTAURANTS -->
+        <div class="all-restaurants-header">
+            <h2 class="section-title"><i class="fas fa-list" style="color: var(--primary);"></i> All Restaurants</h2>
+            <select class="sort-select">
+                <option>Sort by: Rating</option>
+                <option>Sort by: Distance</option>
+                <option>Sort by: Price</option>
+            </select>
         </div>
 
-    </div>
-</div>
+        <div class="list-item">
+            <div class="list-info">
+                <div class="list-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop');"></div>
+                <div>
+                    <h3>Jollibee Kabankalan</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Fast Food • ₱100–₱200</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="color: #27ae60; font-size: 0.9rem;"><i class="fas fa-circle"></i> Open</span>
+                <span class="rating"><i class="fas fa-star"></i> 4.5</span>
+                <a href="#" class="btn-primary" style="padding: 8px 15px; font-size: 0.8rem;">Details</a>
+            </div>
+        </div>
 
-{% endblock %}
+        <div class="list-item">
+            <div class="list-info">
+                <div class="list-img" style="background-image: url('https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=800&auto=format&fit=crop');"></div>
+                <div>
+                    <h3>Macao Imperial Tea</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Milk Tea • ₱80–₱150</p>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="color: #27ae60; font-size: 0.9rem;"><i class="fas fa-circle"></i> Open</span>
+                <span class="rating"><i class="fas fa-star"></i> 4.7</span>
+                <a href="#" class="btn-primary" style="padding: 8px 15px; font-size: 0.8rem;">Details</a>
+            </div>
+        </div>
+
+        <!-- REVIEWS -->
+        <h2 class="section-title"><i class="fas fa-star" style="color: #f1c40f;"></i> Reviews and Ratings</h2>
+        <div class="review-box">
+            <div class="stars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+            </div>
+            <p style="margin-bottom: 20px;">Write a review and share your experience.</p>
+            <textarea class="review-input" rows="4" placeholder="What did you order? How was the food?"></textarea>
+            <a href="#" class="btn-primary" style="display: inline-block; padding: 10px 30px;">Submit Review</a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">About Us</a>
+            <a href="#">Contact Us</a>
+            <a href="#">Help</a>
+        </div>
+        <p class="copyright">&copy; 2026 Kabankalan Eats. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
