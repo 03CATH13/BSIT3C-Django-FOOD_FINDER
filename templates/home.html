@@ -2,183 +2,56 @@
 {% load static %}
 
 {% block content %}
-<!-- Icons (FontAwesome) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<div style="padding: 20px; color: white;">
 
-<style>
-    /* --- GLOBAL DARK THEME --- */
-    body, html {
-        background-color: #0f0f13 !important;
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-    }
-
-    .main-wrapper {
-        /* Gin-butangan sang subtle radial glow sa tunga */
-        background: radial-gradient(circle at 50% 50%, #1a1a24 0%, #0f0f13 70%);
-        position: fixed; 
-        inset: 0; 
-        width: 100%;
-        overflow-y: auto; 
-        padding: 2rem 1rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center; 
-    }
-
-    /* --- HEADER (FOOD FINDER) --- */
-    .header-section {
-        text-align: center;
-        margin-bottom: 4rem; 
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .header-section h1 {
-        font-size: clamp(3rem, 9vw, 5.5rem); 
-        font-weight: 900;
-        margin: 0 0 15px 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        letter-spacing: 2px; 
-        text-transform: uppercase;
-        line-height: 1.1;
-    }
-
-    /* --- NAMI NGA DESIGN SANG TEXT --- */
-    .gradient-text {
-        background: linear-gradient(135deg, #eb78bf 0%, #a78bfa 100%); 
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        
-        /* SUBTLE GLOW: Ginhimo nga soft lang, indi sobra ka siga */
-        filter: drop-shadow(0 0 15px rgba(235, 120, 191, 0.3));
-        
-        display: inline-block;
-        max-width: 100%;
-    }
-
-    .header-section p {
-        color: #a1a1aa;
-        font-size: clamp(1.1rem, 2vw, 1.3rem);
-        margin: 0;
-        text-align: center;
-        letter-spacing: 1px;
-        font-weight: 500;
-    }
-
-    /* --- BUTTONS CONTAINER --- */
-    .button-container {
-        display: flex;
-        gap: 1.5rem;
-        flex-wrap: wrap; 
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* --- GLASSMORPHISM BUTTONS --- */
-    .action-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 12px;
-        padding: 1.2rem 3rem; 
-        border-radius: 16px;
-        text-decoration: none;
-        font-size: 1.1rem;
-        font-weight: 700;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(12px); /* Glass effect */
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Shadow */
-    }
-
-    .btn-admin {
-        color: #a78bfa;
-        border: 1px solid rgba(167, 139, 250, 0.4);
-        background: rgba(167, 139, 250, 0.05); /* Subtle purple tint */
-    }
-    .btn-admin:hover { 
-        background: rgba(167, 139, 250, 0.15); 
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 12px 40px rgba(167, 139, 250, 0.2); /* Purple glow on hover */
-    }
-
-    .btn-logout {
-        color: #f59e0b;
-        border: 1px solid rgba(245, 158, 11, 0.4);
-        background: rgba(245, 158, 11, 0.05); /* Subtle orange tint */
-    }
-    .btn-logout:hover { 
-        background: rgba(245, 158, 11, 0.15); 
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 12px 40px rgba(245, 158, 11, 0.2); /* Orange glow on hover */
-    }
-
-    /* --- FOOTER --- */
-    .footer-text {
-        color: #52525b;
-        font-size: 0.9rem;
-        text-align: center;
-        margin-top: 5rem;
-        letter-spacing: 0.5px;
-    }
-
-    /* RESPONSIVE PARA SA GAMAY NGA SCREEN */
-    @media (max-width: 768px) {
-        .header-section {
-            margin-bottom: 3rem;
-        }
-        .action-btn {
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            width: 100%; /* Full width kung mobile */
-            justify-content: center;
-        }
-        .button-container {
-            flex-direction: column;
-            width: 100%;
-            max-width: 300px;
-        }
-    }
-</style>
-
-<div class="main-wrapper">
-    
-    <!-- HEADER -->
-    <div class="header-section">
-        <h1>
-            <span class="gradient-text">FOOD FINDER</span> 
-        </h1>
-        <p>What would you like to explore today?</p>
+    <!-- TRENDING NEARBY YOU -->
+    <h2 class="mb-4" style="color: white; font-weight: bold;">
+        <i class="fas fa-fire text-danger"></i> Trending Nearby You
+    </h2>
+    <div class="row">
+        {% for r in trending_restaurants %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100" style="background-color: #1a1a1a; border: 1px solid #333; border-radius: 12px; overflow: hidden;">
+                {% if r.image %}
+                    <img src="{{ r.image }}" class="card-img-top" alt="{{ r.name }}" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title" style="color: #ffffff; font-weight: bold;">{{ r.name }}</h5>
+                        <span style="color: #ffd700;"><i class="fas fa-star"></i> {{ r.rating|default:"4.5" }}</span>
+                    </div>
+                    <p class="text-muted mb-1" style="font-size: 0.85rem;">{{ r.price|default:"₱100-₱200" }}</p>
+                    <p class="text-light" style="font-size: 0.85rem;"><i class="fas fa-map-marker-alt"></i> {{ r.address }}</p>
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="{% url 'food_finder:restaurant_detail' r.id %}" class="btn w-100" style="background-color: #ff4d6d; color: white; font-weight: bold;">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
-    <!-- BUTTONS (Naka-center na) -->
-    <div class="button-container">
-        
-        <!-- 1. ADMIN PANEL (Staff only) -->
-        {% if user.is_staff %}
-        <a href="{% url 'admin:index' %}" class="action-btn btn-admin">
-            <i class="fas fa-users-cog"></i> Admin Panel
-        </a>
-        {% endif %}
-        
-        <!-- 2. LOGOUT -->
-        <a href="{% url 'core:logout' %}" class="action-btn btn-logout">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="footer-text">
-        &copy; 2026 KabankalanEats &mdash; Food Finder System. All rights reserved.
+    <!-- ALL RESTAURANTS -->
+    <h2 class="mb-4 mt-5" style="color: white; font-weight: bold;">
+        <i class="fas fa-list text-danger"></i> All Restaurants
+    </h2>
+    <div class="row">
+        {% for r in all_restaurants %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100" style="background-color: #1a1a1a; border: 1px solid #333; border-radius: 12px; overflow: hidden;">
+                {% if r.image %}
+                    <img src="{{ r.image }}" class="card-img-top" alt="{{ r.name }}" style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title" style="color: #ffffff; font-weight: bold;">{{ r.name }}</h5>
+                    <p class="text-muted mb-1" style="font-size: 0.85rem;"><i class="fas fa-utensils"></i> {{ r.cuisine_type }}</p>
+                    <p class="text-light" style="font-size: 0.85rem;"><i class="fas fa-map-marker-alt"></i> {{ r.address }}</p>
+                    <a href="{% url 'food_finder:restaurant_detail' r.id %}" class="btn w-100 mt-3" style="background-color: #ff4d6d; color: white; font-weight: bold;">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
 </div>
-
 {% endblock %}
