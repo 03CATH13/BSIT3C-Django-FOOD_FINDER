@@ -68,7 +68,7 @@
             padding: 2px 5px; border-radius: 50%; font-weight: bold;
         }
 
-        .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .container { padding: 40px; max-width: 1400px; margin: 0 auto; }
 
         /* Hero Section */
         .hero {
@@ -102,11 +102,17 @@
         }
 
         /* Sections */
-        .section-title { font-size: 1.5rem; margin: 40px 0 20px; display: flex; align-items: center; gap: 10px; }
+        .section-title { font-size: 1.5rem; margin: 40px 0 20px; display: flex; align-items: center; gap: 10px; justify-content: center; }
 
         /* Categories */
         .categories {
-            display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none;
+            display: flex; gap: 15px; padding-bottom: 10px; scrollbar-width: none;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 900px) {
+            .categories { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; }
         }
 
         .cat-btn {
@@ -121,69 +127,142 @@
             color: var(--primary);
         }
 
-        /* TRENDING CARDS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-
-        .card {
-            background: var(--card-bg); border-radius: 20px; overflow: hidden;
-            border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer;
+        /* DUAL COLUMN LAYOUT */
+        .content-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
         }
 
-        .card:hover { 
+        @media (max-width: 1024px) {
+            .content-split { grid-template-columns: 1fr; }
+        }
+
+        /* ========================================= */
+        /* TRENDING CARDS (SOBRANG MALIIT NA)        */
+        /* ========================================= */
+        .trending-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px; 
+        }
+
+        .trending-card {
+            background: var(--card-bg); border-radius: 8px; overflow: hidden;
+            border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer;
+            display: flex; flex-direction: column;
+        }
+
+        .trending-card:hover { 
+            transform: translateY(-3px); 
+            border-color: rgba(255, 71, 87, 0.4);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .trending-card .card-img { height: 70px; background-size: cover; background-position: center; }
+        .trending-card .card-content { padding: 6px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+        .trending-card h3 { font-size: 0.65rem; margin: 0; line-height: 1.1; color: #fff; }
+        .trending-card .rating { color: #f1c40f; font-size: 0.55rem; font-weight: 600; margin-top: 2px; }
+
+        /* ========================================= */
+        /* ALL CATEGORY CARDS (MAS MALAKI)           */
+        /* ========================================= */
+        .all-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px; 
+        }
+
+        .all-card {
+            background: var(--card-bg); border-radius: 15px; overflow: hidden;
+            border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer;
+            display: flex; flex-direction: column;
+        }
+
+        .all-card:hover { 
             transform: translateY(-5px); 
             border-color: rgba(255, 71, 87, 0.4);
             box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        .card-img {
-            height: 180px; background-size: cover; background-position: center; position: relative;
-        }
+        .all-card .card-img { height: 140px; background-size: cover; background-position: center; }
+        .all-card .card-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .all-card h3 { font-size: 1rem; margin: 0 0 5px 0; line-height: 1.2; }
+        .all-card .rating { color: #f1c40f; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 3px;}
+        .all-card .price { color: var(--text-muted); font-size: 0.75rem; margin-bottom: 15px; }
+        .all-card .btn-primary { padding: 8px; font-size: 0.8rem; margin-top: auto; border-radius: 8px; }
 
-        .card-content { padding: 20px; }
-
-        .header-row { display: flex; justify-content: space-between; align-items: flex-start; }
-        
-        .header-row h3 { font-size: 1.2rem; margin-bottom: 5px; }
-        
-        .rating { color: #f1c40f; font-weight: 600; font-size: 0.9rem; }
-        
-        .details-row { color: var(--text-muted); font-size: 0.85rem; margin: 5px 0 15px; }
-
-        .card-buttons { display: flex; gap: 10px; }
+        /* Shared Button */
         .btn-primary {
-            flex: 1; text-align: center; background: var(--primary); color: white;
-            padding: 10px; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
+            text-align: center; background: var(--primary); color: white;
             border: none; cursor: pointer; font-family: inherit;
             display: flex; align-items: center; justify-content: center; gap: 5px;
         }
 
-        /* ALL RESTAURANTS */
-        .compact-list {
-            display: flex; flex-direction: column; gap: 10px; margin-bottom: 50px;
+        /* ========================================= */
+        /* REVIEWS SECTION (SYSTEM FEEDBACK)         */
+        /* ========================================= */
+        .reviews-container {
+            max-width: 800px;
+            margin: 60px auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
         }
 
-        .compact-item {
-            display: flex; align-items: center; gap: 15px;
-            background: var(--card-bg); padding: 10px 15px;
-            border-radius: 12px; border: 1px solid var(--border-color);
-            cursor: pointer; transition: 0.2s;
+        .review-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
-        .compact-item:hover { background: #252530; border-color: var(--primary); }
-
-        .compact-img {
-            width: 50px; height: 50px; border-radius: 8px;
-            background-size: cover; background-position: center; flex-shrink: 0;
+        .review-form input, .review-form textarea {
+            width: 100%;
+            padding: 15px;
+            background: #141419;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.95rem;
         }
 
-        .compact-info { flex-grow: 1; }
-        .compact-info h4 { font-size: 1rem; margin-bottom: 2px; color: #fff; }
-        .compact-info p { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
-
-        .compact-rating {
-            color: #f1c40f; font-size: 0.9rem; font-weight: 600;
-            display: flex; align-items: center; gap: 4px; margin-right: 10px;
+        .review-form input:focus, .review-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
         }
+
+        .review-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .review-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .review-item {
+            background: #141419;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .review-name { font-weight: 600; color: #fff; }
+        .review-stars { color: #f1c40f; font-size: 0.9rem; }
+        .review-text { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 10px; }
+        .review-date { font-size: 0.75rem; color: #555; text-align: right; display: block; }
 
         /* Empty State */
         .empty-state { text-align: center; padding: 40px; color: var(--text-muted); grid-column: 1 / -1; }
@@ -295,7 +374,7 @@
         }
         .map-container iframe { width: 100%; height: 100%; border: none; }
 
-        /* BAGONG DESIGN: ILILIPAT NATIN SA ILALIM ANG BADGE */
+        /* ACTION BUTTONS SA ILALIM NG MAPA */
         .action-buttons {
             display: flex;
             gap: 15px;
@@ -304,47 +383,23 @@
 
         .btn-google-maps {
             flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 15px;
-            background: var(--primary);
-            color: white;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: 0.3s;
-            border: none;
-            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 15px; background: var(--primary); color: white;
+            border-radius: 12px; font-weight: 600; font-size: 1rem;
+            text-decoration: none; transition: 0.3s; border: none; cursor: pointer;
         }
         .btn-google-maps:hover {
-            background: #e03e50;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+            background: #e03e50; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
         }
 
-        /* BAGONG BUTTON PARA SA BADGE SA ILALIM */
         .btn-exact-location {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 15px;
-            background: #141419;
-            color: var(--text-light);
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: 0.3s;
-            border: 1px solid var(--primary);
-            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 15px; background: #141419; color: var(--text-light);
+            border-radius: 12px; font-weight: 600; font-size: 1rem;
+            text-decoration: none; transition: 0.3s; border: 1px solid var(--primary); cursor: pointer;
         }
         .btn-exact-location:hover {
-            background: rgba(255, 71, 87, 0.1);
-            color: var(--primary);
+            background: rgba(255, 71, 87, 0.1); color: var(--primary);
         }
     </style>
 </head>
@@ -375,11 +430,7 @@
             </div>
         </div>
 
-        <!-- 1. TRENDING -->
-        <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: #e67e22;"></i> Trending in Kabankalan City Proper</h2>
-        <div class="grid" id="trending-grid"></div>
-
-        <!-- 2. CATEGORIES -->
+        <!-- 2. CATEGORIES (CENTERED) -->
         <h2 class="section-title"><i class="fas fa-utensils" style="color: var(--primary);"></i> Explore Categories</h2>
         <div class="categories" id="category-list">
             <button class="cat-btn" data-category="fastfood"><i class="fas fa-burger"></i> Fast Food</button>
@@ -389,9 +440,69 @@
             <button class="cat-btn active" data-category="milktea"><i class="fas fa-coffee"></i> Milk Tea</button>
         </div>
 
-        <!-- 3. ALL RESTAURANTS -->
-        <h2 class="section-title"><i class="fas fa-list" style="color: var(--primary);"></i> All Local Restaurants (Kabankalan City Proper)</h2>
-        <div class="compact-list" id="all-restaurants-list"></div>
+        <!-- DUAL LAYOUT: TRENDING (KALIWA - MALIIT) AT ALL CATEGORY (KANAN - MALAKI) -->
+        <div class="content-split">
+            
+            <!-- KALIWA: TRENDING (MALIIT) -->
+            <div>
+                <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: #e67e22;"></i> Trending</h2>
+                <div class="trending-grid" id="trending-grid"></div>
+            </div>
+
+            <!-- KANAN: ALL [CATEGORY] (MALAKI) -->
+            <div>
+                <h2 class="section-title" id="category-title"><i class="fas fa-list" style="color: var(--primary);"></i> All Milk Tea</h2>
+                <div class="all-grid" id="all-restaurants-grid"></div>
+            </div>
+
+        </div>
+
+        <!-- 3. SYSTEM FEEDBACK & RATINGS SECTION -->
+        <div class="reviews-container">
+            <h2 class="section-title" style="margin-top: 0;"><i class="fas fa-star" style="color: #f1c40f;"></i> System Feedback & Ratings</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 0.9rem;">
+                Kamusta ang pag-gamit ninyo sa Food Finder? I-rate ang system at mag-iwan ng komento.
+            </p>
+
+            <!-- Review Form -->
+            <form class="review-form" id="reviewForm">
+                <div class="d-flex gap-3" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <input type="text" id="reviewName" placeholder="Iyong Pangalan" required style="flex: 1;">
+                    <select id="reviewRating" required style="width: 100%; max-width: 200px; padding: 15px; background: #141419; border: 1px solid var(--border-color); border-radius: 10px; color: white; font-family: inherit; font-size: 0.95rem; outline: none;">
+                        <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
+                        <option value="4">⭐⭐⭐⭐ (Very Good)</option>
+                        <option value="3">⭐⭐⭐ (Good)</option>
+                        <option value="2">⭐⭐ (Fair)</option>
+                        <option value="1">⭐ (Poor)</option>
+                    </select>
+                </div>
+                <textarea id="reviewText" placeholder="Isulat ang inyong comment... (e.g., Napakadali gamitin, pero pwede pa dagdagan ang mga pictures.)" required></textarea>
+                <button type="submit" class="btn-primary" style="padding: 15px; border-radius: 10px; font-size: 1rem; font-weight: 600;">
+                    <i class="fas fa-paper-plane"></i> Submit Feedback
+                </button>
+            </form>
+
+            <!-- Review List -->
+            <div class="review-list" id="reviewList">
+                <!-- Default Reviews -->
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="review-name">Argie Salgado</span>
+                        <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                    </div>
+                    <p class="review-text">Napaka-user-friendly ng system! Makikita mo agad kung saan ang mga sikat na kainan sa Kabankalan.</p>
+                    <span class="review-date">November 10, 2026</span>
+                </div>
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="review-name">BSIT Student</span>
+                        <span class="review-stars">⭐⭐⭐⭐</span>
+                    </div>
+                    <p class="review-text">Gumagana naman nang maayos ang search bar at maps. Sana soon, may cart system na para maka-order online.</p>
+                    <span class="review-date">November 11, 2026</span>
+                </div>
+            </div>
+        </div>
 
     </main>
 
@@ -435,7 +546,6 @@
                             <iframe id="mapFrame" src="" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                         
-                        <!-- DALAWANG BUTTON SA ILALIM (Exact Location at Google Maps) -->
                         <div class="action-buttons">
                             <a href="#" id="mapBadgeLink" target="_blank" class="btn-exact-location">
                                 <i class="fas fa-map-pin"></i> Exact Location
@@ -537,9 +647,21 @@
             ]
         };
 
+        const trendingData = [
+            foodData.fastfood.find(item => item.name === "Jollibee Kabankalan"),
+            foodData.fastfood.find(item => item.name === "Mang Inasal (Gaisano)"),
+            foodData.carinderia.find(item => item.name === "Kabankalan Ihaw-Ihaw"),
+            foodData.carinderia.find(item => item.name === "ALONSO's Cansi & Sizzling House"),
+            foodData.cafe.find(item => item.name === "Taza La Bien"),
+            foodData.desserts.find(item => item.name === "Bibingka & Puto Bumbong Station"),
+            foodData.milktea.find(item => item.name === "Chatime City Mall"),
+            foodData.milktea.find(item => item.name === "Macao Imperial Tea")
+        ];
+
         const categoryList = document.getElementById('category-list');
         const trendingGrid = document.getElementById('trending-grid');
-        const allRestaurantsList = document.getElementById('all-restaurants-list');
+        const allRestaurantsGrid = document.getElementById('all-restaurants-grid');
+        const categoryTitle = document.getElementById('category-title');
         const trendingTitle = document.getElementById('trending-title');
         const buttons = categoryList.querySelectorAll('.cat-btn');
         const searchInput = document.getElementById('searchInput');
@@ -555,7 +677,19 @@
 
         let currentCategory = 'milktea';
 
-        function createLargeCardHTML(item) {
+        // SOBRANG MALIIT NA CARD PARA SA TRENDING (Pangalan at Rating lang)
+        function createTrendingCardHTML(item) {
+            return `
+                <div class="card-img" style="background-image: url('${item.img}');"></div>
+                <div class="card-content">
+                    <h3>${item.name}</h3>
+                    <div class="rating"><i class="fas fa-star"></i> ${item.rating}</div>
+                </div>
+            `;
+        }
+
+        // MALAKING CARD PARA SA ALL
+        function createAllCardHTML(item) {
             return `
                 <div class="card-img" style="background-image: url('${item.img}');"></div>
                 <div class="card-content">
@@ -563,42 +697,45 @@
                         <h3>${item.name}</h3>
                         <div class="rating"><i class="fas fa-star"></i> ${item.rating}</div>
                     </div>
-                    <div class="details-row">${item.price}</div>
-                    <div class="card-buttons">
-                        <button class="btn-primary">
-                            <i class="fas fa-utensils"></i> View Menu & Map
-                        </button>
-                    </div>
+                    <div class="price">${item.price}</div>
+                    <button class="btn-primary">
+                        <i class="fas fa-utensils"></i> View Menu
+                    </button>
                 </div>
             `;
         }
 
-        function createCompactItemHTML(item) {
-            return `
-                <div class="compact-img" style="background-image: url('${item.img}');"></div>
-                <div class="compact-info">
-                    <h4>${item.name}</h4>
-                    <p><i class="fas fa-map-marker-alt"></i> ${item.address.split(',')[0]}</p>
-                </div>
-                <div class="compact-rating">
-                    <i class="fas fa-star"></i> ${item.rating}
-                </div>
-            `;
+        function renderTrending(isSearch = false, searchResults = []) {
+            let itemsToRender = isSearch ? searchResults : trendingData;
+            trendingGrid.innerHTML = '';
+
+            if (itemsToRender.length === 0) {
+                trendingGrid.innerHTML = `<div class="empty-state"><h3>Wala sang nakita</h3></div>`;
+                return;
+            }
+
+            itemsToRender.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'trending-card'; 
+                card.setAttribute('onclick', `openModal("${item.name}")`); 
+                card.innerHTML = createTrendingCardHTML(item);
+                trendingGrid.appendChild(card);
+            });
         }
 
-        function renderTrending(categoryKey, searchQuery = "") {
+        function renderCategory(categoryKey, categoryName, searchQuery = "") {
             let items = foodData[categoryKey] || [];
 
             if (searchQuery.trim() !== "") {
-                items = items.filter(item => 
-                    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-                );
+                items = items.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
             }
 
-            trendingGrid.innerHTML = '';
+            categoryTitle.innerHTML = `<i class="fas fa-list" style="color: var(--primary);"></i> All ${categoryName}`;
+            
+            allRestaurantsGrid.innerHTML = '';
 
             if (items.length === 0) {
-                trendingGrid.innerHTML = `
+                allRestaurantsGrid.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-search"></i>
                         <h3>Wala sang nakita</h3>
@@ -610,56 +747,48 @@
 
             items.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'card';
+                card.className = 'all-card'; 
                 card.setAttribute('onclick', `openModal("${item.name}")`); 
-                card.innerHTML = createLargeCardHTML(item);
-                trendingGrid.appendChild(card);
-            });
-        }
-
-        function renderAllRestaurants(searchQuery = "") {
-            let allItems = [];
-            for (let key in foodData) {
-                allItems = allItems.concat(foodData[key]);
-            }
-
-            if (searchQuery.trim() !== "") {
-                allItems = allItems.filter(item => 
-                    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-                );
-            }
-
-            allRestaurantsList.innerHTML = '';
-
-            if (allItems.length === 0) {
-                allRestaurantsList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-search"></i>
-                        <h3>Wala sang nakita</h3>
-                        <p>Wala kami makita nga "${searchQuery}".</p>
-                    </div>
-                `;
-                return;
-            }
-
-            allItems.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'compact-item';
-                div.setAttribute('onclick', `openModal("${item.name}")`); 
-                div.innerHTML = createCompactItemHTML(item);
-                allRestaurantsList.appendChild(div);
+                card.innerHTML = createAllCardHTML(item);
+                allRestaurantsGrid.appendChild(card);
             });
         }
 
         function handleSearch(query) {
             if (query.trim() !== "") {
-                trendingTitle.innerHTML = `<i class="fas fa-search" style="color: var(--primary);"></i> Search Results for "${query}"`;
-                renderTrending(currentCategory, query); 
-                renderAllRestaurants(query); 
+                trendingTitle.innerHTML = `<i class="fas fa-search" style="color: var(--primary);"></i> Search Results`;
+                categoryTitle.innerHTML = `<i class="fas fa-list" style="color: var(--primary);"></i> All Search Results`;
+                
+                let allResults = [];
+                for (let key in foodData) {
+                    const filtered = foodData[key].filter(item => 
+                        item.name.toLowerCase().includes(query.toLowerCase())
+                    );
+                    allResults = allResults.concat(filtered);
+                }
+                
+                renderTrending(true, allResults); 
+                
+                allRestaurantsGrid.innerHTML = '';
+                if (allResults.length === 0) {
+                    allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>Wala sang nakita</h3></div>`;
+                } else {
+                    allResults.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'all-card';
+                        card.setAttribute('onclick', `openModal("${item.name}")`); 
+                        card.innerHTML = createAllCardHTML(item);
+                        allRestaurantsGrid.appendChild(card);
+                    });
+                }
             } else {
-                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: #e67e22;"></i> Trending in Kabankalan City Proper`;
-                renderTrending(currentCategory); 
-                renderAllRestaurants(); 
+                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: #e67e22;"></i> Trending`;
+                
+                renderTrending(); 
+                
+                const activeBtn = document.querySelector('.cat-btn.active');
+                const catName = activeBtn ? activeBtn.innerText.trim() : 'Milk Tea';
+                renderCategory(currentCategory, catName);
             }
         }
 
@@ -669,11 +798,14 @@
                 this.classList.add('active');
                 
                 currentCategory = this.dataset.category;
-                searchInput.value = ""; 
-                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: #e67e22;"></i> Trending in Kabankalan City Proper`;
+                const categoryName = this.innerText.trim();
                 
-                renderTrending(currentCategory);
-                renderAllRestaurants();
+                searchInput.value = ""; 
+                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: #e67e22;"></i> Trending`;
+                
+                renderTrending(); 
+                
+                renderCategory(currentCategory, categoryName);
             });
         });
 
@@ -743,9 +875,43 @@
             if (e.target === infoModal) closeModal();
         });
 
+        // ==========================================
+        // SYSTEM FEEDBACK LOGIC
+        // ==========================================
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewList = document.getElementById('reviewList');
+
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+
+            const name = document.getElementById('reviewName').value;
+            const rating = document.getElementById('reviewRating').value;
+            const text = document.getElementById('reviewText').value;
+            
+            let stars = '';
+            for (let i = 0; i < rating; i++) stars += '⭐';
+
+            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            const newReview = document.createElement('div');
+            newReview.className = 'review-item';
+            newReview.innerHTML = `
+                <div class="review-header">
+                    <span class="review-name">${name}</span>
+                    <span class="review-stars">${stars}</span>
+                </div>
+                <p class="review-text">${text}</p>
+                <span class="review-date">${date}</span>
+            `;
+
+            reviewList.prepend(newReview);
+
+            reviewForm.reset();
+        });
+
         // Default Load
-        renderTrending('milktea');
-        renderAllRestaurants();
+        renderTrending();
+        renderCategory('milktea', 'Milk Tea');
     </script>
 
 </body>
