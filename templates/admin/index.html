@@ -11,10 +11,11 @@
         :root {
             --bg-dark: #0f0f13;
             --card-bg: #1c1c24;
+            --modal-bg: #1e1e26;
             --primary: #ff4757;
             --text-light: #ffffff;
             --text-muted: #a4b0be;
-            --hover-glow: rgba(255, 71, 87, 0.4);
+            --border-color: #2d2d35;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,7 +40,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid #2d2d35;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .navbar h2 { color: var(--primary); font-weight: 700; font-size: 1.5rem; }
@@ -67,7 +68,7 @@
             text-align: center; padding: 60px 20px 80px;
             background: linear-gradient(135deg, #1c1c24 0%, #2a2a35 100%);
             border-radius: 25px; margin-bottom: -40px;
-            border: 1px solid #2d2d35; position: relative; z-index: 1;
+            border: 1px solid var(--border-color); position: relative; z-index: 1;
         }
 
         .hero h1 {
@@ -102,7 +103,7 @@
         }
 
         .cat-btn {
-            padding: 12px 25px; border-radius: 30px; border: 1px solid #2d2d35;
+            padding: 12px 25px; border-radius: 30px; border: 1px solid var(--border-color);
             background: var(--card-bg); color: var(--text-light);
             font-weight: 500; cursor: pointer; transition: all 0.3s;
             display: flex; align-items: center; gap: 8px; white-space: nowrap;
@@ -113,15 +114,19 @@
             color: var(--primary);
         }
 
-        /* Cards Grid */
+        /* TRENDING CARDS (Malalaki) */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
 
         .card {
             background: var(--card-bg); border-radius: 20px; overflow: hidden;
-            border: 1px solid #2d2d35; transition: 0.3s;
+            border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer;
         }
 
-        .card:hover { transform: translateY(-5px); border-color: rgba(255, 71, 87, 0.4); }
+        .card:hover { 
+            transform: translateY(-5px); 
+            border-color: rgba(255, 71, 87, 0.4);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
 
         .card-img {
             height: 180px; background-size: cover; background-position: center; position: relative;
@@ -144,11 +149,64 @@
             border: none; cursor: pointer; font-family: inherit;
             display: flex; align-items: center; justify-content: center; gap: 5px;
         }
-        .btn-secondary {
-            flex: 1; text-align: center; background: rgba(255, 71, 87, 0.1); color: var(--primary);
-            padding: 10px; border-radius: 10px; font-weight: 600; font-size: 0.9rem;
-            border: 1px solid rgba(255, 71, 87, 0.3); cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 5px;
+
+        /* ALL RESTAURANTS (Maliit at siksik na listahan) */
+        .compact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .compact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--card-bg);
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .compact-item:hover {
+            background: #252530;
+            border-color: var(--primary);
+        }
+
+        .compact-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background-size: cover;
+            background-position: center;
+            flex-shrink: 0;
+        }
+
+        .compact-info {
+            flex-grow: 1;
+        }
+
+        .compact-info h4 {
+            font-size: 1rem;
+            margin-bottom: 2px;
+            color: #fff;
+        }
+
+        .compact-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .compact-rating {
+            color: #f1c40f;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-right: 10px;
         }
 
         /* Empty State */
@@ -158,29 +216,10 @@
         }
         .empty-state i { font-size: 3rem; margin-bottom: 15px; color: #3d3d4a; }
 
-        /* All Restaurants Section */
-        .all-restaurants-header {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
-        }
-        .sort-select {
-            background: var(--card-bg); color: white; padding: 10px 15px;
-            border: 1px solid #2d2d35; border-radius: 10px; outline: none;
-        }
-
-        .list-item {
-            background: var(--card-bg); border-radius: 15px; padding: 15px;
-            margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;
-            border: 1px solid #2d2d35; flex-wrap: wrap; gap: 10px;
-        }
-        .list-info { display: flex; align-items: center; gap: 15px; }
-        .list-img {
-            width: 60px; height: 60px; border-radius: 10px; background-size: cover; background-position: center;
-        }
-
         /* Review Section */
         .review-box {
             background: var(--card-bg); padding: 30px; border-radius: 20px; text-align: center;
-            border: 1px solid #2d2d35; margin-top: 20px;
+            border: 1px solid var(--border-color); margin-top: 20px;
         }
         .stars { font-size: 2rem; color: #f1c40f; margin-bottom: 15px; }
         .review-input {
@@ -191,7 +230,7 @@
         /* Footer */
         footer {
             background: #0a0a0d; padding: 40px 20px; text-align: center;
-            border-top: 1px solid #2d2d35; margin-top: 60px;
+            border-top: 1px solid var(--border-color); margin-top: 60px;
         }
         .footer-links { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap; }
         .footer-links a { color: var(--text-muted); transition: color 0.3s; }
@@ -199,106 +238,83 @@
         .copyright { color: #555; font-size: 0.9rem; }
 
         /* ========================================= */
-        /* MODAL STYLES (Para sa Menu & Map)         */
+        /* PINAGSAMANG MODAL (Menu at Map)           */
         /* ========================================= */
         .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
+            z-index: 1000; justify-content: center; align-items: center; padding: 20px;
         }
-
         .modal-overlay.active { display: flex; }
-
+        
         .modal-content {
-            background: var(--card-bg);
-            border: 1px solid #3d3d4a;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
+            background: var(--modal-bg); border: 1px solid #3d3d4a; border-radius: 20px;
+            width: 100%; max-width: 850px; max-height: 90vh; overflow-y: auto; position: relative;
             animation: slideUp 0.3s ease;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
-
+        
         @keyframes slideUp {
             from { transform: translateY(30px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-
+        
         .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid #2d2d35;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            background: var(--card-bg);
-            z-index: 2;
+            padding: 20px 25px; border-bottom: 1px solid var(--border-color); display: flex;
+            justify-content: space-between; align-items: center; position: sticky;
+            top: 0; background: var(--modal-bg); z-index: 2; border-radius: 20px 20px 0 0;
         }
-
-        .modal-header h3 { color: var(--primary); font-size: 1.3rem; }
-
+        
+        .modal-header h3 { color: var(--primary); font-size: 1.6rem; font-weight: 700; }
+        
         .close-btn {
-            background: none; border: none; color: var(--text-muted);
-            font-size: 1.5rem; cursor: pointer; transition: color 0.3s;
+            background: rgba(255,255,255,0.05); border: none; color: var(--text-muted);
+            width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; cursor: pointer; transition: all 0.3s;
         }
-        .close-btn:hover { color: var(--primary); }
+        .close-btn:hover { background: rgba(255, 71, 87, 0.2); color: var(--primary); }
+        
+        .modal-body { padding: 25px; }
 
-        .modal-body { padding: 20px; }
+        /* Dalawang column sa loob ng modal */
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
 
-        /* Menu Items */
+        @media (max-width: 768px) {
+            .modal-grid { grid-template-columns: 1fr; gap: 20px; }
+        }
+
+        /* Left side: Menu */
+        .menu-section h4, .map-section h4 {
+            color: var(--text-light); margin-bottom: 15px; font-size: 1.2rem;
+            border-bottom: 1px solid var(--border-color); padding-bottom: 10px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
         .menu-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px dashed #2d2d35;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px dashed var(--border-color);
         }
         .menu-item:last-child { border-bottom: none; }
-        .menu-item-info h4 { font-size: 1rem; margin-bottom: 3px; }
+        .menu-item-info h5 { font-size: 1rem; margin-bottom: 3px; color: #fff; }
         .menu-item-info p { font-size: 0.8rem; color: var(--text-muted); }
         .menu-item-price { color: var(--primary); font-weight: 700; font-size: 1rem; }
 
-        /* Map Styles */
+        /* Right side: Map */
         .location-details {
-            margin-bottom: 15px;
-            padding: 15px;
-            background: #141419;
-            border-radius: 10px;
-            border: 1px solid #2d2d35;
+            margin-bottom: 15px; padding: 15px; background: #141419;
+            border-radius: 10px; border: 1px solid var(--border-color);
         }
-        .location-details p { font-size: 0.95rem; margin-bottom: 5px; }
+        .location-details p { font-size: 0.9rem; margin-bottom: 3px; }
         .location-details strong { color: var(--primary); }
         
         .map-container {
-            width: 100%;
-            height: 300px;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid #3d3d4a;
+            width: 100%; height: 280px; border-radius: 12px; overflow: hidden; border: 1px solid #3d3d4a;
         }
-
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            .container { padding: 20px; }
-            .navbar { padding: 15px 20px; }
-            .hero h1 { font-size: 1.8rem; }
-            .modal-content { max-width: 100%; }
-        }
+        .map-container iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
@@ -338,51 +354,13 @@
             <button class="cat-btn active" data-category="milktea"><i class="fas fa-coffee"></i> Milk Tea</button>
         </div>
 
-        <!-- TRENDING -->
-        <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: #e67e22;"></i> Trending in City Proper</h2>
-        <div class="grid" id="trending-grid">
-            <!-- Ang JavaScript ang maga-butang sang mga cards diri -->
-        </div>
+        <!-- TRENDING (Malalaking cards) -->
+        <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: #e67e22;"></i> Trending in Kabankalan City Proper</h2>
+        <div class="grid" id="trending-grid"></div>
 
-        <!-- ALL RESTAURANTS -->
-        <div class="all-restaurants-header">
-            <h2 class="section-title"><i class="fas fa-list" style="color: var(--primary);"></i> All Local Restaurants (City Proper)</h2>
-            <select class="sort-select">
-                <option>Sort by: Rating</option>
-                <option>Sort by: Distance</option>
-                <option>Sort by: Price</option>
-            </select>
-        </div>
-
-        <div class="list-item">
-            <div class="list-info">
-                <div class="list-img" style="background-image: url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop');"></div>
-                <div>
-                    <h3>Jollibee Kabankalan</h3>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">Gatuslao St. • Fast Food</p>
-                </div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span style="color: #27ae60; font-size: 0.9rem;"><i class="fas fa-circle"></i> Open</span>
-                <span class="rating"><i class="fas fa-star"></i> 4.5</span>
-                <button class="btn-primary" style="padding: 8px 15px; font-size: 0.8rem;" onclick="openLocation('Jollibee Kabankalan')">Map</button>
-            </div>
-        </div>
-
-        <div class="list-item">
-            <div class="list-info">
-                <div class="list-img" style="background-image: url('https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop');"></div>
-                <div>
-                    <h3>Cha Tuk Chak</h3>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">Gatuslao St. • Milk Tea</p>
-                </div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span style="color: #27ae60; font-size: 0.9rem;"><i class="fas fa-circle"></i> Open</span>
-                <span class="rating"><i class="fas fa-star"></i> 4.8</span>
-                <button class="btn-primary" style="padding: 8px 15px; font-size: 0.8rem;" onclick="openLocation('Cha Tuk Chak')">Map</button>
-            </div>
-        </div>
+        <!-- ALL RESTAURANTS (Maliit na listahan para siksik) -->
+        <h2 class="section-title"><i class="fas fa-list" style="color: var(--primary);"></i> All Local Restaurants (City Proper)</h2>
+        <div class="compact-list" id="all-restaurants-list"></div>
 
         <!-- REVIEWS -->
         <h2 class="section-title"><i class="fas fa-star" style="color: #f1c40f;"></i> Reviews and Ratings</h2>
@@ -408,41 +386,35 @@
     </footer>
 
     <!-- ========================================= -->
-    <!-- MENU MODAL POPUP                          -->
+    <!-- PINAGSAMANG MENU AT MAP MODAL             -->
     <!-- ========================================= -->
-    <div class="modal-overlay" id="menuModal">
+    <div class="modal-overlay" id="infoModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modalRestaurantName">Restaurant Name</h3>
-                <button class="close-btn" onclick="closeMenu()"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body" id="modalMenuList">
-                <!-- Ari mag-show ang mga menu items -->
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================= -->
-    <!-- LOCATION / MAP MODAL POPUP                -->
-    <!-- ========================================= -->
-    <div class="modal-overlay" id="locationModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalLocationName">Location</h3>
-                <button class="close-btn" onclick="closeLocation()"><i class="fas fa-times"></i></button>
+                <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
-                <div class="location-details">
-                    <p><i class="fas fa-map-marker-alt" style="color: var(--primary); margin-right: 8px;"></i> <strong id="modalAddress">Address here</strong></p>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">Kabankalan City Proper, Negros Occidental</p>
-                </div>
-                <div class="map-container">
-                    <iframe id="mapFrame" 
-                            src="" 
-                            allowfullscreen="" 
-                            loading="lazy" 
-                            referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
+                <div class="modal-grid">
+                    
+                    <!-- KALIWA: MENU -->
+                    <div class="menu-section">
+                        <h4><i class="fas fa-utensils" style="color: var(--primary);"></i> Menu</h4>
+                        <div id="modalMenuList"></div>
+                    </div>
+
+                    <!-- KANAN: MAPA -->
+                    <div class="map-section">
+                        <h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Location</h4>
+                        <div class="location-details">
+                            <p><strong id="modalAddress">Address here</strong></p>
+                            <p style="color: var(--text-muted); font-size: 0.75rem;">Kabankalan City Proper</p>
+                        </div>
+                        <div class="map-container">
+                            <iframe id="mapFrame" src="" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -450,193 +422,85 @@
 
     <!-- JAVASCRIPT -->
     <script>
-        // 1. DATA (Naka-focus gid sa Kabankalan City Proper - Poblacion Area)
         const foodData = {
             fastfood: [
-                { 
-                    name: "Jollibee Kabankalan", rating: "4.5", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop",
-                    address: "Gatuslao St, Kabankalan City Proper",
-                    mapQuery: "Jollibee+Gatuslao+Street+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Chickenjoy (1pc)", price: "₱99", desc: "Crispy fried chicken with rice" },
-                        { name: "Yumburger", price: "₱45", desc: "Classic Jollibee burger" },
-                        { name: "Jolly Spaghetti", price: "₱75", desc: "Sweet-style spaghetti" }
-                    ]
-                },
-                { 
-                    name: "McDonald's Kabankalan", rating: "4.3", price: "₱80–₱180", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=800&auto=format&fit=crop",
-                    address: "Rizal St, Kabankalan City Proper",
-                    mapQuery: "McDonalds+Rizal+Street+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Big Mac", price: "₱180", desc: "Double-decker burger" },
-                        { name: "McChicken", price: "₱120", desc: "Crispy chicken sandwich" },
-                        { name: "Fries (Large)", price: "₱80", desc: "Golden crispy fries" }
-                    ]
-                },
-                { 
-                    name: "KFC Kabankalan", rating: "4.4", price: "₱120–₱250", img: "https://images.unsplash.com/photo-1513639776629-7b61b0ac49cb?q=80&w=800&auto=format&fit=crop",
-                    address: "Araneta St, Kabankalan City Proper",
-                    mapQuery: "KFC+Araneta+Street+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "1pc Chicken with Rice", price: "₱110", desc: "Original recipe fried chicken" },
-                        { name: "Zinger Burger", price: "₱150", desc: "Spicy chicken fillet burger" },
-                        { name: "Bucket of 6", price: "₱550", desc: "6pcs fried chicken" }
-                    ]
-                }
+                { name: "Jollibee Kabankalan", rating: "4.5", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", mapQuery: "Jollibee+Guanzon+Street+Kabankalan+City", menu: [{ name: "Chickenjoy (1pc)", price: "₱99", desc: "Crispy fried chicken with rice" }, { name: "Yumburger", price: "₱45", desc: "Classic Jollibee burger" }, { name: "Jolly Spaghetti", price: "₱75", desc: "Sweet-style spaghetti" }] },
+                { name: "McDonald's Kabankalan", rating: "4.3", price: "₱80–₱180", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", mapQuery: "McDonalds+Guanzon+Street+Kabankalan+City", menu: [{ name: "Big Mac", price: "₱180", desc: "Double-decker burger" }, { name: "McChicken", price: "₱120", desc: "Crispy chicken sandwich" }, { name: "Fries (Large)", price: "₱80", desc: "Golden crispy fries" }] },
+                { name: "Mang Inasal (Gaisano)", rating: "4.4", price: "₱120–₱250", img: "https://images.unsplash.com/photo-1513639776629-7b61b0ac49cb?q=80&w=800&auto=format&fit=crop", address: "Gaisano Grand Mall, Kabankalan City Proper", mapQuery: "Mang+Inasal+Gaisano+Grand+Mall+Kabankalan", menu: [{ name: "1pc Chicken with Rice", price: "₱110", desc: "Original recipe fried chicken" }, { name: "Zinger Burger", price: "₱150", desc: "Spicy chicken fillet burger" }, { name: "Bucket of 6", price: "₱550", desc: "6pcs fried chicken" }] },
+                { name: "Lola Nena's Lomi House", rating: "4.7", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=800&auto=format&fit=crop", address: "Tan Lorenzo St, Kabankalan City Proper", mapQuery: "Lomi+House+Tan+Lorenzo+Kabankalan", menu: [{ name: "Special Lomi", price: "₱90", desc: "Rich and savory noodle soup" }, { name: "Lomi Overload", price: "₱120", desc: "Loaded with toppings" }] }
             ],
             carinderia: [
-                { 
-                    name: "Aling Nena's Carinderia", rating: "4.6", price: "₱50–₱100", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop",
-                    address: "Public Market, Kabankalan City Proper",
-                    mapQuery: "Kabankalan+City+Public+Market+Proper",
-                    menu: [
-                        { name: "Adobo with Rice", price: "₱70", desc: "Classic pork adobo" },
-                        { name: "Sinigang na Baboy", price: "₱85", desc: "Sour pork soup" },
-                        { name: "Pancit Canton", price: "₱60", desc: "Stir-fried noodles" }
-                    ]
-                },
-                { 
-                    name: "Tita's Home Cooking", rating: "4.7", price: "₱60–₱120", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
-                    address: "Brgy. 1 Poblacion, Kabankalan City Proper",
-                    mapQuery: "Poblacion+1+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Kare-Kare", price: "₱120", desc: "Peanut stew with vegetables" },
-                        { name: "Bicol Express", price: "₱95", desc: "Spicy coconut pork" },
-                        { name: "Pinakbet", price: "₱80", desc: "Mixed vegetable stew" }
-                    ]
-                },
-                { 
-                    name: "Lutong Bahay ni Nanay", rating: "4.5", price: "₱70–₱130", img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop",
-                    address: "National Highway, Kabankalan City Proper",
-                    mapQuery: "National+Highway+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Chicken Inasal", price: "₱110", desc: "Grilled chicken with rice" },
-                        { name: "Pork Sisig", price: "₱100", desc: "Sizzling chopped pork" },
-                        { name: "Bulalo", price: "₱130", desc: "Beef marrow soup" }
-                    ]
-                }
+                { name: "Aida's Carinderia", rating: "4.6", price: "₱50–₱100", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop", address: "Public Market, Kabankalan City Proper", mapQuery: "Kabankalan+City+Public+Market", menu: [{ name: "Adobo with Rice", price: "₱70", desc: "Classic pork adobo" }, { name: "Sinigang na Baboy", price: "₱85", desc: "Sour pork soup" }, { name: "Pancit Canton", price: "₱60", desc: "Stir-fried noodles" }] },
+                { name: "Tita Beth's Eatery", rating: "4.7", price: "₱60–₱120", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop", address: "Guanzon St., Brgy. 2, Kabankalan City Proper", mapQuery: "Guanzon+Street+Kabankalan+City", menu: [{ name: "Kare-Kare", price: "₱120", desc: "Peanut stew with vegetables" }, { name: "Bicol Express", price: "₱95", desc: "Spicy coconut pork" }, { name: "Pinakbet", price: "₱80", desc: "Mixed vegetable stew" }] }, 
+                { name: "ALONSO's Cansi & Sizzling House", rating: "4.5", price: "₱150–₱300", img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Brgy. 1, Kabankalan City Proper", mapQuery: "Alonsos+Cansi+Guanzon+Street+Kabankalan", menu: [{ name: "Special Cansi", price: "₱130", desc: "Sour beef marrow soup" }, { name: "Sizzling Sisig", price: "₱100", desc: "Sizzling chopped pork" }, { name: "Cansi Batchoy", price: "₱120", desc: "Noodle soup with beef" }] },
+                { name: "Kabankalan Ihaw-Ihaw", rating: "4.8", price: "₱50–₱150", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=800&auto=format&fit=crop", address: "Rizal St., Brgy. 3, Kabankalan City Proper", mapQuery: "Rizal+Street+Kabankalan+City", menu: [{ name: "Pork BBQ (5 sticks)", price: "₱100", desc: "Grilled pork skewers" }, { name: "Grilled Squid", price: "₱150", desc: "Fresh grilled squid" }, { name: "Puso ng Saging", price: "₱25", desc: "Banana heart" }] }
             ],
             cafe: [
-                { 
-                    name: "Starbucks City Mall", rating: "4.8", price: "₱150–₱250", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop",
-                    address: "City Mall Kabankalan, City Proper",
-                    mapQuery: "City+Mall+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Caffe Latte", price: "₱160", desc: "Espresso with steamed milk" },
-                        { name: "Caramel Macchiato", price: "₱180", desc: "Vanilla, milk, espresso, caramel" },
-                        { name: "Iced Americano", price: "₱150", desc: "Chilled espresso with water" }
-                    ]
-                },
-                { 
-                    name: "Bo's Coffee Gatuslao", rating: "4.6", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=800&auto=format&fit=crop",
-                    address: "Gatuslao St, Kabankalan City Proper",
-                    mapQuery: "Bos+Coffee+Gatuslao+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Cappuccino", price: "₱140", desc: "Espresso with milk foam" },
-                        { name: "Mocha Frappe", price: "₱170", desc: "Blended coffee chocolate drink" },
-                        { name: "Croissant", price: "₱85", desc: "Butter croissant" }
-                    ]
-                },
-                { 
-                    name: "Coffee Project Vista Mall", rating: "4.5", price: "₱120–₱180", img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop",
-                    address: "Vista Mall Kabankalan, City Proper",
-                    mapQuery: "Vista+Mall+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Spanish Latte", price: "₱150", desc: "Sweetened latte" },
-                        { name: "Matcha Latte", price: "₱160", desc: "Green tea with milk" },
-                        { name: "Club Sandwich", price: "₱140", desc: "Triple decker sandwich" }
-                    ]
-                }
+                { name: "Taza La Bien", rating: "4.8", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop", address: "Los Angeles St, Brgy. 1, Kabankalan City Proper", mapQuery: "Taza+La+Bien+Los+Angeles+Street+Kabankalan", menu: [{ name: "Caffe Latte", price: "₱120", desc: "Espresso with steamed milk" }, { name: "Wintermelon Milktea", price: "₱75", desc: "Sweet and refreshing" }, { name: "Carbonara", price: "₱150", desc: "Creamy pasta" }] },
+                { name: "Kalamay Artisan Patisserie & Cafe", rating: "4.6", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=800&auto=format&fit=crop", address: "Lirazan St. Brgy. 4, Kabankalan City Proper", mapQuery: "Kalamay+Artisan+Lirazan+Street+Kabankalan", menu: [{ name: "Cappuccino", price: "₱110", desc: "Espresso with milk foam" }, { name: "Croissant Plain", price: "₱85", desc: "Butter croissant" }, { name: "Chocolate Cake Slice", price: "₱125", desc: "Rich chocolate cake" }] },
+                { name: "Kapehan sa Plaza", rating: "4.5", price: "₱30–₱100", img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop", address: "Plaza Area, Brgy. 1, Kabankalan City Proper", mapQuery: "Kabankalan+City+Plaza", menu: [{ name: "Native Coffee", price: "₱30", desc: "Local brewed coffee" }, { name: "Pandesal", price: "₱10", desc: "Freshly baked bread" }] }
             ],
             desserts: [
-                { 
-                    name: "Halo-Halo sa Plaza", rating: "4.9", price: "₱50–₱100", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop",
-                    address: "Plaza, Kabankalan City Proper",
-                    mapQuery: "Kabankalan+City+Plaza+Proper",
-                    menu: [
-                        { name: "Special Halo-Halo", price: "₱99", desc: "Loaded with ingredients" },
-                        { name: "Mais con Yelo", price: "₱60", desc: "Sweet corn with ice" },
-                        { name: "Saba con Hielo", price: "₱55", desc: "Sweet banana with ice" }
-                    ]
-                },
-                { 
-                    name: "Cake Avenue Kabankalan", rating: "4.7", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop",
-                    address: "Rizal St, Kabankalan City Proper",
-                    mapQuery: "Cake+Avenue+Rizal+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Chocolate Cake", price: "₱120", desc: "Rich chocolate slice" },
-                        { name: "Red Velvet", price: "₱130", desc: "Cream cheese frosting" },
-                        { name: "Tiramisu", price: "₱140", desc: "Coffee-flavored dessert" }
-                    ]
-                },
-                { 
-                    name: "Leche Flan ni Aling Rosa", rating: "4.8", price: "₱60–₱120", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop",
-                    address: "Brgy. 5, Kabankalan City Proper",
-                    mapQuery: "Barangay+5+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Leche Flan", price: "₱70", desc: "Caramel custard" },
-                        { name: "Buko Pandan", price: "₱60", desc: "Coconut pandan dessert" },
-                        { name: "Mango Graham", price: "₱80", desc: "Mango graham cake" }
-                    ]
-                }
+                { name: "Bibingka & Puto Bumbong Station", rating: "4.9", price: "₱40–₱100", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop", address: "Church Vicinity, Kabankalan City Proper", mapQuery: "Kabankalan+City+Church", menu: [{ name: "Bibingka Special", price: "₱50", desc: "Rice cake with salted egg" }, { name: "Puto Bumbong", price: "₱40", desc: "Purple glutinous rice" }] },
+                { name: "Cake Avenue Kabankalan", rating: "4.7", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop", address: "Rizal St, Kabankalan City Proper", mapQuery: "Cake+Avenue+Rizal+Kabankalan+City", menu: [{ name: "Chocolate Cake", price: "₱120", desc: "Rich chocolate slice" }, { name: "Red Velvet", price: "₱130", desc: "Cream cheese frosting" }, { name: "Tiramisu", price: "₱140", desc: "Coffee-flavored dessert" }] }
             ],
             milktea: [
-                { 
-                    name: "Cha Tuk Chak", rating: "4.8", price: "₱70–₱130", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop",
-                    address: "Gatuslao St, Kabankalan City Proper",
-                    mapQuery: "Cha+Tuk+Chak+Gatuslao+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Thai Milk Tea", price: "₱85", desc: "Authentic Thai tea with milk" },
-                        { name: "Classic Pearl Milk Tea", price: "₱75", desc: "Brown sugar boba" },
-                        { name: "Matcha Milk Tea", price: "₱90", desc: "Green tea with milk" }
-                    ]
-                },
-                { 
-                    name: "Chatime City Mall", rating: "4.6", price: "₱70–₱140", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop",
-                    address: "City Mall Kabankalan, City Proper",
-                    mapQuery: "Chatime+City+Mall+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "Pearl Milk Tea", price: "₱85", desc: "Classic with tapioca pearls" },
-                        { name: "Chocolate Milk Tea", price: "₱90", desc: "Chocolate flavored" },
-                        { name: "Strawberry Milk Tea", price: "₱95", desc: "Fruity strawberry" }
-                    ]
-                },
-                { 
-                    name: "CoCo Fresh Tea", rating: "4.7", price: "₱90–₱160", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=800&auto=format&fit=crop",
-                    address: "Araneta St, Kabankalan City Proper",
-                    mapQuery: "CoCo+Fresh+Tea+Araneta+Kabankalan+City+Proper",
-                    menu: [
-                        { name: "3Q Milk Tea", price: "₱110", desc: "Pearl, pudding, grass jelly" },
-                        { name: "Mango Green Tea", price: "₱100", desc: "Fresh mango tea" },
-                        { name: "Passion Fruit Tea", price: "₱95", desc: "Refreshing fruit tea" }
-                    ]
-                }
+                { name: "Chatime City Mall", rating: "4.8", price: "₱70–₱140", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop", address: "City Mall Kabankalan, City Proper", mapQuery: "Chatime+City+Mall+Kabankalan", menu: [{ name: "Pearl Milk Tea", price: "₱85", desc: "Classic with tapioca pearls" }, { name: "Chocolate Milk Tea", price: "₱90", desc: "Chocolate flavored" }, { name: "Strawberry Milk Tea", price: "₱95", desc: "Fruity strawberry" }] },
+                { name: "Macao Imperial Tea", rating: "4.6", price: "₱90–₱160", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop", address: "Gaisano Grand Mall Kabankalan, City Proper", mapQuery: "Macao+Imperial+Tea+Gaisano+Kabankalan", menu: [{ name: "Cream Cheese Milk Tea", price: "₱120", desc: "With cheesecake series" }, { name: "Taro Milktea", price: "₱105", desc: "Taro flavored" }] }
             ]
         };
 
-        // 2. Elements
         const categoryList = document.getElementById('category-list');
         const trendingGrid = document.getElementById('trending-grid');
+        const allRestaurantsList = document.getElementById('all-restaurants-list'); // Binago ang ID
         const trendingTitle = document.getElementById('trending-title');
         const buttons = categoryList.querySelectorAll('.cat-btn');
         const searchInput = document.getElementById('searchInput');
         const searchBtn = document.getElementById('searchBtn');
         
         // Modal Elements
-        const menuModal = document.getElementById('menuModal');
+        const infoModal = document.getElementById('infoModal');
         const modalRestaurantName = document.getElementById('modalRestaurantName');
         const modalMenuList = document.getElementById('modalMenuList');
-
-        // Location Modal Elements
-        const locationModal = document.getElementById('locationModal');
-        const modalLocationName = document.getElementById('modalLocationName');
         const modalAddress = document.getElementById('modalAddress');
         const mapFrame = document.getElementById('mapFrame');
 
         let currentCategory = 'milktea';
 
-        // 3. Function para mag-render sang cards
-        function renderCards(categoryKey, searchQuery = "") {
+        // 1. Function para sa MALALAKING CARD (Trending)
+        function createLargeCardHTML(item) {
+            return `
+                <div class="card-img" style="background-image: url('${item.img}');"></div>
+                <div class="card-content">
+                    <div class="header-row">
+                        <h3>${item.name}</h3>
+                        <div class="rating"><i class="fas fa-star"></i> ${item.rating}</div>
+                    </div>
+                    <div class="details-row">${item.price}</div>
+                    <div class="card-buttons">
+                        <button class="btn-primary">
+                            <i class="fas fa-utensils"></i> View Menu & Map
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 2. Function para sa MALIIT NA LISTAHAN (All Restaurants)
+        function createCompactItemHTML(item) {
+            return `
+                <div class="compact-img" style="background-image: url('${item.img}');"></div>
+                <div class="compact-info">
+                    <h4>${item.name}</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> ${item.address.split(',')[0]}</p>
+                </div>
+                <div class="compact-rating">
+                    <i class="fas fa-star"></i> ${item.rating}
+                </div>
+            `;
+        }
+
+        function renderTrending(categoryKey, searchQuery = "") {
             let items = foodData[categoryKey] || [];
 
             if (searchQuery.trim() !== "") {
@@ -661,29 +525,58 @@
             items.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-img" style="background-image: url('${item.img}');"></div>
-                    <div class="card-content">
-                        <div class="header-row">
-                            <h3>${item.name}</h3>
-                            <div class="rating"><i class="fas fa-star"></i> ${item.rating}</div>
-                        </div>
-                        <div class="details-row">${item.price}</div>
-                        <div class="card-buttons">
-                            <button class="btn-primary" onclick="openMenu('${item.name}')">
-                                <i class="fas fa-utensils"></i> Menu
-                            </button>
-                            <button class="btn-secondary" onclick="openLocation('${item.name}')">
-                                <i class="fas fa-map-marker-alt"></i> Map
-                            </button>
-                        </div>
-                    </div>
-                `;
+                card.setAttribute('onclick', `openModal("${item.name}")`); 
+                card.innerHTML = createLargeCardHTML(item);
                 trendingGrid.appendChild(card);
             });
         }
 
-        // 4. Category Click
+        function renderAllRestaurants(searchQuery = "") {
+            let allItems = [];
+            for (let key in foodData) {
+                allItems = allItems.concat(foodData[key]);
+            }
+
+            if (searchQuery.trim() !== "") {
+                allItems = allItems.filter(item => 
+                    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            }
+
+            allRestaurantsList.innerHTML = '';
+
+            if (allItems.length === 0) {
+                allRestaurantsList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>Wala sang nakita</h3>
+                        <p>Wala kami makita nga "${searchQuery}".</p>
+                    </div>
+                `;
+                return;
+            }
+
+            allItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'compact-item';
+                div.setAttribute('onclick', `openModal("${item.name}")`); 
+                div.innerHTML = createCompactItemHTML(item);
+                allRestaurantsList.appendChild(div);
+            });
+        }
+
+        function handleSearch(query) {
+            if (query.trim() !== "") {
+                trendingTitle.innerHTML = `<i class="fas fa-search" style="color: var(--primary);"></i> Search Results for "${query}"`;
+                renderTrending(currentCategory, query); 
+                renderAllRestaurants(query); 
+            } else {
+                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: #e67e22;"></i> Trending in Kabankalan City Proper`;
+                renderTrending(currentCategory); 
+                renderAllRestaurants(); 
+            }
+        }
+
         buttons.forEach(btn => {
             btn.addEventListener('click', function() {
                 buttons.forEach(b => b.classList.remove('active'));
@@ -691,149 +584,74 @@
                 
                 currentCategory = this.dataset.category;
                 searchInput.value = ""; 
-                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: #e67e22;"></i> Trending in City Proper`;
+                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: #e67e22;"></i> Trending in Kabankalan City Proper`;
                 
-                renderCards(currentCategory);
+                renderTrending(currentCategory);
+                renderAllRestaurants();
             });
         });
 
-        // 5. Search Functionality
         searchInput.addEventListener('input', function() {
-            const query = this.value;
-            
-            if (query.trim() !== "") {
-                trendingTitle.innerHTML = `<i class="fas fa-search" style="color: var(--primary);"></i> Search Results for "${query}"`;
-                
-                let allResults = [];
-                for (let key in foodData) {
-                    const filtered = foodData[key].filter(item => 
-                        item.name.toLowerCase().includes(query.toLowerCase())
-                    );
-                    allResults = allResults.concat(filtered);
-                }
-                
-                trendingGrid.innerHTML = '';
-                if (allResults.length === 0) {
-                    trendingGrid.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-search"></i>
-                            <h3>Wala sang nakita</h3>
-                            <p>Wala kami makita nga "${query}".</p>
-                        </div>
-                    `;
-                } else {
-                    allResults.forEach(item => {
-                        const card = document.createElement('div');
-                        card.className = 'card';
-                        card.innerHTML = `
-                            <div class="card-img" style="background-image: url('${item.img}');"></div>
-                            <div class="card-content">
-                                <div class="header-row">
-                                    <h3>${item.name}</h3>
-                                    <div class="rating"><i class="fas fa-star"></i> ${item.rating}</div>
-                                </div>
-                                <div class="details-row">${item.price}</div>
-                                <div class="card-buttons">
-                                    <button class="btn-primary" onclick="openMenu('${item.name}')">
-                                        <i class="fas fa-utensils"></i> Menu
-                                    </button>
-                                    <button class="btn-secondary" onclick="openLocation('${item.name}')">
-                                        <i class="fas fa-map-marker-alt"></i> Map
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                        trendingGrid.appendChild(card);
-                    });
-                }
-            } else {
-                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: #e67e22;"></i> Trending in City Proper`;
-                renderCards(currentCategory);
-            }
+            handleSearch(this.value);
         });
 
         searchBtn.addEventListener('click', function() {
             searchInput.dispatchEvent(new Event('input'));
         });
 
-        // 6. FUNCTION PARA SA MENU MODAL
-        function openMenu(restaurantName) {
+        function openModal(restaurantName) {
             let foundRestaurant = null;
             for (let key in foodData) {
                 const found = foodData[key].find(item => item.name === restaurantName);
-                if (found) {
-                    foundRestaurant = found;
-                    break;
-                }
+                if (found) { foundRestaurant = found; break; }
             }
 
-            if (foundRestaurant && foundRestaurant.menu) {
+            if (foundRestaurant) {
                 modalRestaurantName.textContent = foundRestaurant.name;
+                
                 modalMenuList.innerHTML = '';
-                
-                foundRestaurant.menu.forEach(menuItem => {
-                    const div = document.createElement('div');
-                    div.className = 'menu-item';
-                    div.innerHTML = `
-                        <div class="menu-item-info">
-                            <h4>${menuItem.name}</h4>
-                            <p>${menuItem.desc}</p>
-                        </div>
-                        <div class="menu-item-price">${menuItem.price}</div>
-                    `;
-                    modalMenuList.appendChild(div);
-                });
-
-                menuModal.classList.add('active');
-            } else {
-                alert("Wala sang menu nga available.");
-            }
-        }
-
-        function closeMenu() {
-            menuModal.classList.remove('active');
-        }
-
-        menuModal.addEventListener('click', function(e) {
-            if (e.target === menuModal) closeMenu();
-        });
-
-        // 7. FUNCTION PARA SA LOCATION / MAP MODAL
-        function openLocation(restaurantName) {
-            let foundRestaurant = null;
-            for (let key in foodData) {
-                const found = foodData[key].find(item => item.name === restaurantName);
-                if (found) {
-                    foundRestaurant = found;
-                    break;
+                if (foundRestaurant.menu) {
+                    foundRestaurant.menu.forEach(menuItem => {
+                        const div = document.createElement('div');
+                        div.className = 'menu-item';
+                        div.innerHTML = `
+                            <div class="menu-item-info">
+                                <h5>${menuItem.name}</h5>
+                                <p>${menuItem.desc}</p>
+                            </div>
+                            <div class="menu-item-price">${menuItem.price}</div>
+                        `;
+                        modalMenuList.appendChild(div);
+                    });
+                } else {
+                    modalMenuList.innerHTML = '<p class="text-muted">No menu available.</p>';
                 }
-            }
 
-            if (foundRestaurant && foundRestaurant.address) {
-                modalLocationName.textContent = foundRestaurant.name;
-                modalAddress.textContent = foundRestaurant.address;
-                
-                // I-set ang Google Maps iframe src gamit ang address/query
-                // Gin-gamit ko ang z=18 para mas naka-zoom in gid sa City Proper
-                mapFrame.src = `https://maps.google.com/maps?q=${foundRestaurant.mapQuery}&t=&z=18&ie=UTF8&iwloc=&output=embed`;
+                modalAddress.textContent = foundRestaurant.address || 'Address not available';
+                if (foundRestaurant.mapQuery) {
+                    mapFrame.src = `https://maps.google.com/maps?q=${foundRestaurant.mapQuery}&t=&z=18&ie=UTF8&iwloc=&output=embed`;
+                } else {
+                    mapFrame.src = "";
+                }
 
-                locationModal.classList.add('active');
+                infoModal.classList.add('active');
             } else {
-                alert("Wala sang location nga available.");
+                alert("Wala sang detalye nga available.");
             }
         }
 
-        function closeLocation() {
-            locationModal.classList.remove('active');
+        function closeModal() {
+            infoModal.classList.remove('active');
             mapFrame.src = ""; 
         }
 
-        locationModal.addEventListener('click', function(e) {
-            if (e.target === locationModal) closeLocation();
+        infoModal.addEventListener('click', function(e) {
+            if (e.target === infoModal) closeModal();
         });
 
-        // 8. Default load
-        renderCards('milktea');
+        // Default Load
+        renderTrending('milktea');
+        renderAllRestaurants();
     </script>
 
 </body>
