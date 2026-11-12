@@ -1,0 +1,61 @@
+{% extends 'theme/base_dashboard.html' %}
+
+{% block content %}
+<style>
+    /* Kinukuha nito ang buong screen at tinatakpan ang puting gilid */
+    .placeholder-fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #0f0f13; /* Dark background */
+        background: radial-gradient(circle at 50% 0%, #1e1e26 0%, #0f0f13 80%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999; /* Para maitago lahat ng nasa likod */
+        color: white;
+        text-align: center;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .placeholder-fullscreen h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        margin-bottom: 10px;
+        letter-spacing: -2px;
+        color: #ffffff;
+    }
+
+    .placeholder-fullscreen p {
+        color: #a1a1aa;
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+    }
+
+    .placeholder-fullscreen a {
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #eb78bf 0%, #a78bfa 100%);
+        color: white;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(235, 120, 191, 0.3);
+    }
+
+    .placeholder-fullscreen a:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(235, 120, 191, 0.5);
+    }
+</style>
+
+<div class="placeholder-fullscreen">
+    <h1>{{ title }}</h1>
+    <p>This feature is coming soon!</p>
+    <a href="/">Go Back Home</a>
+</div>
+{% endblock %}

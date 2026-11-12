@@ -166,7 +166,7 @@ def home(request):
     context = {
         'total_orders': total_orders,
     }
-    return render(request, 'admin/index.html', context) 
+    return render(request, 'index.html', context) 
 
 def login_view(request):
     if request.method == 'POST':
@@ -189,7 +189,7 @@ def near_me_view(request):
     context = {
         'restaurants': RESTAURANT_LIST_DATA
     }
-    return render(request, 'admin/near_me.html', context)
+    return render(request, 'near_me.html', context)
 
 @login_required
 def restaurant_list_view(request):
@@ -202,7 +202,7 @@ def restaurant_list_view(request):
 
 def top_rated_view(request):
     context = {'top_rated': TOP_RATED_DATA}
-    return render(request, 'admin/top_rated.html', context)
+    return render(request, 'top_rated.html', context)
 
 @login_required
 def my_orders_view(request):
@@ -219,11 +219,11 @@ def my_orders_view(request):
         context = {'orders': orders, 'sample_order': sample_order}
     else:
         context = {'orders': orders}
-    return render(request, 'admin/my_orders.html', context)
+    return render(request, 'my_orders.html', context)
 
 def promos_view(request):
     context = {'promos': PROMOS_DATA}
-    return render(request, 'admin/promos.html', context)
+    return render(request, 'promos.html', context)
 
 def restaurant_detail_view(request, rest_id):
     selected_restaurant = None
@@ -234,7 +234,7 @@ def restaurant_detail_view(request, rest_id):
     if not selected_restaurant:
         return redirect('core:near_me')
     context = {'restaurant': selected_restaurant}
-    return render(request, 'admin/restaurant_detail.html', context)
+    return render(request, 'restaurant_detail.html', context)
 
 @login_required
 def place_order(request, rest_id):
