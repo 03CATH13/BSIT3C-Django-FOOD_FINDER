@@ -129,7 +129,7 @@
             color: var(--primary);
         }
 
-        /* DUAL COLUMN LAYOUT */
+        /* DUAL COLUMN LAYOUT (ORIHINAL) */
         .content-split {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -170,7 +170,7 @@
         .trending-card h3 { font-size: 0.65rem; margin: 0; line-height: 1.1; color: #fff; }
         .trending-card .rating { color: #f1c40f; font-size: 0.55rem; font-weight: 600; margin-top: 2px; }
 
-        /* ALL CATEGORY CARDS */
+        /* ALL CATEGORY CARDS (ORIHINAL SA KANAN) */
         .all-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -196,11 +196,62 @@
         .all-card .price { color: var(--text-muted); font-size: 0.75rem; margin-bottom: 15px; }
         .all-card .btn-primary { padding: 8px; font-size: 0.8rem; margin-top: auto; border-radius: 8px; }
 
+        /* BAGONG DAGDAG: MALIIT NGA CARDS PARA SA IDALOM SANG TRENDING */
+        .all-grid-small {
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
+            gap: 10px; 
+        }
+
+        .all-card-small {
+            background: var(--card-bg); border-radius: 10px; overflow: hidden;
+            border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer;
+            display: flex; flex-direction: column;
+        }
+
+        .all-card-small:hover { 
+            transform: translateY(-3px); 
+            border-color: rgba(255, 71, 87, 0.4);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .all-card-small .card-img { height: 80px; background-size: cover; background-position: center; } 
+        .all-card-small .card-content { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; }
+        .all-card-small h3 { font-size: 0.75rem; margin: 0 0 3px 0; line-height: 1.2; } 
+        .all-card-small .rating { color: #f1c40f; font-size: 0.65rem; font-weight: 600; display: flex; align-items: center; gap: 2px;}
+        .all-card-small .price { color: var(--text-muted); font-size: 0.6rem; margin-bottom: 8px; }
+        .all-card-small .btn-primary { padding: 5px; font-size: 0.65rem; margin-top: auto; border-radius: 6px; } 
+
         /* Shared Button */
         .btn-primary {
             text-align: center; background: var(--primary); color: white;
             border: none; cursor: pointer; font-family: inherit;
             display: flex; align-items: center; justify-content: center; gap: 5px;
+        }
+
+        /* ALL BUTTON SA TRENDING */
+        .all-trending-btn {
+            width: 100%;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            background: transparent;
+            color: var(--primary);
+            border: 1px dashed var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .all-trending-btn:hover {
+            background: rgba(255, 71, 87, 0.1);
+            border-style: solid;
+            transform: translateY(-2px);
         }
 
         /* SYSTEM FEEDBACK SECTION */
@@ -394,22 +445,36 @@
         <div id="categoriesSection">
             <h2 class="section-title"><i class="fas fa-utensils" style="color: var(--primary);"></i> Explore Categories</h2>
             <div class="categories" id="category-list">
-                <button class="cat-btn" data-category="fastfood"><i class="fas fa-burger"></i> Fast Food</button>
                 <button class="cat-btn active" data-category="carinderia"><i class="fas fa-bowl-rice"></i> Local & Cansi</button>
+                <button class="cat-btn" data-category="fastfood"><i class="fas fa-burger"></i> Fast Food</button>
                 <button class="cat-btn" data-category="cafe"><i class="fas fa-mug-hot"></i> Cafe & Snacks</button>
                 <button class="cat-btn" data-category="desserts"><i class="fas fa-ice-cream"></i> Desserts</button>
                 <button class="cat-btn" data-category="milktea"><i class="fas fa-coffee"></i> Milk Tea</button>
             </div>
         </div>
 
+        <!-- ORIHINAL NGA LAYOUT (DUAL COLUMN) -->
         <div class="content-split">
             
+            <!-- KALIWA NGA BAHIN (TRENDING + BAGONG ALL RESTAURANTS SA IDALOM) -->
             <div id="trendingSection">
                 <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: #e67e22;"></i> Trending</h2>
                 <div class="trending-grid" id="trending-grid"></div>
+                
+                <!-- IBINALIK ANG GLOBE ICON -->
+                <button class="all-trending-btn" id="showAllBtn" onclick="showAllRestaurants()">
+                    <i class="fas fa-globe"></i> View All Restaurants
+                </button>
+
+                <!-- BAGONG DAGDAG: ALL RESTAURANTS SA IDALOM SANG TRENDING (KALIWA) -->
+                <div id="left-all-restaurants-section" style="margin-top: 40px;">
+                    <h2 class="section-title" style="font-size: 1.3rem; margin-bottom: 15px;"><i class="fas fa-globe" style="color: var(--primary);"></i> All Restaurants in Kabankalan</h2>
+                    <div class="all-grid-small" id="left-all-restaurants-grid"></div>
+                </div>
             </div>
 
-            <div>
+            <!-- KANAN NGA BAHIN (ORIHINAL NGA LISTAHAN) -->
+            <div id="right-section">
                 <h2 class="section-title" id="category-title"><i class="fas fa-list" style="color: var(--primary);"></i> All Local & Cansi</h2>
                 <div class="all-grid" id="all-restaurants-grid"></div>
             </div>
@@ -515,7 +580,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT (DINAGDAGAN NG MGA KAINAN SA KABANKALAN PROPER) -->
+    <!-- JAVASCRIPT -->
     <script>
         const foodData = {
             fastfood: [
@@ -643,6 +708,7 @@
         const categoryList = document.getElementById('category-list');
         const trendingGrid = document.getElementById('trending-grid');
         const allRestaurantsGrid = document.getElementById('all-restaurants-grid');
+        const leftAllRestaurantsGrid = document.getElementById('left-all-restaurants-grid');
         const categoryTitle = document.getElementById('category-title');
         const trendingTitle = document.getElementById('trending-title');
         const buttons = categoryList.querySelectorAll('.cat-btn');
@@ -660,8 +726,15 @@
         const openMapsBtn = document.getElementById('openMapsBtn');
         const mapBadgeLink = document.getElementById('mapBadgeLink');
 
-        // Default active category
         let currentCategory = 'carinderia';
+
+        function getAllRestaurants() {
+            let all = [];
+            for (let key in foodData) {
+                all = all.concat(foodData[key]);
+            }
+            return all;
+        }
 
         function createTrendingCardHTML(item) {
             return `
@@ -689,12 +762,28 @@
             `;
         }
 
+        function createSmallCardHTML(item) {
+            return `
+                <div class="card-img" style="background-image: url('${item.img}');"></div>
+                <div class="card-content">
+                    <div class="header-row">
+                        <h3>${item.name}</h3>
+                        <div class="rating"><i class="fas fa-star"></i> ${item.rating}</div>
+                    </div>
+                    <div class="price">${item.price}</div>
+                    <button class="btn-primary">
+                        <i class="fas fa-utensils"></i> View Menu
+                    </button>
+                </div>
+            `;
+        }
+
         function renderTrending(isSearch = false, searchResults = []) {
             let itemsToRender = isSearch ? searchResults : trendingData;
             trendingGrid.innerHTML = '';
 
             if (itemsToRender.length === 0) {
-                trendingGrid.innerHTML = `<div class="empty-state"><h3>Wala sang nakita</h3></div>`;
+                trendingGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3></div>`;
                 return;
             }
 
@@ -708,7 +797,7 @@
         }
 
         function renderCategory(categoryKey, categoryName, searchQuery = "") {
-            let items = foodData[categoryKey] || [];
+            let items = categoryKey === 'all' ? getAllRestaurants() : (foodData[categoryKey] || []);
 
             if (searchQuery.trim() !== "") {
                 items = items.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -722,8 +811,8 @@
                 allRestaurantsGrid.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-search"></i>
-                        <h3>Wala sang nakita</h3>
-                        <p>Wala kami makita nga "${searchQuery}" sa sini nga category.</p>
+                       <h3>No results found</h3>
+                       <p>We couldn't find "${searchQuery}" in this category.</p>
                     </div>
                 `;
                 return;
@@ -735,6 +824,27 @@
                 card.setAttribute('onclick', `openModal("${item.name}")`); 
                 card.innerHTML = createAllCardHTML(item);
                 allRestaurantsGrid.appendChild(card);
+            });
+        }
+
+        function renderLeftAllRestaurants() {
+            const allItems = getAllRestaurants();
+            leftAllRestaurantsGrid.innerHTML = '';
+            allItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'all-card-small'; 
+                card.setAttribute('onclick', `openModal("${item.name}")`); 
+                card.innerHTML = createSmallCardHTML(item);
+                leftAllRestaurantsGrid.appendChild(card);
+            });
+        }
+
+        function showAllRestaurants() {
+            categoryTitle.innerHTML = `<i class="fas fa-globe" style="color: var(--primary);"></i> All Restaurants in Kabankalan`;
+            renderCategory('all', 'Restaurants');
+            window.scrollTo({
+                top: document.querySelector('.content-split').offsetTop - 20,
+                behavior: 'smooth'
             });
         }
 
@@ -756,7 +866,6 @@
             if (query.trim() !== "") {
                 categoriesSection.classList.add('hide-on-search');
                 trendingSection.classList.add('hide-on-search');
-                
                 document.querySelector('.content-split').style.gridTemplateColumns = '1fr';
                 
                 categoryTitle.innerHTML = `<i class="fas fa-search" style="color: var(--primary);"></i> Search Results for "${query}"`;
@@ -782,7 +891,7 @@
                 
                 allRestaurantsGrid.innerHTML = '';
                 if (allResults.length === 0) {
-                    allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>Wala sang nakita</h3></div>`;
+                    allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3></div>`;
                 } else {
                     allResults.forEach(item => {
                         const card = document.createElement('div');
@@ -936,9 +1045,10 @@
             }
         });
 
-        // Default Load
+        // --- DEFAULT LOAD ---
         renderTrending();
-        renderCategory('carinderia', 'Local & Cansi'); // Naka-set sa Local & Cansi sa umpisa
+        renderCategory('carinderia', 'Local & Cansi');
+        renderLeftAllRestaurants(); 
     </script>
 
 </body>
