@@ -3,43 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kabankalan City Proper Food Finder</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Kabankalan Food Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* --- BLACK & PINK THEME --- */
         :root {
-            --bg-dark: #0f0f13;
-            --card-bg: #1c1c24;
-            --modal-bg: #1e1e26;
-            --primary: #ff4757;
+            --bg-dark: #000000;
+            --card-bg: #111111;
+            --modal-bg: #0a0a0a;
+            --pink: #FF1493; 
+            --pink-hover: #FF69B4;
             --text-light: #ffffff;
-            --text-muted: #a4b0be;
-            --border-color: #2d2d35;
+            --text-muted: #888888;
+            --border-color: #333333;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Outfit', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-light);
             line-height: 1.6;
             scrollbar-width: thin;
-            scrollbar-color: var(--primary) var(--bg-dark);
+            scrollbar-color: var(--pink) var(--bg-dark);
         }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--pink); }
 
         a { text-decoration: none; color: inherit; }
 
         /* Navbar */
         .navbar {
-            background: rgba(15, 15, 19, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.95);
             padding: 15px 40px;
             display: flex;
             justify-content: space-between;
@@ -50,400 +51,335 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        .navbar h2 { color: var(--primary); font-weight: 700; font-size: 1.5rem; }
+        .navbar h2 { color: var(--pink); font-weight: 800; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
 
-        .nav-actions { display: flex; align-items: center; gap: 20px; }
-        
-        .nav-icon {
-            color: var(--text-light);
-            font-size: 1.2rem;
-            transition: color 0.3s;
-            position: relative;
+        .nav-actions { display: flex; align-items: center; gap: 20px; position: relative; }
+        .nav-icon { color: var(--text-light); font-size: 1.3rem; transition: color 0.3s; cursor: pointer; position: relative; }
+        .nav-icon:hover { color: var(--pink); }
+        .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--pink); font-size: 0.65rem; padding: 2px 6px; border-radius: 50%; font-weight: bold; color: white; }
+
+        /* Profile Dropdown */
+        .profile-menu {
+            display: none; position: absolute; top: 40px; right: 0;
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;
+            width: 200px; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
-        .nav-icon:hover { color: var(--primary); }
-        
-        .cart-badge {
-            position: absolute; top: -5px; right: -8px;
-            background: var(--primary); font-size: 0.6rem;
-            padding: 2px 5px; border-radius: 50%; font-weight: bold;
+        .profile-menu.active { display: flex; }
+        .profile-menu a { padding: 12px 20px; color: var(--text-light); font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
+        .profile-menu a:hover { background: rgba(255, 20, 147, 0.1); color: var(--pink); }
+        .profile-menu .divider { height: 1px; background: var(--border-color); }
+
+        /* Cart Side Panel */
+        .cart-panel {
+            position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
+            background: var(--card-bg); border-left: 1px solid var(--pink);
+            z-index: 1001; transition: right 0.4s ease; display: flex; flex-direction: column;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
         }
+        .cart-panel.active { right: 0; }
+        .cart-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .cart-header h3 { color: var(--pink); }
+        .cart-body { padding: 20px; flex-grow: 1; overflow-y: auto; }
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border-color); }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border-color); }
 
         .container { padding: 40px; max-width: 1400px; margin: 0 auto; }
 
+        /* --- BAG-O: FEATURED RESTAURANT BANNER --- */
+        .featured-banner {
+            position: relative; border-radius: 25px; overflow: hidden; margin-bottom: 30px;
+            height: 280px; display: flex; align-items: center; padding: 40px;
+            background: linear-gradient(to right, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.2)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop') center/cover;
+            border: 1px solid var(--border-color);
+        }
+        .featured-content { max-width: 500px; z-index: 2; }
+        .featured-badge { background: var(--pink); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; display: inline-block; margin-bottom: 15px; letter-spacing: 1px; }
+        .featured-content h2 { font-size: 2.5rem; margin-bottom: 10px; color: white; font-weight: 800; }
+        .featured-content p { color: #ccc; margin-bottom: 20px; font-size: 1rem; }
+        .btn-featured { background: var(--pink); color: white; padding: 12px 30px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-block; transition: 0.3s; border: none; cursor: pointer; }
+        .btn-featured:hover { background: var(--pink-hover); transform: scale(1.05); }
+
+        /* PROMO BANNER */
+        .promo-banner {
+            background: linear-gradient(45deg, var(--pink), #ff7f50);
+            border-radius: 20px; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; box-shadow: 0 10px 30px rgba(255, 20, 147, 0.2);
+        }
+        .promo-text h3 { font-size: 1.4rem; font-weight: 800; color: #ffffff !important; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .promo-text p { font-size: 0.9rem; color: #ffffff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .promo-btn { background: white; color: var(--pink); padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; border: none; transition: 0.3s; }
+        .promo-btn:hover { transform: scale(1.05); }
+
         /* Hero Section */
         .hero {
-            text-align: center; padding: 60px 20px 80px;
-            background: linear-gradient(135deg, #1c1c24 0%, #2a2a35 100%);
-            border-radius: 25px; margin-bottom: -40px;
-            border: 1px solid var(--border-color); position: relative; z-index: 1;
-            transition: all 0.3s ease;
+            text-align: center; padding: 40px 20px;
+            background: linear-gradient(135deg, #111111 0%, #1a1a1a 100%);
+            border-radius: 25px; margin-bottom: 40px;
+            border: 1px solid var(--border-color);
         }
 
-        .hero h1 {
-            font-size: 2.5rem; margin-bottom: 10px;
-            background: linear-gradient(to right, #ff4757, #ff7f50);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; color: var(--text-light); }
+        .hero h1 span { color: var(--pink); }
 
         .search-box { position: relative; max-width: 600px; margin: 20px auto 0; }
-
         .search-box input {
             width: 100%; padding: 18px 25px; padding-right: 120px;
-            border-radius: 50px; border: 1px solid #3d3d4a;
-            background: #141419; color: white; font-size: 1rem; outline: none;
-            transition: border 0.3s;
+            border-radius: 50px; border: 1px solid var(--border-color);
+            background: #000; color: white; font-size: 1rem; outline: none; transition: border 0.3s;
         }
-        
-        .search-box input:focus { border-color: var(--primary); }
-
+        .search-box input:focus { border-color: var(--pink); box-shadow: 0 0 15px rgba(255, 20, 147, 0.2); }
         .search-box button {
             position: absolute; right: 5px; top: 5px; bottom: 5px;
-            background: var(--primary); color: white; border: none;
-            padding: 0 30px; border-radius: 50px; font-weight: 600; cursor: pointer;
+            background: var(--pink); color: white; border: none;
+            padding: 0 30px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
+        .search-box button:hover { background: var(--pink-hover); }
 
-        /* Sections */
+        /* Sections & Categories */
         .section-title { font-size: 1.5rem; margin: 40px 0 20px; display: flex; align-items: center; gap: 10px; justify-content: center; }
-
-        /* Categories */
-        .categories {
-            display: flex; gap: 15px; padding-bottom: 10px; scrollbar-width: none;
-            justify-content: center;
-            flex-wrap: wrap;
-            transition: all 0.3s ease;
-        }
-
-        @media (max-width: 900px) {
-            .categories { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; }
-        }
-
+        .categories { display: flex; gap: 15px; padding-bottom: 10px; justify-content: center; flex-wrap: wrap; }
         .cat-btn {
             padding: 12px 25px; border-radius: 30px; border: 1px solid var(--border-color);
-            background: var(--card-bg); color: var(--text-light);
-            font-weight: 500; cursor: pointer; transition: all 0.3s;
+            background: var(--card-bg); color: var(--text-light); font-weight: 500; cursor: pointer; transition: all 0.3s;
             display: flex; align-items: center; gap: 8px; white-space: nowrap;
         }
-
         .cat-btn:hover, .cat-btn.active {
-            border-color: var(--primary); background: rgba(255, 71, 87, 0.1);
-            color: var(--primary);
+            border-color: var(--pink) !important; background: var(--pink) !important;
+            color: white !important; box-shadow: 0 0 15px rgba(255, 20, 147, 0.4) !important;
         }
 
-        /* DUAL COLUMN LAYOUT (ORIHINAL) */
-        .content-split {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
+        /* QUICK FILTERS */
+        .filters-container { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; flex-wrap: wrap; gap: 10px; }
+        .filter-group { display: flex; gap: 10px; }
+        .filter-btn { padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light); font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
+        .filter-btn:hover, .filter-btn.active { border-color: var(--pink); color: var(--pink); }
+        .sort-select { background: var(--card-bg); color: white; padding: 8px 15px; border: 1px solid var(--border-color); border-radius: 20px; outline: none; font-family: inherit; font-size: 0.85rem; cursor: pointer; }
 
-        @media (max-width: 1024px) {
-            .content-split { grid-template-columns: 1fr; }
-        }
-
-        .hide-on-search {
-            display: none !important;
-        }
+        /* DUAL COLUMN LAYOUT */
+        .content-split { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
+        @media (max-width: 1024px) { .content-split { grid-template-columns: 1fr; } }
+        .hide-on-search { display: none !important; }
 
         /* TRENDING CARDS */
-        .trending-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 8px; 
-        }
-
+        .trending-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
         .trending-card {
-            background: var(--card-bg); border-radius: 8px; overflow: hidden;
+            background: var(--card-bg); border-radius: 10px; overflow: hidden;
             border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer;
-            display: flex; flex-direction: column;
+            display: flex; flex-direction: column; text-align: center;
         }
+        .trending-card:hover { transform: translateY(-3px); border-color: var(--pink); box-shadow: 0 5px 15px rgba(255, 20, 147, 0.2); }
+        .trending-card .card-img { height: 80px; background-size: cover; background-position: center; }
+        .trending-card .card-content { padding: 8px; }
+        .trending-card h3 { font-size: 0.7rem; margin: 0; color: #fff; }
+        .trending-card .rating { color: #f1c40f; font-size: 0.6rem; margin-top: 2px; }
 
-        .trending-card:hover { 
-            transform: translateY(-3px); 
-            border-color: rgba(255, 71, 87, 0.4);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .trending-card .card-img { height: 70px; background-size: cover; background-position: center; }
-        .trending-card .card-content { padding: 6px; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; text-align: center; }
-        .trending-card h3 { font-size: 0.65rem; margin: 0; line-height: 1.1; color: #fff; }
-        .trending-card .rating { color: #f1c40f; font-size: 0.55rem; font-weight: 600; margin-top: 2px; }
-
-        /* ALL CATEGORY CARDS (ORIHINAL SA KANAN) */
-        .all-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px; 
-        }
-
+        /* ALL CARDS */
+        .all-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         .all-card {
             background: var(--card-bg); border-radius: 15px; overflow: hidden;
             border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer;
             display: flex; flex-direction: column;
         }
-
-        .all-card:hover { 
-            transform: translateY(-5px); 
-            border-color: rgba(255, 71, 87, 0.4);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        .all-card .card-img { height: 140px; background-size: cover; background-position: center; }
+        .all-card:hover { transform: translateY(-5px); border-color: var(--pink); box-shadow: 0 10px 20px rgba(255, 20, 147, 0.2); }
+        .all-card .card-img { height: 150px; background-size: cover; background-position: center; }
         .all-card .card-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .all-card h3 { font-size: 1rem; margin: 0 0 5px 0; line-height: 1.2; }
-        .all-card .rating { color: #f1c40f; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 3px;}
-        .all-card .price { color: var(--text-muted); font-size: 0.75rem; margin-bottom: 15px; }
-        .all-card .btn-primary { padding: 8px; font-size: 0.8rem; margin-top: auto; border-radius: 8px; }
+        .all-card h3 { font-size: 1.1rem; margin: 0 0 5px 0; }
+        .all-card .rating { color: #f1c40f; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 3px;}
+        .all-card .price { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 15px; }
 
-        /* BAGONG DAGDAG: MALIIT NGA CARDS PARA SA IDALOM SANG TRENDING */
-        .all-grid-small {
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
-            gap: 10px; 
-        }
-
+        /* ALL GRID SMALL */
+        .all-grid-small { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
         .all-card-small {
             background: var(--card-bg); border-radius: 10px; overflow: hidden;
             border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer;
             display: flex; flex-direction: column;
         }
+        .all-card-small:hover { transform: translateY(-3px); border-color: var(--pink); }
+        .all-card-small .card-img { height: 80px; background-size: cover; background-position: center; }
+        .all-card-small .card-content { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; }
+        .all-card-small h3 { font-size: 0.8rem; margin: 0 0 3px 0; }
+        .all-card-small .rating { color: #f1c40f; font-size: 0.65rem; }
+        .all-card-small .price { color: var(--text-muted); font-size: 0.65rem; margin-bottom: 8px; }
 
-        .all-card-small:hover { 
-            transform: translateY(-3px); 
-            border-color: rgba(255, 71, 87, 0.4);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .all-card-small .card-img { height: 80px; background-size: cover; background-position: center; } 
-        .all-card-small .card-content { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; }
-        .all-card-small h3 { font-size: 0.75rem; margin: 0 0 3px 0; line-height: 1.2; } 
-        .all-card-small .rating { color: #f1c40f; font-size: 0.65rem; font-weight: 600; display: flex; align-items: center; gap: 2px;}
-        .all-card-small .price { color: var(--text-muted); font-size: 0.6rem; margin-bottom: 8px; }
-        .all-card-small .btn-primary { padding: 5px; font-size: 0.65rem; margin-top: auto; border-radius: 6px; } 
-
-        /* Shared Button */
         .btn-primary {
-            text-align: center; background: var(--primary); color: white;
+            text-align: center; background: var(--pink); color: white;
             border: none; cursor: pointer; font-family: inherit;
             display: flex; align-items: center; justify-content: center; gap: 5px;
+            padding: 10px; border-radius: 8px; font-weight: 600; transition: 0.3s;
+            margin-top: auto; width: 100%;
         }
+        .btn-primary:hover { background: var(--pink-hover); }
 
-        /* ALL BUTTON SA TRENDING */
         .all-trending-btn {
-            width: 100%;
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 10px;
-            background: transparent;
-            color: var(--primary);
-            border: 1px dashed var(--primary);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            width: 100%; margin-top: 15px; padding: 12px; border-radius: 10px;
+            background: transparent; color: var(--pink); border: 1px dashed var(--pink);
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
+        .all-trending-btn:hover { background: rgba(255, 20, 147, 0.1); border-style: solid; }
 
-        .all-trending-btn:hover {
-            background: rgba(255, 71, 87, 0.1);
-            border-style: solid;
-            transform: translateY(-2px);
-        }
-
-        /* SYSTEM FEEDBACK SECTION */
+        /* REVIEWS */
         .reviews-container {
-            max-width: 600px; margin: 60px auto; 
-            background: linear-gradient(135deg, #1c1c24 0%, #15151a 100%);
-            padding: 25px; border-radius: 20px; border: 1px solid var(--border-color);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            max-width: 600px; margin: 60px auto; background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%);
+            padding: 25px; border-radius: 20px; border: 1px solid var(--border-color); box-shadow: 0 15px 40px rgba(255, 20, 147, 0.1);
         }
-
-        .review-form { 
-            display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; 
-            background: rgba(255, 255, 255, 0.02); padding: 15px;
-            border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
+        .review-form { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; background: rgba(255, 255, 255, 0.02); padding: 15px; border-radius: 15px; border: 1px solid var(--border-color); }
         .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
-
         .review-form input, .review-form select, .review-form textarea {
-            width: 100%; padding: 10px 14px; background: #141419;
-            border: 1px solid var(--border-color); border-radius: 8px;
-            color: white; font-family: inherit; font-size: 0.85rem; transition: all 0.3s ease;
+            width: 100%; padding: 12px 15px; background: #000; border: 1px solid var(--border-color);
+            border-radius: 8px; color: white; font-family: inherit; font-size: 0.9rem; transition: 0.3s;
         }
-
-        .review-form input:focus, .review-form select:focus, .review-form textarea:focus { 
-            outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(255, 71, 87, 0.2);
-        }
-
-        .review-form textarea { resize: vertical; min-height: 70px; }
-
-        .review-form select {
-            appearance: none; -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a4b0be' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat; background-position: right 10px center; background-size: 12px; cursor: pointer;
-        }
-
-        #submitBtn { 
-            padding: 10px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease;
-            background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%); box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3); margin-top: 5px;
-        }
-
-        #submitBtn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5); }
-
+        .review-form input:focus, .review-form select:focus, .review-form textarea:focus { border-color: var(--pink); outline: none; }
+        .review-form textarea { resize: vertical; min-height: 80px; }
+        #submitBtn { padding: 12px; font-size: 1rem; margin-top: 5px; }
+        
         .review-list { display: flex; flex-direction: column; gap: 12px; }
-
-        .review-item {
-            background: #141419; padding: 15px; border-radius: 10px; border-left: 4px solid var(--primary);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s ease;
-        }
-
-        .review-item:hover { transform: translateX(5px); }
-
+        .review-item { background: #000; padding: 15px; border-radius: 10px; border-left: 4px solid var(--pink); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .review-name { font-weight: 600; color: #fff; font-size: 0.9rem; }
-        .review-stars { color: #f1c40f; font-size: 0.75rem; background: rgba(241, 196, 15, 0.1); padding: 2px 8px; border-radius: 20px; }
-        .review-text { color: #d1d8e0; font-size: 0.85rem; margin-bottom: 8px; line-height: 1.5; }
-        .review-date { font-size: 0.7rem; color: #718093; text-align: right; display: block; font-style: italic; }
+        .review-name { font-weight: 600; color: #fff; font-size: 0.95rem; }
+        .review-stars { color: #f1c40f; font-size: 0.8rem; background: rgba(241, 196, 15, 0.1); padding: 2px 8px; border-radius: 20px; }
+        .review-text { color: #d1d8e0; font-size: 0.9rem; margin-bottom: 8px; }
+        .review-date { font-size: 0.75rem; color: #718093; text-align: right; display: block; font-style: italic; }
 
-        /* Empty State */
         .empty-state { text-align: center; padding: 40px; color: var(--text-muted); grid-column: 1 / -1; }
-        .empty-state i { font-size: 3rem; margin-bottom: 15px; color: #3d3d4a; }
 
         /* Footer */
-        footer {
-            background: #0a0a0d; padding: 40px 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px;
-        }
+        footer { background: #000; padding: 40px 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 60px; }
         .footer-links { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap; }
-        .footer-links a { color: var(--text-muted); transition: color 0.3s; }
-        .footer-links a:hover { color: var(--primary); }
-        .copyright { color: #555; font-size: 0.9rem; }
+        .footer-links a { color: var(--text-muted); transition: color 0.3s; font-size: 0.95rem; }
+        .footer-links a:hover { color: var(--pink); }
+        .copyright { color: #444; font-size: 0.9rem; }
 
-        /* FULL SCREEN MODAL DESIGN */
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(8px);
-            z-index: 1000; justify-content: center; align-items: center; padding: 20px; overflow: hidden;
-        }
-        
+        /* MODAL */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; overflow: hidden; }
         .modal-overlay.active { display: flex; }
-        
-        .modal-content {
-            background: var(--modal-bg); border: 1px solid #3d3d4a; border-radius: 20px;
-            width: 95vw; height: 95vh; overflow-y: auto; position: relative;
-            animation: slideUp 0.3s ease; box-shadow: 0 25px 60px rgba(0,0,0,0.7);
-            display: flex; flex-direction: column;
-        }
-
-        .modal-content::-webkit-scrollbar { width: 8px; }
-        .modal-content::-webkit-scrollbar-track { background: transparent; }
-        .modal-content::-webkit-scrollbar-thumb { background: #3d3d4a; border-radius: 10px; }
-        .modal-content::-webkit-scrollbar-thumb:hover { background: var(--primary); }
-        
+        .modal-content { background: var(--modal-bg); border: 1px solid var(--pink); border-radius: 20px; width: 95vw; height: 95vh; overflow-y: auto; position: relative; animation: slideUp 0.3s ease; display: flex; flex-direction: column; }
         @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        .modal-header {
-            padding: 25px 40px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; 
-            position: sticky; top: 0; background: rgba(30, 30, 38, 0.95); backdrop-filter: blur(10px); z-index: 2; border-radius: 20px 20px 0 0;
-        }
-        
-        .modal-header h3 { color: var(--primary); font-size: 2.5rem; font-weight: 800; letter-spacing: -0.5px; }
-        
-        .close-btn {
-            background: rgba(255,255,255,0.05); border: none; color: var(--text-muted); width: 45px; height: 45px; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: all 0.3s;
-        }
-        .close-btn:hover { background: rgba(255, 71, 87, 0.2); color: var(--primary); transform: rotate(90deg); }
+        .modal-header { padding: 25px 40px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 2; }
+        .modal-header h3 { color: var(--pink); font-size: 2.2rem; font-weight: 800; }
+        .close-btn { background: rgba(255,255,255,0.05); border: none; color: var(--text-muted); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: all 0.3s; }
+        .close-btn:hover { background: rgba(255, 20, 147, 0.2); color: var(--pink); transform: rotate(90deg); }
         
         .modal-body { padding: 40px; flex-grow: 1; }
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; height: 100%; }
+        @media (max-width: 900px) { .modal-grid { grid-template-columns: 1fr; gap: 30px; } .modal-content { width: 100%; height: 100%; border-radius: 0; } .modal-header h3 { font-size: 1.8rem; } .modal-body { padding: 20px; } }
 
-        @media (max-width: 900px) {
-            .modal-grid { grid-template-columns: 1fr; gap: 30px; height: auto; }
-            .modal-content { width: 100%; height: 100%; border-radius: 0; }
-            .modal-header { padding: 20px; }
-            .modal-body { padding: 20px; }
-            .modal-header h3 { font-size: 1.8rem; }
-        }
-
-        /* Left side: Menu */
-        .menu-section h4, .map-section h4 {
-            color: var(--text-light); margin-bottom: 25px; font-size: 1.4rem; border-bottom: 2px solid var(--border-color); 
-            padding-bottom: 15px; display: flex; align-items: center; gap: 10px; font-weight: 700;
-        }
-
+        .menu-section h4, .map-section h4 { color: var(--text-light); margin-bottom: 25px; font-size: 1.4rem; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; display: flex; align-items: center; gap: 10px; font-weight: 700; }
         .menu-item { display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px dashed var(--border-color); }
-        .menu-item:last-child { border-bottom: none; }
-
-        .menu-item-img {
-            width: 70px; height: 70px; border-radius: 10px; background-size: cover; background-position: center;
-            flex-shrink: 0; border: 1px solid var(--border-color);
-        }
-
-        .menu-item-details { flex-grow: 1; }
-        .menu-item-info h5 { font-size: 1.1rem; margin-bottom: 3px; color: #fff; font-weight: 600; }
+        .menu-item-img { width: 70px; height: 70px; border-radius: 10px; background-size: cover; background-position: center; flex-shrink: 0; border: 1px solid var(--border-color); }
+        .menu-item-info h5 { font-size: 1.1rem; margin-bottom: 3px; color: #fff; }
         .menu-item-info p { font-size: 0.85rem; color: var(--text-muted); }
-        .menu-item-price { color: var(--primary); font-weight: 800; font-size: 1.2rem; }
+        .menu-item-price { color: var(--pink); font-weight: 800; font-size: 1.2rem; margin-left: auto; }
 
-        /* Right side: Map */
-        .location-details { margin-bottom: 20px; padding: 20px; background: #141419; border-radius: 12px; border: 1px solid var(--border-color); }
+        .location-details { margin-bottom: 20px; padding: 20px; background: #000; border-radius: 12px; border: 1px solid var(--border-color); }
         .location-details p { font-size: 1.1rem; margin-bottom: 5px; }
-        .location-details strong { color: var(--primary); font-size: 1.2rem; }
+        .location-details strong { color: var(--pink); font-size: 1.2rem; }
         
-        .map-container {
-            width: 100%; height: 55vh; border-radius: 15px; overflow: hidden; border: 2px solid #3d3d4a; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6); position: relative;
-        }
+        .map-container { width: 100%; height: 55vh; border-radius: 15px; overflow: hidden; border: 2px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
         .map-container iframe { width: 100%; height: 100%; border: none; }
 
         .action-buttons { display: flex; gap: 15px; margin-top: 15px; }
-
-        .btn-google-maps {
-            flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px;
-            padding: 15px; background: var(--primary); color: white; border-radius: 12px; 
-            font-weight: 600; font-size: 1rem; text-decoration: none; transition: 0.3s; border: none; cursor: pointer;
-        }
-        .btn-google-maps:hover { background: #e03e50; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
-
-        .btn-exact-location {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            padding: 15px; background: #141419; color: var(--text-light); border-radius: 12px; 
-            font-weight: 600; font-size: 1rem; text-decoration: none; transition: 0.3s; border: 1px solid var(--primary); cursor: pointer;
-        }
-        .btn-exact-location:hover { background: rgba(255, 71, 87, 0.1); color: var(--primary); }
+        .btn-google-maps { flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; background: var(--pink); color: white; border-radius: 12px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: 0.3s; border: none; cursor: pointer; }
+        .btn-google-maps:hover { background: var(--pink-hover); transform: translateY(-2px); }
+        .btn-exact-location { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; background: #000; color: var(--text-light); border-radius: 12px; font-weight: 600; font-size: 1rem; text-decoration: none; transition: 0.3s; border: 1px solid var(--pink); cursor: pointer; }
+        .btn-exact-location:hover { background: rgba(255, 20, 147, 0.1); color: var(--pink); }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <h2>🍔 Kabankalan Eats</h2>
+        <h2><i class="fas fa-bolt"></i> Kabankalan Eats</h2>
         <div class="nav-actions">
             <a href="#" class="nav-icon"><i class="fas fa-search"></i></a>
-            <a href="#" class="nav-icon">
+            <div class="nav-icon" onclick="toggleCart()">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-badge">2</span>
-            </a>
-            <a href="#" class="nav-icon"><i class="fas fa-user-circle"></i></a>
+            </div>
+            <div class="nav-icon" onclick="toggleProfile()">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            
+            <!-- Profile Dropdown -->
+            <div class="profile-menu" id="profileMenu">
+                <a href="#"><i class="fas fa-box"></i> My Orders</a>
+                <a href="#"><i class="fas fa-heart"></i> Favorites</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                <div class="divider"></div>
+                <a href="#" style="color: #e74c3c;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
         </div>
     </nav>
 
+    <!-- Cart Side Panel -->
+    <div class="cart-panel" id="cartPanel">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+            <button class="close-btn" onclick="toggleCart()" style="width: 30px; height: 30px; font-size: 1rem;"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-body">
+            <div class="cart-item">
+                <div>
+                    <h4>Chickenjoy</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Jollibee (Guanzon)</p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="color: var(--pink); font-weight: bold;">₱99</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Qty: 1</p>
+                </div>
+            </div>
+            <div class="cart-item">
+                <div>
+                    <h4>Special Cansi</h4>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">ALONSO's Cansi</p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="color: var(--pink); font-weight: bold;">₱130</p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Qty: 1</p>
+                </div>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <span>Total:</span>
+                <span style="color: var(--pink); font-weight: bold; font-size: 1.2rem;">₱229</span>
+            </div>
+            <button class="btn-primary" style="width: 100%;"><i class="fas fa-credit-card"></i> Checkout</button>
+        </div>
+    </div>
+
     <main class="container">
         
+        <!-- BAG-O: FEATURED RESTAURANT BANNER -->
+        <div class="featured-banner">
+            <div class="featured-content">
+                <span class="featured-badge">Featured Today</span>
+                <h2>Gorio's Cafe & Restaurant</h2>
+                <p>Experience the best local dishes and premium coffee in the heart of Kabankalan City.</p>
+                <button class="btn-featured" onclick="openModal('Gorio\'s Cafe')">View Menu</button>
+            </div>
+        </div>
+
+        <!-- PROMO BANNER -->
+        <div class="promo-banner">
+            <div class="promo-text">
+                <h3><i class="fas fa-tags"></i> Hot Deals Today!</h3>
+                <p>Get 20% off on your first order. Use code: <b>KABANKALAN20</b></p>
+            </div>
+            <button class="promo-btn">Claim Now</button>
+        </div>
+
         <div class="hero" id="heroSection">
-            <h1>Discover the Best Food</h1>
+            <h1>Discover the Best <span>Food</span></h1>
             <p>Search for local restaurants, dishes, and cuisines within <strong>Kabankalan City Proper</strong> only.</p>
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search food, drinks, or restaurants...">
+                <input type="text" id="searchInput" placeholder="Try 'checkin joy', 'cansi', 'milk tea'...">
                 <button type="button" id="searchBtn">Search</button>
             </div>
         </div>
 
         <div id="categoriesSection">
-            <h2 class="section-title"><i class="fas fa-utensils" style="color: var(--primary);"></i> Explore Categories</h2>
+            <h2 class="section-title"><i class="fas fa-utensils" style="color: var(--pink);"></i> Explore Categories</h2>
             <div class="categories" id="category-list">
                 <button class="cat-btn active" data-category="carinderia"><i class="fas fa-bowl-rice"></i> Local & Cansi</button>
                 <button class="cat-btn" data-category="fastfood"><i class="fas fa-burger"></i> Fast Food</button>
@@ -453,45 +389,55 @@
             </div>
         </div>
 
-        <!-- ORIHINAL NGA LAYOUT (DUAL COLUMN) -->
+        <!-- DUAL COLUMN -->
         <div class="content-split">
             
-            <!-- KALIWA NGA BAHIN (TRENDING + BAGONG ALL RESTAURANTS SA IDALOM) -->
+            <!-- KALIWA: TRENDING + ALL SMALL -->
             <div id="trendingSection">
-                <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: #e67e22;"></i> Trending</h2>
+                <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan</h2>
                 <div class="trending-grid" id="trending-grid"></div>
                 
-                <!-- IBINALIK ANG GLOBE ICON -->
                 <button class="all-trending-btn" id="showAllBtn" onclick="showAllRestaurants()">
                     <i class="fas fa-globe"></i> View All Restaurants
                 </button>
 
-                <!-- BAGONG DAGDAG: ALL RESTAURANTS SA IDALOM SANG TRENDING (KALIWA) -->
                 <div id="left-all-restaurants-section" style="margin-top: 40px;">
-                    <h2 class="section-title" style="font-size: 1.3rem; margin-bottom: 15px;"><i class="fas fa-globe" style="color: var(--primary);"></i> All Restaurants in Kabankalan</h2>
+                    <h2 class="section-title" style="font-size: 1.3rem; margin-bottom: 15px; justify-content: flex-start;"><i class="fas fa-globe" style="color: var(--pink);"></i> All Restaurants</h2>
                     <div class="all-grid-small" id="left-all-restaurants-grid"></div>
                 </div>
             </div>
 
-            <!-- KANAN NGA BAHIN (ORIHINAL NGA LISTAHAN) -->
+            <!-- KANAN: LISTAHAN + FILTERS -->
             <div id="right-section">
-                <h2 class="section-title" id="category-title"><i class="fas fa-list" style="color: var(--primary);"></i> All Local & Cansi</h2>
+                <h2 class="section-title" id="category-title"><i class="fas fa-list" style="color: var(--pink);"></i> All Local & Cansi</h2>
+                
+                <!-- FILTERS -->
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Top Rated</button>
+                    </div>
+                    <select class="sort-select">
+                        <option>Sort by: Rating</option>
+                        <option>Sort by: Price</option>
+                    </select>
+                </div>
+
                 <div class="all-grid" id="all-restaurants-grid"></div>
             </div>
 
         </div>
 
-        <!-- SYSTEM FEEDBACK SECTION -->
+        <!-- SYSTEM FEEDBACK -->
         <div class="reviews-container">
-            <h2 class="section-title" style="margin-top: 0; margin-bottom: 5px; font-size: 1.3rem;"><i class="fas fa-star" style="color: #f1c40f;"></i> System Feedback</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.8rem;">
+            <h2 class="section-title" style="margin-top: 0; margin-bottom: 5px; font-size: 1.3rem; justify-content: center;"><i class="fas fa-star" style="color: #f1c40f;"></i> System Feedback</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 20px; font-size: 0.85rem;">
                 Kamusta ang experience? I-rate at mag-iwan ng komento.
             </p>
 
             <form class="review-form" id="reviewForm">
                 <div class="form-row">
                     <input type="text" id="reviewName" placeholder="Iyong Pangalan" required style="flex: 1; min-width: 150px;">
-                    
                     <select id="reviewRating" required style="flex: 1; min-width: 150px;">
                         <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
                         <option value="4">⭐⭐⭐⭐ (Very Good)</option>
@@ -500,9 +446,7 @@
                         <option value="1">⭐ (Poor)</option>
                     </select>
                 </div>
-                
                 <textarea id="reviewText" placeholder="Isulat ang comment dito..." required></textarea>
-                
                 <button type="submit" id="submitBtn" class="btn-primary">
                     <i class="fas fa-paper-plane"></i> Submit Feedback
                 </button>
@@ -539,7 +483,7 @@
         <p class="copyright">&copy; 2026 Kabankalan Eats. All rights reserved.</p>
     </footer>
 
-    <!-- FULL SCREEN MENU AT MAP MODAL -->
+    <!-- MODAL -->
     <div class="modal-overlay" id="infoModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -548,23 +492,19 @@
             </div>
             <div class="modal-body">
                 <div class="modal-grid">
-                    
                     <div class="menu-section">
-                        <h4><i class="fas fa-utensils" style="color: var(--primary);"></i> Menu</h4>
+                        <h4><i class="fas fa-utensils" style="color: var(--pink);"></i> Menu</h4>
                         <div id="modalMenuList"></div>
                     </div>
-
                     <div class="map-section">
-                        <h4><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Location</h4>
+                        <h4><i class="fas fa-map-marker-alt" style="color: var(--pink);"></i> Location</h4>
                         <div class="location-details">
                             <p><strong id="modalAddress">Address here</strong></p>
                             <p style="color: var(--text-muted); font-size: 0.85rem;">Kabankalan City Proper</p>
                         </div>
-                        
                         <div class="map-container">
-                            <iframe id="mapFrame" src="" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <iframe id="mapFrame" src="" allowfullscreen="" loading="lazy"></iframe>
                         </div>
-                        
                         <div class="action-buttons">
                             <a href="#" id="mapBadgeLink" target="_blank" class="btn-exact-location">
                                 <i class="fas fa-map-pin"></i> Exact Location
@@ -574,123 +514,56 @@
                             </a>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT -->
     <script>
+        // --- DATA ---
         const foodData = {
             fastfood: [
-                { name: "Jollibee (Guanzon)", mapQuery: "Jollibee+Guanzon+St+Kabankalan", rating: "4.5", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", menu: [
-                    { name: "Chickenjoy", price: "₱99", desc: "Crispy fried chicken", img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=200&auto=format&fit=crop" }, 
-                    { name: "Yumburger", price: "₱45", desc: "Classic burger", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "McDonald's (Guanzon)", mapQuery: "McDonalds+Guanzon+St+Kabankalan", rating: "4.3", price: "₱80–₱180", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", menu: [
-                    { name: "Big Mac", price: "₱180", desc: "Double burger", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=200&auto=format&fit=crop" }, 
-                    { name: "Fries", price: "₱80", desc: "Crispy fries", img: "https://images.unsplash.com/photo-1576107232684-1279f390859f?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Mang Inasal (Gaisano)", mapQuery: "Gaisano+Grand+Mall+Kabankalan", rating: "4.4", price: "₱120–₱250", img: "https://images.unsplash.com/photo-1513639776629-7b61b0ac49cb?q=80&w=800&auto=format&fit=crop", address: "Gaisano Grand Mall, City Proper", menu: [
-                    { name: "1pc Chicken", price: "₱110", desc: "Original recipe", img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Chowking (City Mall)", mapQuery: "Chowking+City+Mall+Kabankalan", rating: "4.1", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop", address: "CityMall, City Proper", menu: [
-                    { name: "Chao Fan", price: "₱95", desc: "Fried rice", img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Angel's Burger (Rizal)", mapQuery: "Angels+Burger+Rizal+Kabankalan", rating: "4.2", price: "₱25–₱60", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [
-                    { name: "Burger Steak", price: "₱35", desc: "Classic burger", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Lola Nena's Lomi", mapQuery: "Lomi+House+Tan+Lorenzo+Kabankalan", rating: "4.7", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=800&auto=format&fit=crop", address: "Tan Lorenzo St, City Proper", menu: [
-                    { name: "Special Lomi", price: "₱90", desc: "Noodle soup", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=200&auto=format&fit=crop" }
-                ]}
+                { name: "Jollibee (Guanzon)", mapQuery: "Jollibee+Guanzon+St+Kabankalan", rating: "4.5", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", menu: [{ name: "Chickenjoy", price: "₱99", desc: "Crispy fried chicken", img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "McDonald's (Guanzon)", mapQuery: "McDonalds+Guanzon+St+Kabankalan", rating: "4.3", price: "₱80–₱180", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", menu: [{ name: "Big Mac", price: "₱180", desc: "Double burger", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Mang Inasal (Gaisano)", mapQuery: "Gaisano+Grand+Mall+Kabankalan", rating: "4.4", price: "₱120–₱250", img: "https://images.unsplash.com/photo-1513639776629-7b61b0ac49cb?q=80&w=800&auto=format&fit=crop", address: "Gaisano Grand Mall, City Proper", menu: [{ name: "1pc Chicken", price: "₱110", desc: "Original recipe", img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Chowking (City Mall)", mapQuery: "Chowking+City+Mall+Kabankalan", rating: "4.1", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop", address: "CityMall, City Proper", menu: [{ name: "Chao Fan", price: "₱95", desc: "Fried rice", img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Angel's Burger (Rizal)", mapQuery: "Angels+Burger+Rizal+Kabankalan", rating: "4.2", price: "₱25–₱60", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [{ name: "Burger Steak", price: "₱35", desc: "Classic burger", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Lola Nena's Lomi", mapQuery: "Lomi+House+Tan+Lorenzo+Kabankalan", rating: "4.7", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=800&auto=format&fit=crop", address: "Tan Lorenzo St, City Proper", menu: [{ name: "Special Lomi", price: "₱90", desc: "Noodle soup", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=200&auto=format&fit=crop" }] }
             ],
             carinderia: [
-                { name: "ALONSO's Cansi", mapQuery: "Alonsos+Cansi+Guanzon+Kabankalan", rating: "4.8", price: "₱150–₱300", img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Brgy. 1, City Proper", menu: [
-                    { name: "Special Cansi", price: "₱130", desc: "Sour beef soup", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=200&auto=format&fit=crop" }, 
-                    { name: "Sizzling Sisig", price: "₱100", desc: "Sizzling pork", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Kabankalan Ihaw-Ihaw", mapQuery: "Rizal+Street+Kabankalan+City", rating: "4.9", price: "₱50–₱150", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [
-                    { name: "Pork BBQ", price: "₱100", desc: "Grilled skewers", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Cansi House", mapQuery: "Cansi+House+Rizal+Kabankalan", rating: "4.7", price: "₱120–₱280", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop", address: "Rizal St, Brgy. 5, City Proper", menu: [
-                    { name: "Cansi Bulalo", price: "₱280", desc: "Rich soup", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Sharyn's Cansi", mapQuery: "Sharyns+Cansi+National+Highway+Kabankalan", rating: "4.6", price: "₱150–₱260", img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop", address: "National Highway, Brgy. 1, City Proper", menu: [
-                    { name: "Special Cansi", price: "₱260", desc: "Sour soup", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Aida's Carinderia", mapQuery: "Kabankalan+City+Public+Market", rating: "4.5", price: "₱50–₱100", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop", address: "Public Market, City Proper", menu: [
-                    { name: "Adobo with Rice", price: "₱70", desc: "Classic adobo", img: "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Tita Beth's Eatery", mapQuery: "Guanzon+Street+Kabankalan+City", rating: "4.6", price: "₱60–₱120", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop", address: "Guanzon St., Brgy. 2, City Proper", menu: [
-                    { name: "Kare-Kare", price: "₱120", desc: "Peanut stew", img: "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Myrna's Restaurant", mapQuery: "Myrnas+Restaurant+Kabankalan", rating: "4.4", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1626776876729-bab4369a5a5a?q=80&w=800&auto=format&fit=crop", address: "Tan Lorenzo St, City Proper", menu: [
-                    { name: "Pork Adobo", price: "₱85", desc: "Home-cooked", img: "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "3RD Talabahan", mapQuery: "3RD+Talabahan+Lirazan+Kabankalan", rating: "4.5", price: "₱100–₱250", img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop", address: "Lirazan St, City Proper", menu: [
-                    { name: "Baked Talaba", price: "₱150", desc: "Fresh oysters", img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=200&auto=format&fit=crop" }
-                ]}
+                { name: "ALONSO's Cansi", mapQuery: "Alonsos+Cansi+Guanzon+Kabankalan", rating: "4.8", price: "₱150–₱300", img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Brgy. 1, City Proper", menu: [{ name: "Special Cansi", price: "₱130", desc: "Sour beef soup", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Kabankalan Ihaw-Ihaw", mapQuery: "Rizal+Street+Kabankalan+City", rating: "4.9", price: "₱50–₱150", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [{ name: "Pork BBQ", price: "₱100", desc: "Grilled skewers", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Cansi House", mapQuery: "Cansi+House+Rizal+Kabankalan", rating: "4.7", price: "₱120–₱280", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop", address: "Rizal St, Brgy. 5, City Proper", menu: [{ name: "Cansi Bulalo", price: "₱280", desc: "Rich soup", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Sharyn's Cansi", mapQuery: "Sharyns+Cansi+National+Highway+Kabankalan", rating: "4.6", price: "₱150–₱260", img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop", address: "National Highway, Brgy. 1, City Proper", menu: [{ name: "Special Cansi", price: "₱260", desc: "Sour soup", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Aida's Carinderia", mapQuery: "Kabankalan+City+Public+Market", rating: "4.5", price: "₱50–₱100", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop", address: "Public Market, City Proper", menu: [{ name: "Adobo with Rice", price: "₱70", desc: "Classic adobo", img: "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Tita Beth's Eatery", mapQuery: "Guanzon+Street+Kabankalan+City", rating: "4.6", price: "₱60–₱120", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop", address: "Guanzon St., Brgy. 2, City Proper", menu: [{ name: "Kare-Kare", price: "₱120", desc: "Peanut stew", img: "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Myrna's Restaurant", mapQuery: "Myrnas+Restaurant+Kabankalan", rating: "4.4", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1626776876729-bab4369a5a5a?q=80&w=800&auto=format&fit=crop", address: "Tan Lorenzo St, City Proper", menu: [{ name: "Pork Adobo", price: "₱85", desc: "Home-cooked", img: "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "3RD Talabahan", mapQuery: "3RD+Talabahan+Lirazan+Kabankalan", rating: "4.5", price: "₱100–₱250", img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop", address: "Lirazan St, City Proper", menu: [{ name: "Baked Talaba", price: "₱150", desc: "Fresh oysters", img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=200&auto=format&fit=crop" }] }
             ],
             cafe: [
-                { name: "Taza La Bien", mapQuery: "Taza+La+Bien+Kabankalan", rating: "4.8", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop", address: "Los Angeles St, Brgy. 1, City Proper", menu: [
-                    { name: "Caffe Latte", price: "₱120", desc: "Steamed milk", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Kalamay Artisan Cafe", mapQuery: "Kalamay+Artisan+Lirazan+Kabankalan", rating: "4.6", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=800&auto=format&fit=crop", address: "Lirazan St, Brgy. 4, City Proper", menu: [
-                    { name: "Cappuccino", price: "₱110", desc: "Milk foam", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Kapehan sa Plaza", mapQuery: "Kabankalan+City+Plaza", rating: "4.5", price: "₱30–₱100", img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop", address: "Plaza Area, Brgy. 1, City Proper", menu: [
-                    { name: "Native Coffee", price: "₱30", desc: "Brewed coffee", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "MOICA Pizzeria", mapQuery: "MOICA+Pizzeria+Coloso+Kabankalan", rating: "4.7", price: "₱150–₱400", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop", address: "Coloso St, Brgy. 6, City Proper", menu: [
-                    { name: "Pepperoni Pizza", price: "₱350", desc: "Classic pizza", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Amore Mio Pizza", mapQuery: "Amore+Mio+Pizza+Rizal+Kabankalan", rating: "4.6", price: "₱120–₱350", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=800&auto=format&fit=crop", address: "Rizal St, Brgy. 9, City Proper", menu: [
-                    { name: "Margherita", price: "₱299", desc: "Italian pizza", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Bo's Coffee (CityMall)", mapQuery: "Bos+Coffee+City+Mall+Kabankalan", rating: "4.4", price: "₱100–₱180", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=800&auto=format&fit=crop", address: "CityMall, City Proper", menu: [
-                    { name: "Brewed Coffee", price: "₱100", desc: "Local beans", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=200&auto=format&fit=crop" }
-                ]}
+                { name: "Gorio's Cafe", mapQuery: "Gorios+Cafe+Kabankalan", rating: "4.9", price: "₱100–₱250", img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", menu: [{ name: "Iced Latte", price: "₱120", desc: "Espresso and milk", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Taza La Bien", mapQuery: "Taza+La+Bien+Kabankalan", rating: "4.8", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop", address: "Los Angeles St, Brgy. 1, City Proper", menu: [{ name: "Caffe Latte", price: "₱120", desc: "Steamed milk", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Kalamay Artisan Cafe", mapQuery: "Kalamay+Artisan+Lirazan+Kabankalan", rating: "4.6", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=800&auto=format&fit=crop", address: "Lirazan St, Brgy. 4, City Proper", menu: [{ name: "Cappuccino", price: "₱110", desc: "Milk foam", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Kapehan sa Plaza", mapQuery: "Kabankalan+City+Plaza", rating: "4.5", price: "₱30–₱100", img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop", address: "Plaza Area, Brgy. 1, City Proper", menu: [{ name: "Native Coffee", price: "₱30", desc: "Brewed coffee", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "MOICA Pizzeria", mapQuery: "MOICA+Pizzeria+Coloso+Kabankalan", rating: "4.7", price: "₱150–₱400", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop", address: "Coloso St, Brgy. 6, City Proper", menu: [{ name: "Pepperoni Pizza", price: "₱350", desc: "Classic pizza", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Amore Mio Pizza", mapQuery: "Amore+Mio+Pizza+Rizal+Kabankalan", rating: "4.6", price: "₱120–₱350", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=800&auto=format&fit=crop", address: "Rizal St, Brgy. 9, City Proper", menu: [{ name: "Margherita", price: "₱299", desc: "Italian pizza", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Bo's Coffee (CityMall)", mapQuery: "Bos+Coffee+City+Mall+Kabankalan", rating: "4.4", price: "₱100–₱180", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=800&auto=format&fit=crop", address: "CityMall, City Proper", menu: [{ name: "Brewed Coffee", price: "₱100", desc: "Local beans", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=200&auto=format&fit=crop" }] }
             ],
             desserts: [
-                { name: "Cake Avenue", mapQuery: "Cake+Avenue+Rizal+Kabankalan", rating: "4.7", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [
-                    { name: "Chocolate Cake", price: "₱120", desc: "Chocolate slice", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Melting Pot", mapQuery: "Melting+Pot+Rizal+Kabankalan", rating: "4.4", price: "₱55–₱165", img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?q=80&w=800&auto=format&fit=crop", address: "Rizal St, Brgy. 7, City Proper", menu: [
-                    { name: "Sundae", price: "₱55", desc: "Ice cream", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Bibingka Station", mapQuery: "Kabankalan+City+Church", rating: "4.9", price: "₱40–₱100", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop", address: "Church Vicinity, City Proper", menu: [
-                    { name: "Bibingka", price: "₱50", desc: "Rice cake", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Leche Flan ni Aling Rosa", mapQuery: "Kabankalan+Public+Market", rating: "4.8", price: "₱60–₱120", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop", address: "Public Market, City Proper", menu: [
-                    { name: "Leche Flan", price: "₱70", desc: "Caramel custard", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Don Benito's", mapQuery: "Don+Benitos+Guanzon+Kabankalan", rating: "4.5", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, City Proper", menu: [
-                    { name: "Halo-Halo", price: "₱99", desc: "Shaved ice dessert", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Red Ribbon (CityMall)", mapQuery: "Red+Ribbon+City+Mall+Kabankalan", rating: "4.6", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop", address: "CityMall, City Proper", menu: [
-                    { name: "Black Forest", price: "₱120", desc: "Cake slice", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=200&auto=format&fit=crop" }
-                ]}
+                { name: "Cake Avenue", mapQuery: "Cake+Avenue+Rizal+Kabankalan", rating: "4.7", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [{ name: "Chocolate Cake", price: "₱120", desc: "Chocolate slice", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Melting Pot", mapQuery: "Melting+Pot+Rizal+Kabankalan", rating: "4.4", price: "₱55–₱165", img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?q=80&w=800&auto=format&fit=crop", address: "Rizal St, Brgy. 7, City Proper", menu: [{ name: "Sundae", price: "₱55", desc: "Ice cream", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Bibingka Station", mapQuery: "Kabankalan+City+Church", rating: "4.9", price: "₱40–₱100", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop", address: "Church Vicinity, City Proper", menu: [{ name: "Bibingka", price: "₱50", desc: "Rice cake", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Leche Flan ni Aling Rosa", mapQuery: "Kabankalan+Public+Market", rating: "4.8", price: "₱60–₱120", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop", address: "Public Market, City Proper", menu: [{ name: "Leche Flan", price: "₱70", desc: "Caramel custard", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Don Benito's", mapQuery: "Don+Benitos+Guanzon+Kabankalan", rating: "4.5", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, City Proper", menu: [{ name: "Halo-Halo", price: "₱99", desc: "Shaved ice dessert", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Red Ribbon (CityMall)", mapQuery: "Red+Ribbon+City+Mall+Kabankalan", rating: "4.6", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop", address: "CityMall, City Proper", menu: [{ name: "Black Forest", price: "₱120", desc: "Cake slice", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=200&auto=format&fit=crop" }] }
             ],
             milktea: [
-                { name: "Chatime (City Mall)", mapQuery: "CityMall+Kabankalan", rating: "4.8", price: "₱70–₱140", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop", address: "City Mall, City Proper", menu: [
-                    { name: "Pearl Milk Tea", price: "₱85", desc: "Classic pearls", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Macao Imperial Tea", mapQuery: "Gaisano+Grand+Mall+Kabankalan", rating: "4.6", price: "₱90–₱160", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop", address: "Gaisano Grand Mall, City Proper", menu: [
-                    { name: "Cream Cheese", price: "₱120", desc: "Cheesecake series", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "CoCo Fresh Tea", mapQuery: "CoCo+Fresh+Tea+Araneta+Kabankalan", rating: "4.5", price: "₱90–₱130", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=800&auto=format&fit=crop", address: "Araneta St, City Proper", menu: [
-                    { name: "3Q Milk Tea", price: "₱110", desc: "Pearl, pudding, jelly", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "SereniTea", mapQuery: "SereniTea+Kabankalan", rating: "4.4", price: "₱70–₱120", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [
-                    { name: "Wintermelon", price: "₱75", desc: "Sweet and refreshing", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Tea Talk", mapQuery: "Tea+Talk+Guanzon+Kabankalan", rating: "4.3", price: "₱60–₱100", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, City Proper", menu: [
-                    { name: "Okinawa", price: "₱85", desc: "Brown sugar milk tea", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }
-                ]},
-                { name: "Infinitea", mapQuery: "Infinitea+Kabankalan", rating: "4.5", price: "₱80–₱130", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop", address: "City Proper, Kabankalan", menu: [
-                    { name: "Hokkaido", price: "₱95", desc: "Creamy milk tea", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=200&auto=format&fit=crop" }
-                ]}
+                { name: "Chatime (City Mall)", mapQuery: "CityMall+Kabankalan", rating: "4.8", price: "₱70–₱140", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop", address: "City Mall, City Proper", menu: [{ name: "Pearl Milk Tea", price: "₱85", desc: "Classic pearls", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Macao Imperial Tea", mapQuery: "Gaisano+Grand+Mall+Kabankalan", rating: "4.6", price: "₱90–₱160", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop", address: "Gaisano Grand Mall, City Proper", menu: [{ name: "Cream Cheese", price: "₱120", desc: "Cheesecake series", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "CoCo Fresh Tea", mapQuery: "CoCo+Fresh+Tea+Araneta+Kabankalan", rating: "4.5", price: "₱90–₱130", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=800&auto=format&fit=crop", address: "Araneta St, City Proper", menu: [{ name: "3Q Milk Tea", price: "₱110", desc: "Pearl, pudding, jelly", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "SereniTea", mapQuery: "SereniTea+Kabankalan", rating: "4.4", price: "₱70–₱120", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [{ name: "Wintermelon", price: "₱75", desc: "Sweet and refreshing", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Tea Talk", mapQuery: "Tea+Talk+Guanzon+Kabankalan", rating: "4.3", price: "₱60–₱100", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, City Proper", menu: [{ name: "Okinawa", price: "₱85", desc: "Brown sugar milk tea", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }] },
+                { name: "Infinitea", mapQuery: "Infinitea+Kabankalan", rating: "4.5", price: "₱80–₱130", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop", address: "City Proper, Kabankalan", menu: [{ name: "Hokkaido", price: "₱95", desc: "Creamy milk tea", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=200&auto=format&fit=crop" }] }
             ]
         };
 
@@ -728,11 +601,30 @@
 
         let currentCategory = 'carinderia';
 
+        // --- NAVBAR INTERACTIONS ---
+        function toggleProfile() {
+            document.getElementById('profileMenu').classList.toggle('active');
+        }
+        function toggleCart() {
+            document.getElementById('cartPanel').classList.toggle('active');
+        }
+        // Close dropdown if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.fa-user-circle') && !event.target.matches('.nav-icon')) {
+                var dropdowns = document.getElementsByClassName("profile-menu");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('active')) {
+                        openDropdown.classList.remove('active');
+                    }
+                }
+            }
+        }
+
+        // --- RESTAURANT LOGIC ---
         function getAllRestaurants() {
             let all = [];
-            for (let key in foodData) {
-                all = all.concat(foodData[key]);
-            }
+            for (let key in foodData) { all = all.concat(foodData[key]); }
             return all;
         }
 
@@ -772,7 +664,7 @@
                     </div>
                     <div class="price">${item.price}</div>
                     <button class="btn-primary">
-                        <i class="fas fa-utensils"></i> View Menu
+                        <i class="fas fa-utensils"></i> View
                     </button>
                 </div>
             `;
@@ -798,23 +690,15 @@
 
         function renderCategory(categoryKey, categoryName, searchQuery = "") {
             let items = categoryKey === 'all' ? getAllRestaurants() : (foodData[categoryKey] || []);
-
             if (searchQuery.trim() !== "") {
                 items = items.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
             }
 
-            categoryTitle.innerHTML = `<i class="fas fa-list" style="color: var(--primary);"></i> All ${categoryName}`;
-            
+            categoryTitle.innerHTML = `<i class="fas fa-list" style="color: var(--pink);"></i> All ${categoryName}`;
             allRestaurantsGrid.innerHTML = '';
 
             if (items.length === 0) {
-                allRestaurantsGrid.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-search"></i>
-                       <h3>No results found</h3>
-                       <p>We couldn't find "${searchQuery}" in this category.</p>
-                    </div>
-                `;
+                allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3><p>We couldn't find "${searchQuery}" here.</p></div>`;
                 return;
             }
 
@@ -840,12 +724,9 @@
         }
 
         function showAllRestaurants() {
-            categoryTitle.innerHTML = `<i class="fas fa-globe" style="color: var(--primary);"></i> All Restaurants in Kabankalan`;
+            categoryTitle.innerHTML = `<i class="fas fa-globe" style="color: var(--pink);"></i> All Restaurants in Kabankalan`;
             renderCategory('all', 'Restaurants');
-            window.scrollTo({
-                top: document.querySelector('.content-split').offsetTop - 20,
-                behavior: 'smooth'
-            });
+            window.scrollTo({ top: document.querySelector('.content-split').offsetTop - 20, behavior: 'smooth' });
         }
 
         function isSimilar(word1, word2) {
@@ -868,8 +749,8 @@
                 trendingSection.classList.add('hide-on-search');
                 document.querySelector('.content-split').style.gridTemplateColumns = '1fr';
                 
-                categoryTitle.innerHTML = `<i class="fas fa-search" style="color: var(--primary);"></i> Search Results for "${query}"`;
-                trendingTitle.innerHTML = `<i class="fas fa-search" style="color: var(--primary);"></i> Search Results for "${query}"`;
+                categoryTitle.innerHTML = `<i class="fas fa-search" style="color: var(--pink);"></i> Search Results for "${query}"`;
+                trendingTitle.innerHTML = `<i class="fas fa-search" style="color: var(--pink);"></i> Search Results for "${query}"`;
                 
                 const searchTerm = query.toLowerCase().trim();
                 let allResults = [];
@@ -891,7 +772,7 @@
                 
                 allRestaurantsGrid.innerHTML = '';
                 if (allResults.length === 0) {
-                    allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3></div>`;
+                    allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3><p>Wala kami makita nga "${query}".</p></div>`;
                 } else {
                     allResults.forEach(item => {
                         const card = document.createElement('div');
@@ -906,8 +787,7 @@
                 trendingSection.classList.remove('hide-on-search');
                 document.querySelector('.content-split').style.gridTemplateColumns = '1fr 1fr';
 
-                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: #e67e22;"></i> Trending`;
-                
+                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan`;
                 renderTrending(); 
                 
                 const activeBtn = document.querySelector('.cat-btn.active');
@@ -925,33 +805,23 @@
                 const categoryName = this.innerText.trim();
                 
                 searchInput.value = ""; 
-                
                 categoriesSection.classList.remove('hide-on-search');
                 trendingSection.classList.remove('hide-on-search');
                 document.querySelector('.content-split').style.gridTemplateColumns = '1fr 1fr';
 
-                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: #e67e22;"></i> Trending`;
+                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan`;
                 
                 renderTrending(); 
                 renderCategory(currentCategory, categoryName);
             });
         });
 
-        searchBtn.addEventListener('click', function() {
-            handleSearch(searchInput.value);
-        });
-
+        searchBtn.addEventListener('click', function() { handleSearch(searchInput.value); });
         searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSearch(this.value);
-            }
+            if (e.key === 'Enter') { e.preventDefault(); handleSearch(this.value); }
         });
-
         searchInput.addEventListener('input', function() {
-            if (this.value.trim() === "") {
-                handleSearch(""); 
-            }
+            if (this.value.trim() === "") { handleSearch(""); }
         });
 
         function openModal(restaurantName) {
@@ -992,11 +862,8 @@
                     openMapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${foundRestaurant.mapQuery}`;
                     mapBadgeLink.href = `https://www.google.com/maps/search/?api=1&query=${foundRestaurant.mapQuery}`;
                 } else {
-                    mapFrame.src = "";
-                    openMapsBtn.href = "#";
-                    mapBadgeLink.href = "#";
+                    mapFrame.src = ""; openMapsBtn.href = "#"; mapBadgeLink.href = "#";
                 }
-
                 infoModal.classList.add('active');
             } else {
                 alert("Wala sang detalye nga available.");
@@ -1007,10 +874,7 @@
             infoModal.classList.remove('active');
             mapFrame.src = ""; 
         }
-
-        infoModal.addEventListener('click', function(e) {
-            if (e.target === infoModal) closeModal();
-        });
+        infoModal.addEventListener('click', function(e) { if (e.target === infoModal) closeModal(); });
 
         const reviewForm = document.getElementById('reviewForm');
         const reviewList = document.getElementById('reviewList');
@@ -1039,10 +903,7 @@
         });
 
         reviewText.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); 
-                submitBtn.click();  
-            }
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitBtn.click(); }
         });
 
         // --- DEFAULT LOAD ---
