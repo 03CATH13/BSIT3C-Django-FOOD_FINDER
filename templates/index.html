@@ -24,11 +24,7 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Custom Text Selection Color */
-        ::selection {
-            background: var(--pink);
-            color: white;
-        }
+        ::selection { background: var(--pink); color: white; }
 
         body {
             font-family: 'Outfit', sans-serif;
@@ -40,7 +36,6 @@
             overflow-x: hidden;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; border: 2px solid var(--bg-dark); }
@@ -48,7 +43,6 @@
 
         a { text-decoration: none; color: inherit; }
 
-        /* Navbar with Glassmorphism effect */
         .navbar {
             background: rgba(5, 5, 5, 0.85);
             backdrop-filter: blur(12px);
@@ -66,29 +60,9 @@
 
         .navbar h2 { color: var(--pink); font-weight: 800; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; text-shadow: 0 0 10px var(--pink-glow); }
 
-        /* Navbar Links (Bagong dagdag) */
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-        .nav-links a {
-            color: var(--text-light);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: 0.3s;
-            position: relative;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: var(--pink);
-            transition: width 0.3s ease;
-        }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { color: var(--text-light); font-weight: 500; font-size: 0.95rem; transition: 0.3s; position: relative; }
+        .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background-color: var(--pink); transition: width 0.3s ease; }
         .nav-links a:hover { color: var(--pink); }
         .nav-links a:hover::after { width: 100%; }
         @media (max-width: 768px) { .nav-links { display: none; } }
@@ -98,24 +72,13 @@
         .nav-icon:hover { color: var(--pink); transform: translateY(-2px); }
         .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--pink); font-size: 0.65rem; padding: 2px 6px; border-radius: 50%; font-weight: bold; color: white; box-shadow: 0 0 10px var(--pink); transition: transform 0.3s; }
 
-        /* Profile Dropdown */
-        .profile-menu {
-            display: none; position: absolute; top: 40px; right: 0;
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px;
-            width: 200px; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
+        .profile-menu { display: none; position: absolute; top: 40px; right: 0; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; width: 200px; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .profile-menu.active { display: flex; animation: slideDown 0.3s ease; }
         .profile-menu a { padding: 12px 20px; color: var(--text-light); font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
         .profile-menu a:hover { background: rgba(255, 20, 147, 0.1); color: var(--pink); padding-left: 25px; }
         .profile-menu .divider { height: 1px; background: var(--border-color); }
 
-        /* Cart Side Panel */
-        .cart-panel {
-            position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
-            background: var(--card-bg); border-left: 1px solid var(--pink);
-            z-index: 1001; transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); display: flex; flex-direction: column;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-        }
+        .cart-panel { position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background: var(--card-bg); border-left: 1px solid var(--pink); z-index: 1001; transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
         .cart-panel.active { right: 0; }
         .cart-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .cart-header h3 { color: var(--pink); }
@@ -125,15 +88,7 @@
 
         .container { padding: 40px; max-width: 1400px; margin: 0 auto; }
 
-        /* --- BAGONG DESIGN: SPOTLIGHT BANNER --- */
-        .spotlight-banner {
-            position: relative; border-radius: 25px; overflow: hidden; margin-bottom: 30px;
-            height: 280px; display: flex; align-items: center; padding: 40px;
-            background: linear-gradient(to right, rgba(0,0,0,0.95) 40%, rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop') center/cover;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            transition: transform 0.3s;
-        }
+        .spotlight-banner { position: relative; border-radius: 25px; overflow: hidden; margin-bottom: 30px; height: 280px; display: flex; align-items: center; padding: 40px; background: linear-gradient(to right, rgba(0,0,0,0.95) 40%, rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop') center/cover; border: 1px solid var(--border-color); box-shadow: 0 15px 40px rgba(0,0,0,0.6); transition: transform 0.3s; }
         .spotlight-banner:hover { transform: scale(1.01); }
         .spotlight-content { max-width: 500px; z-index: 2; animation: slideRight 0.8s ease-out; }
         .spotlight-badge { background: var(--pink); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; display: inline-block; margin-bottom: 15px; letter-spacing: 1px; box-shadow: 0 0 15px var(--pink); }
@@ -142,145 +97,62 @@
         .btn-spotlight { background: var(--pink); color: white; padding: 12px 30px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-block; transition: 0.3s; border: none; cursor: pointer; box-shadow: 0 5px 15px var(--pink-glow); }
         .btn-spotlight:hover { background: var(--pink-hover); transform: translateY(-3px); box-shadow: 0 8px 25px var(--pink-glow); }
 
-        /* PROMO BANNER */
-        .promo-banner {
-            background: linear-gradient(45deg, var(--pink), #ff7f50);
-            border-radius: 20px; padding: 25px 30px; display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px; box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3);
-            position: relative; overflow: hidden;
-        }
-        .promo-banner::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
-            transform: skewX(-25deg); animation: shine 4s infinite;
-        }
+        .promo-banner { background: linear-gradient(45deg, var(--pink), #ff7f50); border-radius: 20px; padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3); position: relative; overflow: hidden; }
+        .promo-banner::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-25deg); animation: shine 4s infinite; }
         .promo-text h3 { font-size: 1.5rem; font-weight: 800; color: #ffffff !important; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
         .promo-text p { font-size: 0.95rem; color: #ffffff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .promo-btn { background: white; color: var(--pink); padding: 12px 25px; border-radius: 10px; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; z-index: 2; }
         .promo-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-        /* Hero Section */
-        .hero {
-            text-align: center; padding: 50px 20px;
-            background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%);
-            border-radius: 25px; margin-bottom: 40px;
-            border: 1px solid var(--border-color);
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        /* Bagong design: subtle glow sa likod ng hero */
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: 50%; transform: translateX(-50%);
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(255,20,147,0.15) 0%, transparent 60%);
-            z-index: 0;
-            pointer-events: none;
-        }
-
+        .hero { text-align: center; padding: 50px 20px; background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%); border-radius: 25px; margin-bottom: 40px; border: 1px solid var(--border-color); box-shadow: inset 0 0 50px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,20,147,0.15) 0%, transparent 60%); z-index: 0; pointer-events: none; }
         .hero h1 { font-size: 3rem; margin-bottom: 10px; font-weight: 800; color: var(--text-light); position: relative; z-index: 1; }
-        
-        /* Animated Gradient Text */
-        .hero h1 span {
-            background: linear-gradient(90deg, var(--pink), #ff7f50, var(--pink));
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: gradientText 3s linear infinite;
-            text-shadow: none;
-        }
+        .hero h1 span { background: linear-gradient(90deg, var(--pink), #ff7f50, var(--pink)); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradientText 3s linear infinite; text-shadow: none; }
         @keyframes gradientText { to { background-position: 200% center; } }
-
         .hero p { color: var(--text-muted); font-size: 1.1rem; position: relative; z-index: 1; }
-
         .search-box { position: relative; max-width: 600px; margin: 30px auto 0; z-index: 1; }
-        .search-box input {
-            width: 100%; padding: 18px 25px; padding-right: 120px;
-            border-radius: 50px; border: 1px solid var(--border-color);
-            background: #000; color: white; font-size: 1rem; outline: none; transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
+        .search-box input { width: 100%; padding: 18px 25px; padding-right: 120px; border-radius: 50px; border: 1px solid var(--border-color); background: #000; color: white; font-size: 1rem; outline: none; transition: all 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .search-box input:focus { border-color: var(--pink); box-shadow: 0 0 20px var(--pink-glow); }
-        .search-box button {
-            position: absolute; right: 5px; top: 5px; bottom: 5px;
-            background: var(--pink); color: white; border: none;
-            padding: 0 35px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 1rem;
-        }
+        .search-box button { position: absolute; right: 5px; top: 5px; bottom: 5px; background: var(--pink); color: white; border: none; padding: 0 35px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 1rem; }
         .search-box button:hover { background: var(--pink-hover); }
 
-        /* Sections & Categories */
         .section-title { font-size: 1.6rem; margin: 40px 0 20px; display: flex; align-items: center; gap: 10px; justify-content: center; font-weight: 700; }
         .categories { display: flex; gap: 15px; padding-bottom: 10px; justify-content: center; flex-wrap: wrap; }
-        .cat-btn {
-            padding: 12px 25px; border-radius: 30px; border: 1px solid var(--border-color);
-            background: var(--card-bg); color: var(--text-light); font-weight: 600; cursor: pointer; transition: all 0.3s;
-            display: flex; align-items: center; gap: 8px; white-space: nowrap;
-        }
-        .cat-btn:hover, .cat-btn.active {
-            border-color: var(--pink) !important; background: var(--pink) !important;
-            color: white !important; box-shadow: 0 0 20px var(--pink-glow) !important; transform: translateY(-2px);
-        }
+        .cat-btn { padding: 12px 25px; border-radius: 30px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light); font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .cat-btn:hover, .cat-btn.active { border-color: var(--pink) !important; background: var(--pink) !important; color: white !important; box-shadow: 0 0 20px var(--pink-glow) !important; transform: translateY(-2px); }
 
-        /* QUICK FILTERS */
         .filters-container { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; flex-wrap: wrap; gap: 10px; background: var(--card-bg); padding: 15px; border-radius: 15px; border: 1px solid var(--border-color); }
         .filter-group { display: flex; gap: 10px; }
         .filter-btn { padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border-color); background: #000; color: var(--text-light); font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
         .filter-btn:hover, .filter-btn.active { border-color: var(--pink); color: var(--pink); background: rgba(255, 20, 147, 0.1); }
         .sort-select { background: #000; color: white; padding: 8px 15px; border: 1px solid var(--border-color); border-radius: 20px; outline: none; font-family: inherit; font-size: 0.85rem; cursor: pointer; }
 
-        /* DUAL COLUMN LAYOUT */
         .content-split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
         @media (max-width: 1024px) { .content-split { grid-template-columns: 1fr; gap: 20px; } }
         .hide-on-search { display: none !important; }
 
-        /* TRENDING CARDS */
         .trending-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
-        .trending-card {
-            background: var(--card-bg); border-radius: 12px; overflow: hidden;
-            border: 1px solid var(--border-color); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer;
-            display: flex; flex-direction: column; text-align: center;
-            position: relative;
-        }
+        .trending-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; display: flex; flex-direction: column; text-align: center; position: relative; }
         .trending-card:hover { transform: translateY(-5px) scale(1.02); border-color: var(--pink); box-shadow: 0 10px 20px var(--pink-glow); }
         .trending-card .card-img { height: 90px; background-size: cover; background-position: center; transition: transform 0.3s; position: relative; }
-        /* Bagong overlay para mas readable ang text */
-        .trending-card .card-img::after {
-            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
-            background: linear-gradient(to top, var(--card-bg), transparent);
-        }
+        .trending-card .card-img::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, var(--card-bg), transparent); }
         .trending-card:hover .card-img { transform: scale(1.1); }
         .trending-card .card-content { padding: 10px; background: var(--card-bg); z-index: 2; }
         .trending-card h3 { font-size: 0.75rem; margin: 0; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .trending-card .rating { color: #f1c40f; font-size: 0.65rem; margin-top: 4px; }
 
-        /* ALL CARDS */
         .all-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-        .all-card {
-            background: var(--card-bg); border-radius: 15px; overflow: hidden;
-            border: 1px solid var(--border-color); transition: all 0.3s; cursor: pointer;
-            display: flex; flex-direction: column; position: relative;
-        }
+        .all-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; position: relative; }
         .all-card:hover { transform: translateY(-8px); border-color: var(--pink); box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 15px var(--pink-glow); }
         .all-card .card-img { height: 160px; background-size: cover; background-position: center; position: relative; }
-        .all-card .card-img::after {
-            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
-            background: linear-gradient(to top, var(--card-bg) 0%, transparent 60%);
-        }
+        .all-card .card-img::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, var(--card-bg) 0%, transparent 60%); }
         .all-card .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; background: var(--card-bg); z-index: 2; margin-top: -20px; }
         .all-card h3 { font-size: 1.2rem; margin: 0 0 5px 0; font-weight: 700; }
         .all-card .rating { color: #f1c40f; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 5px; margin-bottom: 5px;}
         .all-card .price { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; }
 
-        /* ALL GRID SMALL */
         .all-grid-small { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-        .all-card-small {
-            background: var(--card-bg); border-radius: 10px; overflow: hidden;
-            border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer;
-            display: flex; flex-direction: column;
-        }
+        .all-card-small { background: var(--card-bg); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; }
         .all-card-small:hover { transform: translateY(-4px); border-color: var(--pink); box-shadow: 0 8px 15px rgba(255,20,147,0.2); }
         .all-card-small .card-img { height: 90px; background-size: cover; background-position: center; }
         .all-card-small .card-content { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; }
@@ -288,44 +160,19 @@
         .all-card-small .rating { color: #f1c40f; font-size: 0.7rem; margin-bottom: 3px; }
         .all-card-small .price { color: var(--text-muted); font-size: 0.7rem; margin-bottom: 10px; }
 
-        .btn-primary {
-            text-align: center; background: var(--pink); color: white;
-            border: none; cursor: pointer; font-family: inherit;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 12px; border-radius: 8px; font-weight: 700; transition: 0.3s;
-            margin-top: auto; width: 100%; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px;
-            position: relative;
-            overflow: hidden;
-        }
-        /* Bagong effect: parang may ripple/glow pag click */
+        .btn-primary { text-align: center; background: var(--pink); color: white; border: none; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 8px; font-weight: 700; transition: 0.3s; margin-top: auto; width: 100%; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; position: relative; overflow: hidden; }
         .btn-primary:active { transform: scale(0.98); }
-        .btn-primary::after {
-            content: ''; position: absolute; top: 50%; left: 50%; width: 300px; height: 300px;
-            background: rgba(255,255,255,0.2); border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0); opacity: 0; transition: transform 0.5s, opacity 1s;
-        }
+        .btn-primary::after { content: ''; position: absolute; top: 50%; left: 50%; width: 300px; height: 300px; background: rgba(255,255,255,0.2); border-radius: 50%; transform: translate(-50%, -50%) scale(0); opacity: 0; transition: transform 0.5s, opacity 1s; }
         .btn-primary:active::after { transform: translate(-50%, -50%) scale(1); opacity: 1; transition: 0s; }
         .btn-primary:hover { background: var(--pink-hover); box-shadow: 0 0 15px var(--pink-glow); }
 
-        .all-trending-btn {
-            width: 100%; margin-top: 25px; padding: 15px; border-radius: 12px;
-            background: transparent; color: var(--pink); border: 2px dashed var(--pink);
-            font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-size: 1rem;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
+        .all-trending-btn { width: 100%; margin-top: 25px; padding: 15px; border-radius: 12px; background: transparent; color: var(--pink); border: 2px dashed var(--pink); font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .all-trending-btn:hover { background: rgba(255, 20, 147, 0.1); border-style: solid; box-shadow: 0 0 15px var(--pink-glow); transform: translateY(-2px); }
 
-        /* REVIEWS */
-        .reviews-container {
-            max-width: 700px; margin: 80px auto; background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%);
-            padding: 35px; border-radius: 25px; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-        }
+        .reviews-container { max-width: 700px; margin: 80px auto; background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%); padding: 35px; border-radius: 25px; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); }
         .review-form { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; background: rgba(255, 255, 255, 0.02); padding: 20px; border-radius: 15px; border: 1px solid var(--border-color); }
         .form-row { display: flex; gap: 15px; flex-wrap: wrap; }
-        .review-form input, .review-form select, .review-form textarea {
-            width: 100%; padding: 14px 18px; background: #000; border: 1px solid var(--border-color);
-            border-radius: 10px; color: white; font-family: inherit; font-size: 0.95rem; transition: 0.3s;
-        }
+        .review-form input, .review-form select, .review-form textarea { width: 100%; padding: 14px 18px; background: #000; border: 1px solid var(--border-color); border-radius: 10px; color: white; font-family: inherit; font-size: 0.95rem; transition: 0.3s; }
         .review-form input:focus, .review-form select:focus, .review-form textarea:focus { border-color: var(--pink); outline: none; box-shadow: 0 0 10px var(--pink-glow); }
         .review-form textarea { resize: vertical; min-height: 100px; }
         #submitBtn { padding: 15px; font-size: 1rem; margin-top: 5px; letter-spacing: 1px; }
@@ -341,14 +188,12 @@
 
         .empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); grid-column: 1 / -1; background: var(--card-bg); border-radius: 15px; border: 1px dashed var(--border-color); }
 
-        /* Footer */
         footer { background: #000; padding: 50px 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 80px; }
         .footer-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 25px; flex-wrap: wrap; }
         .footer-links a { color: var(--text-muted); transition: color 0.3s; font-size: 1rem; font-weight: 500; }
         .footer-links a:hover { color: var(--pink); text-shadow: 0 0 10px var(--pink-glow); }
         .copyright { color: #555; font-size: 0.9rem; }
 
-        /* MODAL */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; overflow: hidden; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--modal-bg); border: 1px solid var(--border-color); border-radius: 25px; width: 95vw; height: 95vh; overflow-y: auto; position: relative; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(255, 20, 147, 0.1); }
@@ -382,97 +227,49 @@
         .btn-exact-location { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; background: #000; color: var(--text-light); border-radius: 12px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: 0.3s; border: 1px solid var(--pink); cursor: pointer; }
         .btn-exact-location:hover { background: rgba(255, 20, 147, 0.1); color: var(--pink); box-shadow: 0 0 15px var(--pink-glow); }
 
-        /* --- MGA BAGONG DAGDAG NA ANIMATIONS & UI --- */
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideRight { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes shine { 100% { left: 125%; } }
 
-        /* Scroll Reveal Class */
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* Back to Top Button */
-        #backToTopBtn {
-            display: none; position: fixed; bottom: 30px; right: 30px;
-            z-index: 99; border: none; outline: none;
-            background-color: var(--pink); color: white; cursor: pointer;
-            padding: 15px 18px; border-radius: 50%; font-size: 1.2rem;
-            box-shadow: 0 5px 15px var(--pink-glow); transition: all 0.3s;
-        }
+        #backToTopBtn { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 99; border: none; outline: none; background-color: var(--pink); color: white; cursor: pointer; padding: 15px 18px; border-radius: 50%; font-size: 1.2rem; box-shadow: 0 5px 15px var(--pink-glow); transition: all 0.3s; }
         #backToTopBtn:hover { background-color: var(--pink-hover); transform: translateY(-5px) scale(1.1); }
 
-        /* --- PRELOADER & TOAST --- */
-        #preloader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-dark); z-index: 10000;
-            display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 10000; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s ease; }
         #preloader.hidden { opacity: 0; visibility: hidden; }
-        .loader {
-            width: 50px; height: 50px; border: 5px solid var(--border-color);
-            border-top: 5px solid var(--pink); border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+        .loader { width: 50px; height: 50px; border: 5px solid var(--border-color); border-top: 5px solid var(--pink); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        #toast-container {
-            position: fixed; top: 80px; right: 20px; z-index: 9999;
-            display: flex; flex-direction: column; gap: 10px;
-        }
-        .toast {
-            background: var(--card-bg); color: white; padding: 15px 25px;
-            border-radius: 10px; border-left: 4px solid var(--pink);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 15px;
-            animation: slideInRight 0.3s ease forwards; font-weight: 500;
-        }
+        #toast-container { position: fixed; top: 80px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: var(--card-bg); color: white; padding: 15px 25px; border-radius: 10px; border-left: 4px solid var(--pink); box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 15px; animation: slideInRight 0.3s ease forwards; font-weight: 500; }
         .toast i { color: var(--pink); font-size: 1.2rem; }
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .toast.hiding {
-            animation: slideOutRight 0.3s ease forwards;
-        }
-        @keyframes slideOutRight {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
+        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast.hiding { animation: slideOutRight 0.3s ease forwards; }
+        @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <!-- Preloader -->
     <div id="preloader">
         <div class="loader"></div>
     </div>
 
-    <!-- Toast Notification Container -->
     <div id="toast-container"></div>
 
     <nav class="navbar">
         <h2><i class="fas fa-bolt"></i> Kabankalan Eats</h2>
         
-        <!-- Nav Links (Bagong dagdag) -->
         <div class="nav-links">
             <a href="#">Home</a>
             <a href="#">Restaurants</a>
-            <a href="#">Deals</a>
             <a href="#">About</a>
         </div>
 
-        <div class="nav-actions">
-            <a href="#" class="nav-icon"><i class="fas fa-search"></i></a>
-            <div class="nav-icon" onclick="toggleCart()">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-badge" id="cartBadge">2</span>
-            </div>
-            <div class="nav-icon" onclick="toggleProfile()">
-                <i class="fas fa-user-circle"></i>
-            </div>
+        
             
-            <!-- Profile Dropdown -->
             <div class="profile-menu" id="profileMenu">
                 <a href="#"><i class="fas fa-box"></i> My Orders</a>
                 <a href="#"><i class="fas fa-heart"></i> Favorites</a>
@@ -483,7 +280,6 @@
         </div>
     </nav>
 
-    <!-- Cart Side Panel -->
     <div class="cart-panel" id="cartPanel">
         <div class="cart-header">
             <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
@@ -522,7 +318,6 @@
 
     <main class="container">
         
-        <!-- HERO SECTION -->
         <div class="hero reveal" id="heroSection">
             <h1>Discover the Best <span>Food</span></h1>
             <p>Search for local restaurants, dishes, and cuisines within <strong>Kabankalan City Proper</strong> only.</p>
@@ -532,14 +327,7 @@
             </div>
         </div>
 
-        <!-- PROMO BANNER -->
-        <div class="promo-banner reveal">
-            <div class="promo-text">
-                <h3><i class="fas fa-tags"></i> Hot Deals Today!</h3>
-                <p>Get 20% off on your first order. Use code: <b style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 5px;">KABANKALAN20</b></p>
-            </div>
-            <button class="promo-btn">Claim Now</button>
-        </div>
+    
 
         <div id="categoriesSection" class="reveal">
             <h2 class="section-title"><i class="fas fa-utensils" style="color: var(--pink);"></i> Explore Categories</h2>
@@ -552,17 +340,13 @@
             </div>
         </div>
 
-        <!-- DUAL COLUMN -->
         <div class="content-split">
             
-            <!-- KALIWA: TRENDING + ALL SMALL -->
             <div id="trendingSection" class="reveal">
                 <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan</h2>
                 <div class="trending-grid" id="trending-grid"></div>
                 
-                <button class="all-trending-btn" id="showAllBtn" onclick="showAllRestaurants()">
-                    <i class="fas fa-globe"></i> View All Restaurants
-                </button>
+                
 
                 <div id="left-all-restaurants-section" style="margin-top: 40px;">
                     <h2 class="section-title" style="font-size: 1.3rem; margin-bottom: 15px; justify-content: flex-start;"><i class="fas fa-globe" style="color: var(--pink);"></i> All Restaurants</h2>
@@ -570,38 +354,18 @@
                 </div>
             </div>
 
-            <!-- KANAN: LISTAHAN + FILTERS -->
             <div id="right-section" class="reveal">
                 <h2 class="section-title" id="category-title"><i class="fas fa-list" style="color: var(--pink);"></i> All Local & Cansi</h2>
                 
-                <!-- FILTERS -->
-                <div class="filters-container">
-                    <div class="filter-group">
-                        <button class="filter-btn active">All</button>
-                        <button class="filter-btn">Top Rated</button>
-                    </div>
-                    <select class="sort-select">
-                        <option>Sort by: Rating</option>
-                        <option>Sort by: Price</option>
-                    </select>
-                </div>
+                
 
                 <div class="all-grid" id="all-restaurants-grid"></div>
             </div>
 
         </div>
 
-        <!-- DITO KO INILAGAY ANG DESIGN NG DATING FEATURED (Ginawang Spotlight/Partner Section) -->
-        <div class="spotlight-banner reveal">
-            <div class="spotlight-content">
-                <span class="spotlight-badge">Partner Spotlight</span>
-                <h2>Gorio's Cafe & Restaurant</h2>
-                <p>Experience the best local dishes and premium coffee in the heart of Kabankalan City.</p>
-                <button class="btn-spotlight" onclick="openModal('Gorio\'s Cafe')"><i class="fas fa-utensils"></i> View Menu</button>
-            </div>
-        </div>
+        
 
-        <!-- SYSTEM FEEDBACK -->
         <div class="reviews-container reveal">
             <h2 class="section-title" style="margin-top: 0; margin-bottom: 5px; font-size: 1.5rem; justify-content: center;"><i class="fas fa-star" style="color: #f1c40f;"></i> System Feedback</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">
@@ -655,10 +419,8 @@
         <p class="copyright">&copy; 2026 Kabankalan Eats. All rights reserved.</p>
     </footer>
 
-    <!-- Back to Top Button -->
     <button onclick="scrollToTop()" id="backToTopBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
-    <!-- MODAL -->
     <div class="modal-overlay" id="infoModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -695,7 +457,6 @@
     </div>
 
     <script>
-        // --- DATA ---
         const foodData = {
             fastfood: [
                 { name: "Jollibee (Guanzon)", mapQuery: "Jollibee+Guanzon+St+Kabankalan", rating: "4.5", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", menu: [{ name: "Chickenjoy", price: "₱99", desc: "Crispy fried chicken", img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=200&auto=format&fit=crop" }] },
@@ -776,14 +537,9 @@
 
         let currentCategory = 'carinderia';
 
-        // --- NAVBAR INTERACTIONS ---
-        function toggleProfile() {
-            document.getElementById('profileMenu').classList.toggle('active');
-        }
-        function toggleCart() {
-            document.getElementById('cartPanel').classList.toggle('active');
-        }
-        // Close dropdown if clicked outside
+        function toggleProfile() { document.getElementById('profileMenu').classList.toggle('active'); }
+        function toggleCart() { document.getElementById('cartPanel').classList.toggle('active'); }
+        
         window.onclick = function(event) {
             if (!event.target.matches('.fa-user-circle') && !event.target.matches('.nav-icon')) {
                 var dropdowns = document.getElementsByClassName("profile-menu");
@@ -796,7 +552,6 @@
             }
         }
 
-        // --- RESTAURANT LOGIC ---
         function getAllRestaurants() {
             let all = [];
             for (let key in foodData) { all = all.concat(foodData[key]); }
@@ -898,12 +653,7 @@
             });
         }
 
-        function showAllRestaurants() {
-            categoryTitle.innerHTML = `<i class="fas fa-globe" style="color: var(--pink);"></i> All Restaurants in Kabankalan`;
-            renderCategory('all', 'Restaurants');
-            window.scrollTo({ top: document.querySelector('.content-split').offsetTop - 20, behavior: 'smooth' });
-        }
-
+        
         function isSimilar(word1, word2) {
             if (word2.includes(word1) || word1.includes(word2)) return true;
             const track = Array(word2.length + 1).fill(null).map(() => Array(word1.length + 1).fill(null));
@@ -1064,7 +814,6 @@
         reviewForm.addEventListener('submit', async function(e) {
             e.preventDefault(); 
             
-            // Ito yung tamang code para sa Django backend
             const formData = new FormData();
             formData.append('name', document.getElementById('reviewName').value);
             formData.append('rating', document.getElementById('reviewRating').value);
@@ -1088,7 +837,7 @@
                     `;
                     reviewList.prepend(newReview);
                     reviewForm.reset();
-                    showToast("Salamat sa feedback mo!", 'fa-star'); // Added toast notification
+                    showToast("Salamat sa feedback mo!", 'fa-star');
                 } else {
                     showToast("May error sa pag-submit. Subukan muli.", 'fa-exclamation-circle');
                 }
@@ -1102,12 +851,10 @@
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitBtn.click(); }
         });
 
-        // --- DEFAULT LOAD ---
         renderTrending();
         renderCategory('carinderia', 'Local & Cansi');
         renderLeftAllRestaurants(); 
 
-        // --- SCROLL REVEAL ANIMATION LOGIC ---
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
             for (var i = 0; i < reveals.length; i++) {
@@ -1120,9 +867,8 @@
             }
         }
         window.addEventListener("scroll", reveal);
-        reveal(); // Trigger on initial load
+        reveal(); 
 
-        // --- BACK TO TOP BUTTON LOGIC ---
         window.onscroll = function() {
             var btn = document.getElementById("backToTopBtn");
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -1136,16 +882,12 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // --- MGA BAGONG FUNCTIONALITY ---
-
-        // Preloader Logic
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('preloader').classList.add('hidden');
-            }, 500); // Mag-hide pagkatapos ng 0.5 seconds
+            }, 500);
         });
 
-        // Toast Notification System
         function showToast(message, icon = 'fa-check-circle') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -1159,21 +901,18 @@
             }, 3000);
         }
 
-        // Cart Logic
         let cartCount = 2;
         function addToCart(event, itemName, itemPrice) {
-            event.stopPropagation(); // Para hindi mag-close ang modal
+            event.stopPropagation(); 
             cartCount++;
             const badge = document.getElementById('cartBadge');
             badge.innerText = cartCount;
             
-            // Animation effect sa cart icon
             badge.style.transform = 'scale(1.5)';
             setTimeout(() => badge.style.transform = 'scale(1)', 300);
             
             showToast(`${itemName} added to cart!`, 'fa-shopping-bag');
             
-            // I-update ang total (Simulation lang)
             let currentTotal = parseInt(document.getElementById('cartTotal').innerText.replace('₱', ''));
             let priceNum = parseInt(itemPrice.replace('₱', ''));
             document.getElementById('cartTotal').innerText = `₱${currentTotal + priceNum}`;
