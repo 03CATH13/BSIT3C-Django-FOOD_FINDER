@@ -6,7 +6,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-zsnno#^l!whuzs%55j6*366px#r09+borh$1^2mj*_ovz47!o_'
 DEBUG = True
 
-# GIPALITAN NAKO ITO PARA MAKA-ACCESS ANG CELLPHONE MO
 ALLOWED_HOSTS = ['*'] 
 
 INSTALLED_APPS = [
@@ -19,10 +18,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'apps.core',
-    'apps.users',
-    'apps.info',
-    'apps.food_finder',
+    # GIN-KOMMENT OUT ANG IBAN NGA APPS PARA WALA SANG ERROR
+    # 'apps.core',
+    # 'apps.users',
+    # 'apps.info',
+    'apps.food_finder',  # Ini lang ang naka-active
 ]
 
 MIDDLEWARE = [
@@ -95,19 +95,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # ==========================================
-# LOGIN SETTINGS (INI ANG FIX)
-# ==========================================
-LOGIN_URL = '/login/'  # <--- IDINAGDAG ITO PARA HINDI MAG-REDIRECT SA /accounts/login/
-LOGIN_REDIRECT_URL = '/home/'
-LOGOUT_REDIRECT_URL = '/'
-
-# ==========================================
 # SECURITY FIX PARA GUMANA ANG MAPA
 # ==========================================
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 # ==========================================
-# JAZZMIN CUSTOMIZATION
+# JAZZMIN CUSTOMIZATION (CLEANED UP)
 # ==========================================
 JAZZMIN_SETTINGS = {
     "site_title": "Food Finder Admin",
@@ -118,7 +111,7 @@ JAZZMIN_SETTINGS = {
     "search_model": ["food_finder.Restaurant", "auth.User"],
     "topmenu_links": [
         {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
-        {"name": "View Site", "url": "/finder/", "new_window": True},
+        {"name": "View Site", "url": "/", "new_window": True}, # Gin-ilisan ang /finder/ sa /
     ],
     "icons": {
         "auth": "fas fa-users-cog",
@@ -128,13 +121,10 @@ JAZZMIN_SETTINGS = {
         "food_finder.Restaurant": "fas fa-store",
         "food_finder.MenuItem": "fas fa-book-open",
         "food_finder.Review": "fas fa-star",
-        "food_finder.Favorite": "fas fa-heart",
-        "info": "fas fa-info-circle",
-        "info.Info": "fas fa-address-book",
     },
     "show_sidebar": True,
     "navigation_expanded": True,
-    "order_with_respect_to": ["auth", "food_finder", "info"],
+    "order_with_respect_to": ["auth", "food_finder"],
     "custom_css": "css/custom_admin.css",
 }
 

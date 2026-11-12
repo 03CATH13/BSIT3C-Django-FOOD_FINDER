@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -436,6 +437,7 @@
             </p>
 
             <form class="review-form" id="reviewForm">
+                {% csrf_token %}
                 <div class="form-row">
                     <input type="text" id="reviewName" placeholder="Iyong Pangalan" required style="flex: 1; min-width: 150px;">
                     <select id="reviewRating" required style="flex: 1; min-width: 150px;">
@@ -453,22 +455,20 @@
             </form>
 
             <div class="review-list" id="reviewList">
+                {% for review in reviews %}
                 <div class="review-item">
                     <div class="review-header">
-                        <span class="review-name">sayoi</span>
-                        <span class="review-stars">⭐⭐⭐⭐⭐</span>
+                        <span class="review-name">{{ review.name }}</span>
+                        <span class="review-stars">{{ review.stars_display }}</span>
                     </div>
-                    <p class="review-text">Naminami!</p>
-                    <span class="review-date">November 12, 2026</span>
+                    <p class="review-text">{{ review.text }}</p>
+                    <span class="review-date">{{ review.created_at|date:"F d, Y" }}</span>
                 </div>
-                <div class="review-item">
-                    <div class="review-header">
-                        <span class="review-name">Argie Salgado</span>
-                        <span class="review-stars">⭐⭐⭐⭐⭐</span>
-                    </div>
-                    <p class="review-text">Napaka-user-friendly ng system! Makikita mo agad kung saan ang mga sikat na kainan sa Kabankalan.</p>
-                    <span class="review-date">November 10, 2026</span>
+                {% empty %}
+                <div class="review-item" style="border-left-color: #718093; text-align: center;">
+                    <p class="review-text" style="margin: 0;">Wala pa sang reviews. Ikaw ang una!</p>
                 </div>
+                {% endfor %}
             </div>
         </div>
 
@@ -881,25 +881,31 @@
         const reviewText = document.getElementById('reviewText');
         const submitBtn = document.getElementById('submitBtn');
 
-        reviewForm.addEventListener('submit', function(e) {
+        reviewForm.addEventListener('submit', async function(e) {
             e.preventDefault(); 
-            const name = document.getElementById('reviewName').value;
-            const rating = document.getElementById('reviewRating').value;
-            const text = reviewText.value;
-            let stars = ''; for (let i = 0; i < rating; i++) stars += '⭐';
-            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            const newReview = document.createElement('div');
-            newReview.className = 'review-item';
-            newReview.innerHTML = `
-                <div class="review-header">
-                    <span class="review-name">${name}</span>
-                    <span class="review-stars">${stars}</span>
-                </div>
-                <p class="review-text">${text}</p>
-                <span class="review-date">${date}</span>
-            `;
-            reviewList.prepend(newReview);
-            reviewForm.reset();
+            const formData = new FormData();
+            formData.append('name', document.getElementById('reviewName').value);
+            formData.append('rating', document.getElementById('reviewRating').value);
+            formData.append('text', reviewText.value);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+
+            const res = await fetch('/api/review/', { method: 'POST', body: formData });
+            const data = await res.json();
+
+            if (data.ok) {
+                const newReview = document.createElement('div');
+                newReview.className = 'review-item';
+                newReview.innerHTML = `
+                    <div class="review-header">
+                        <span class="review-name">${data.name}</span>
+                        <span class="review-stars">${data.stars}</span>
+                    </div>
+                    <p class="review-text">${data.text}</p>
+                    <span class="review-date">${data.date}</span>
+                `;
+                reviewList.prepend(newReview);
+                reviewForm.reset();
+            }
         });
 
         reviewText.addEventListener('keydown', function(e) {
