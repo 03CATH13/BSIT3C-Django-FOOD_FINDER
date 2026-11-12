@@ -1063,50 +1063,39 @@
 
         reviewForm.addEventListener('submit', async function(e) {
             e.preventDefault(); 
-<<<<<<< HEAD
+            
+            // Ito yung tamang code para sa Django backend
             const formData = new FormData();
             formData.append('name', document.getElementById('reviewName').value);
             formData.append('rating', document.getElementById('reviewRating').value);
             formData.append('text', reviewText.value);
             formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
 
-            const res = await fetch('/api/review/', { method: 'POST', body: formData });
-            const data = await res.json();
+            try {
+                const res = await fetch('/api/review/', { method: 'POST', body: formData });
+                const data = await res.json();
 
-            if (data.ok) {
-                const newReview = document.createElement('div');
-                newReview.className = 'review-item';
-                newReview.innerHTML = `
-                    <div class="review-header">
-                        <span class="review-name">${data.name}</span>
-                        <span class="review-stars">${data.stars}</span>
-                    </div>
-                    <p class="review-text">${data.text}</p>
-                    <span class="review-date">${data.date}</span>
-                `;
-                reviewList.prepend(newReview);
-                reviewForm.reset();
+                if (data.ok) {
+                    const newReview = document.createElement('div');
+                    newReview.className = 'review-item';
+                    newReview.innerHTML = `
+                        <div class="review-header">
+                            <span class="review-name">${data.name}</span>
+                            <span class="review-stars">${data.stars}</span>
+                        </div>
+                        <p class="review-text">${data.text}</p>
+                        <span class="review-date">${data.date}</span>
+                    `;
+                    reviewList.prepend(newReview);
+                    reviewForm.reset();
+                    showToast("Salamat sa feedback mo!", 'fa-star'); // Added toast notification
+                } else {
+                    showToast("May error sa pag-submit. Subukan muli.", 'fa-exclamation-circle');
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                showToast("Hindi maka-konekta sa server.", 'fa-exclamation-circle');
             }
-=======
-            const name = document.getElementById('reviewName').value;
-            const rating = document.getElementById('reviewRating').value;
-            const text = reviewText.value;
-            let stars = ''; for (let i = 0; i < rating; i++) stars += '⭐';
-            const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            const newReview = document.createElement('div');
-            newReview.className = 'review-item';
-            newReview.innerHTML = `
-                <div class="review-header">
-                    <span class="review-name">${name}</span>
-                    <span class="review-stars">${stars}</span>
-                </div>
-                <p class="review-text">${text}</p>
-                <span class="review-date">${date}</span>
-            `;
-            reviewList.prepend(newReview);
-            reviewForm.reset();
-            showToast("Salamat sa feedback mo!", 'fa-star');
->>>>>>> 05205ca5a7ee6b2c470b9798919737faa3a7df49
         });
 
         reviewText.addEventListener('keydown', function(e) {
