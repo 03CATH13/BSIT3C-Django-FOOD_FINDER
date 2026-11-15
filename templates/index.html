@@ -23,7 +23,6 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         ::selection { background: var(--pink); color: white; }
 
         body {
@@ -67,47 +66,18 @@
         .nav-links a:hover::after, .nav-links button:hover::after { width: 100%; }
         @media (max-width: 768px) { .nav-links { display: none; } }
 
-        .nav-actions { display: flex; align-items: center; gap: 20px; position: relative; }
-        .nav-icon { color: var(--text-light); font-size: 1.3rem; transition: all 0.3s; cursor: pointer; position: relative; }
-        .nav-icon:hover { color: var(--pink); transform: translateY(-2px); }
-        .cart-badge { position: absolute; top: -8px; right: -10px; background: var(--pink); font-size: 0.65rem; padding: 2px 6px; border-radius: 50%; font-weight: bold; color: white; box-shadow: 0 0 10px var(--pink); transition: transform 0.3s; }
-
         .profile-menu { display: none; position: absolute; top: 40px; right: 0; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; width: 200px; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .profile-menu.active { display: flex; animation: slideDown 0.3s ease; }
         .profile-menu a { padding: 12px 20px; color: var(--text-light); font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
         .profile-menu a:hover { background: rgba(255, 20, 147, 0.1); color: var(--pink); padding-left: 25px; }
         .profile-menu .divider { height: 1px; background: var(--border-color); }
 
-        .cart-panel { position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background: var(--card-bg); border-left: 1px solid var(--pink); z-index: 1001; transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.5); }
-        .cart-panel.active { right: 0; }
-        .cart-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .cart-header h3 { color: var(--pink); }
-        .cart-body { padding: 20px; flex-grow: 1; overflow-y: auto; }
-        .cart-item { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border-color); }
-        .cart-footer { padding: 20px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.3); }
-
         .container { padding: 40px; max-width: 1400px; margin: 0 auto; }
-
-        .spotlight-banner { position: relative; border-radius: 25px; overflow: hidden; margin-bottom: 30px; height: 280px; display: flex; align-items: center; padding: 40px; background: linear-gradient(to right, rgba(0,0,0,0.95) 40%, rgba(0,0,0,0.1)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1200&auto=format&fit=crop') center/cover; border: 1px solid var(--border-color); box-shadow: 0 15px 40px rgba(0,0,0,0.6); transition: transform 0.3s; }
-        .spotlight-banner:hover { transform: scale(1.01); }
-        .spotlight-content { max-width: 500px; z-index: 2; animation: slideRight 0.8s ease-out; }
-        .spotlight-badge { background: var(--pink); color: white; padding: 6px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; display: inline-block; margin-bottom: 15px; letter-spacing: 1px; box-shadow: 0 0 15px var(--pink); }
-        .spotlight-content h2 { font-size: 2.5rem; margin-bottom: 10px; color: white; font-weight: 800; line-height: 1.1; }
-        .spotlight-content p { color: #ccc; margin-bottom: 20px; font-size: 1rem; }
-        .btn-spotlight { background: var(--pink); color: white; padding: 12px 30px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-block; transition: 0.3s; border: none; cursor: pointer; box-shadow: 0 5px 15px var(--pink-glow); }
-        .btn-spotlight:hover { background: var(--pink-hover); transform: translateY(-3px); box-shadow: 0 8px 25px var(--pink-glow); }
-
-        .promo-banner { background: linear-gradient(45deg, var(--pink), #ff7f50); border-radius: 20px; padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3); position: relative; overflow: hidden; }
-        .promo-banner::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent); transform: skewX(-25deg); animation: shine 4s infinite; }
-        .promo-text h3 { font-size: 1.5rem; font-weight: 800; color: #ffffff !important; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .promo-text p { font-size: 0.95rem; color: #ffffff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-        .promo-btn { background: white; color: var(--pink); padding: 12px 25px; border-radius: 10px; font-weight: 800; cursor: pointer; border: none; transition: 0.3s; z-index: 2; }
-        .promo-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
         .hero { text-align: center; padding: 50px 20px; background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%); border-radius: 25px; margin-bottom: 40px; border: 1px solid var(--border-color); box-shadow: inset 0 0 50px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
         .hero::before { content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,20,147,0.15) 0%, transparent 60%); z-index: 0; pointer-events: none; }
         .hero h1 { font-size: 3rem; margin-bottom: 10px; font-weight: 800; color: var(--text-light); position: relative; z-index: 1; }
-        .hero h1 span { background: linear-gradient(90deg, var(--pink), #ff7f50, var(--pink)); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradientText 3s linear infinite; text-shadow: none; }
+        .hero h1 span { background: linear-gradient(90deg, var(--pink), #ff7f50, var(--pink)); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradientText 3s linear infinite; }
         @keyframes gradientText { to { background-position: 200% center; } }
         .hero p { color: var(--text-muted); font-size: 1.1rem; position: relative; z-index: 1; }
         .search-box { position: relative; max-width: 600px; margin: 30px auto 0; z-index: 1; }
@@ -121,34 +91,26 @@
         .cat-btn { padding: 12px 25px; border-radius: 30px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light); font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
         .cat-btn:hover, .cat-btn.active { border-color: var(--pink) !important; background: var(--pink) !important; color: white !important; box-shadow: 0 0 20px var(--pink-glow) !important; transform: translateY(-2px); }
 
-        .filters-container { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; flex-wrap: wrap; gap: 10px; background: var(--card-bg); padding: 15px; border-radius: 15px; border: 1px solid var(--border-color); }
-        .filter-group { display: flex; gap: 10px; }
-        .filter-btn { padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border-color); background: #000; color: var(--text-light); font-size: 0.85rem; cursor: pointer; transition: 0.3s; }
-        .filter-btn:hover, .filter-btn.active { border-color: var(--pink); color: var(--pink); background: rgba(255, 20, 147, 0.1); }
-        .sort-select { background: #000; color: white; padding: 8px 15px; border: 1px solid var(--border-color); border-radius: 20px; outline: none; font-family: inherit; font-size: 0.85rem; cursor: pointer; }
-
         .content-split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
         @media (max-width: 1024px) { .content-split { grid-template-columns: 1fr; gap: 20px; } }
         .hide-on-search { display: none !important; }
 
         .trending-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
-        .trending-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; display: flex; flex-direction: column; text-align: center; position: relative; }
+        .trending-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; text-align: center; position: relative; }
         .trending-card:hover { transform: translateY(-5px) scale(1.02); border-color: var(--pink); box-shadow: 0 10px 20px var(--pink-glow); }
-        .trending-card .card-img { height: 90px; background-size: cover; background-position: center; transition: transform 0.3s; position: relative; }
-        .trending-card .card-img::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, var(--card-bg), transparent); }
+        .trending-card .card-img { height: 90px; background-size: cover; background-position: center; transition: transform 0.3s; }
         .trending-card:hover .card-img { transform: scale(1.1); }
-        .trending-card .card-content { padding: 10px; background: var(--card-bg); z-index: 2; }
+        .trending-card .card-content { padding: 10px; }
         .trending-card h3 { font-size: 0.75rem; margin: 0; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .trending-card .rating { color: #f1c40f; font-size: 0.65rem; margin-top: 4px; }
 
         .all-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
         .all-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; position: relative; }
         .all-card:hover { transform: translateY(-8px); border-color: var(--pink); box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 15px var(--pink-glow); }
-        .all-card .card-img { height: 160px; background-size: cover; background-position: center; position: relative; }
-        .all-card .card-img::after { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, var(--card-bg) 0%, transparent 60%); }
-        .all-card .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; background: var(--card-bg); z-index: 2; margin-top: -20px; }
+        .all-card .card-img { height: 160px; background-size: cover; background-position: center; }
+        .all-card .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
         .all-card h3 { font-size: 1.2rem; margin: 0 0 5px 0; font-weight: 700; }
-        .all-card .rating { color: #f1c40f; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 5px; margin-bottom: 5px;}
+        .all-card .rating { color: #f1c40f; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
         .all-card .price { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; }
 
         .all-grid-small { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
@@ -160,14 +122,8 @@
         .all-card-small .rating { color: #f1c40f; font-size: 0.7rem; margin-bottom: 3px; }
         .all-card-small .price { color: var(--text-muted); font-size: 0.7rem; margin-bottom: 10px; }
 
-        .btn-primary { text-align: center; background: var(--pink); color: white; border: none; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 8px; font-weight: 700; transition: 0.3s; margin-top: auto; width: 100%; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; position: relative; overflow: hidden; }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-primary::after { content: ''; position: absolute; top: 50%; left: 50%; width: 300px; height: 300px; background: rgba(255,255,255,0.2); border-radius: 50%; transform: translate(-50%, -50%) scale(0); opacity: 0; transition: transform 0.5s, opacity 1s; }
-        .btn-primary:active::after { transform: translate(-50%, -50%) scale(1); opacity: 1; transition: 0s; }
+        .btn-primary { text-align: center; background: var(--pink); color: white; border: none; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 8px; font-weight: 700; transition: 0.3s; margin-top: auto; width: 100%; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
         .btn-primary:hover { background: var(--pink-hover); box-shadow: 0 0 15px var(--pink-glow); }
-
-        .all-trending-btn { width: 100%; margin-top: 25px; padding: 15px; border-radius: 12px; background: transparent; color: var(--pink); border: 2px dashed var(--pink); font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .all-trending-btn:hover { background: rgba(255, 20, 147, 0.1); border-style: solid; box-shadow: 0 0 15px var(--pink-glow); transform: translateY(-2px); }
 
         .reviews-container { max-width: 700px; margin: 80px auto; background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%); padding: 35px; border-radius: 25px; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); }
         .review-form { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; background: rgba(255, 255, 255, 0.02); padding: 20px; border-radius: 15px; border: 1px solid var(--border-color); }
@@ -194,51 +150,49 @@
         .footer-links a:hover { color: var(--pink); text-shadow: 0 0 10px var(--pink-glow); }
         .copyright { color: #555; font-size: 0.9rem; }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; overflow: hidden; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--modal-bg); border: 1px solid var(--border-color); border-radius: 25px; width: 95vw; height: 95vh; overflow-y: auto; position: relative; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(255, 20, 147, 0.1); }
+        .modal-content { background: var(--modal-bg); border: 1px solid var(--border-color); border-radius: 25px; width: 95vw; height: 95vh; overflow-y: auto; position: relative; animation: slideUp 0.4s; display: flex; flex-direction: column; }
         
-        .modal-header { padding: 25px 40px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 2; }
+        .modal-header { padding: 25px 40px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(10, 10, 10, 0.95); z-index: 2; }
         .modal-header h3 { color: var(--pink); font-size: 2.2rem; font-weight: 800; }
         .close-btn { background: rgba(255,255,255,0.05); border: none; color: var(--text-muted); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: all 0.3s; }
         .close-btn:hover { background: rgba(255, 20, 147, 0.2); color: var(--pink); transform: rotate(90deg); }
         
         .modal-body { padding: 40px; flex-grow: 1; }
-        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; height: 100%; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
         @media (max-width: 900px) { .modal-grid { grid-template-columns: 1fr; gap: 30px; } .modal-content { width: 100%; height: 100%; border-radius: 0; } .modal-header h3 { font-size: 1.8rem; } .modal-body { padding: 20px; } }
 
         .menu-section h4, .map-section h4 { color: var(--text-light); margin-bottom: 25px; font-size: 1.4rem; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; display: flex; align-items: center; gap: 10px; font-weight: 700; }
         .menu-item { display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px dashed var(--border-color); }
-        .menu-item-img { width: 80px; height: 80px; border-radius: 12px; background-size: cover; background-position: center; flex-shrink: 0; border: 1px solid var(--border-color); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .menu-item-img { width: 80px; height: 80px; border-radius: 12px; background-size: cover; background-position: center; flex-shrink: 0; border: 1px solid var(--border-color); }
         .menu-item-info h5 { font-size: 1.2rem; margin-bottom: 5px; color: #fff; font-weight: 700; }
         .menu-item-info p { font-size: 0.9rem; color: var(--text-muted); }
-        .menu-item-price { color: var(--pink); font-weight: 800; font-size: 1.3rem; margin-left: auto; text-shadow: 0 0 10px var(--pink-glow); }
+        .menu-item-price { color: var(--pink); font-weight: 800; font-size: 1.3rem; margin-left: auto; }
 
         .location-details { margin-bottom: 20px; padding: 20px; background: #000; border-radius: 12px; border: 1px solid var(--border-color); }
         .location-details p { font-size: 1.1rem; margin-bottom: 5px; }
         .location-details strong { color: var(--pink); font-size: 1.2rem; }
         
-        .map-container { width: 100%; height: 50vh; border-radius: 15px; overflow: hidden; border: 2px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+        .map-container { width: 100%; height: 50vh; border-radius: 15px; overflow: hidden; border: 2px solid var(--border-color); }
         .map-container iframe { width: 100%; height: 100%; border: none; }
 
         .action-buttons { display: flex; gap: 15px; margin-top: 20px; }
-        .btn-google-maps { flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; background: var(--pink); color: white; border-radius: 12px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: 0.3s; border: none; cursor: pointer; box-shadow: 0 5px 15px var(--pink-glow); }
-        .btn-google-maps:hover { background: var(--pink-hover); transform: translateY(-3px); box-shadow: 0 8px 25px var(--pink-glow); }
+        .btn-google-maps { flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; background: var(--pink); color: white; border-radius: 12px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: 0.3s; border: none; cursor: pointer; }
+        .btn-google-maps:hover { background: var(--pink-hover); transform: translateY(-3px); }
         .btn-exact-location { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; background: #000; color: var(--text-light); border-radius: 12px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: 0.3s; border: 1px solid var(--pink); cursor: pointer; }
-        .btn-exact-location:hover { background: rgba(255, 20, 147, 0.1); color: var(--pink); box-shadow: 0 0 15px var(--pink-glow); }
+        .btn-exact-location:hover { background: rgba(255, 20, 147, 0.1); color: var(--pink); }
 
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideRight { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes shine { 100% { left: 125%; } }
 
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        #backToTopBtn { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 99; border: none; outline: none; background-color: var(--pink); color: white; cursor: pointer; padding: 15px 18px; border-radius: 50%; font-size: 1.2rem; box-shadow: 0 5px 15px var(--pink-glow); transition: all 0.3s; }
+        #backToTopBtn { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 99; border: none; background-color: var(--pink); color: white; cursor: pointer; padding: 15px 18px; border-radius: 50%; font-size: 1.2rem; }
         #backToTopBtn:hover { background-color: var(--pink-hover); transform: translateY(-5px) scale(1.1); }
 
-        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 10000; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s ease; }
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 10000; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
         #preloader.hidden { opacity: 0; visibility: hidden; }
         .loader { width: 50px; height: 50px; border: 5px solid var(--border-color); border-top: 5px solid var(--pink); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -250,113 +204,30 @@
         .toast.hiding { animation: slideOutRight 0.3s ease forwards; }
         @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
 
-        /* --- NEW LOGOUT MODAL CSS --- */
-        .logout-modal-overlay {
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background: rgba(0, 0, 0, 0.85); 
-            backdrop-filter: blur(10px);
-            z-index: 9999; 
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .logout-modal-overlay.active {
-            display: flex;
-        }
-
-        .logout-modal-content {
-            background: var(--modal-bg);
-            border: 1px solid var(--pink);
-            box-shadow: 0 0 30px var(--pink-glow);
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .logout-modal-content h3 {
-            font-size: 1.8rem;
-            color: white;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-
-        .logout-modal-content p {
-            color: var(--text-muted);
-            margin-bottom: 30px;
-            font-size: 1rem;
-        }
-
-        .logout-modal-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .btn-logout-yes {
-            background: var(--pink);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: 0.3s;
-            box-shadow: 0 5px 15px var(--pink-glow);
-            flex: 1;
-        }
-
-        .btn-logout-yes:hover {
-            background: var(--pink-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-logout-cancel {
-            background: transparent;
-            color: var(--text-light);
-            border: 1px solid var(--border-color);
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            flex: 1;
-            font-family: inherit;
-            font-size: 1rem;
-        }
-
-        .btn-logout-cancel:hover {
-            border-color: var(--pink);
-            color: var(--pink);
-            background: rgba(255, 20, 147, 0.1);
-        }
-
+        .logout-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 9999; justify-content: center; align-items: center; }
+        .logout-modal-overlay.active { display: flex; }
+        .logout-modal-content { background: var(--modal-bg); border: 1px solid var(--pink); box-shadow: 0 0 30px var(--pink-glow); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%; animation: slideUp 0.4s; }
+        .logout-modal-content h3 { font-size: 1.8rem; color: white; margin-bottom: 10px; font-weight: 800; }
+        .logout-modal-content p { color: var(--text-muted); margin-bottom: 30px; font-size: 1rem; }
+        .logout-modal-buttons { display: flex; gap: 15px; justify-content: center; }
+        .btn-logout-yes { background: var(--pink); color: white; padding: 12px 25px; border-radius: 10px; text-decoration: none; font-weight: 700; transition: 0.3s; flex: 1; }
+        .btn-logout-yes:hover { background: var(--pink-hover); transform: translateY(-2px); }
+        .btn-logout-cancel { background: transparent; color: var(--text-light); border: 1px solid var(--border-color); padding: 12px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; flex: 1; font-family: inherit; font-size: 1rem; }
+        .btn-logout-cancel:hover { border-color: var(--pink); color: var(--pink); background: rgba(255, 20, 147, 0.1); }
     </style>
 </head>
 <body>
 
-    <div id="preloader">
-        <div class="loader"></div>
-    </div>
-
+    <div id="preloader"><div class="loader"></div></div>
     <div id="toast-container"></div>
 
     <nav class="navbar">
         <h2><i class="fas fa-bolt"></i> Kabankalan Eats</h2>
-        
         <div class="nav-links">
-            <a href="#">About</a>
-            <a href="#">Login</a>
-            <!-- Changed Logout to a button so it can trigger the modal -->
+            <a href="{% url 'food_finder:about' %}">About</a>
+            <a href="{% url 'food_finder:login' %}">Login</a>
             <button onclick="openLogoutModal()">Logout</button>
         </div>
-
         <div class="profile-menu" id="profileMenu">
             <a href="#"><i class="fas fa-box"></i> My Orders</a>
             <a href="#"><i class="fas fa-heart"></i> Favorites</a>
@@ -366,47 +237,10 @@
         </div>
     </nav>
 
-    <div class="cart-panel" id="cartPanel">
-        <div class="cart-header">
-            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
-            <button class="close-btn" onclick="toggleCart()" style="width: 35px; height: 35px; font-size: 1rem;"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="cart-body" id="cartBody">
-            <div class="cart-item">
-                <div>
-                    <h4 style="font-weight: 700;">Chickenjoy</h4>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">Jollibee (Guanzon)</p>
-                </div>
-                <div style="text-align: right;">
-                    <p style="color: var(--pink); font-weight: 800; font-size: 1.1rem;">₱99</p>
-                    <p style="font-size: 0.8rem; color: var(--text-muted);">Qty: 1</p>
-                </div>
-            </div>
-            <div class="cart-item">
-                <div>
-                    <h4 style="font-weight: 700;">Special Cansi</h4>
-                    <p style="color: var(--text-muted); font-size: 0.85rem;">ALONSO's Cansi</p>
-                </div>
-                <div style="text-align: right;">
-                    <p style="color: var(--pink); font-weight: 800; font-size: 1.1rem;">₱130</p>
-                    <p style="font-size: 0.8rem; color: var(--text-muted);">Qty: 1</p>
-                </div>
-            </div>
-        </div>
-        <div class="cart-footer">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.1rem;">
-                <span>Total:</span>
-                <span style="color: var(--pink); font-weight: 800; font-size: 1.3rem; text-shadow: 0 0 10px var(--pink-glow);" id="cartTotal">₱229</span>
-            </div>
-            <button class="btn-primary" onclick="checkout()" style="width: 100%;"><i class="fas fa-credit-card"></i> Checkout</button>
-        </div>
-    </div>
-
     <main class="container">
-        
         <div class="hero reveal" id="heroSection">
             <h1>Discover the Best <span>Food</span></h1>
-            <p>Search for local restaurants, dishes, and cuisines within <strong>Kabankalan City Proper</strong> only.</p>
+            <p>Search for local restaurants, Cafe, Dessert, and Snacks within <strong>Kabankalan City Proper</strong> only.</p>
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="Try 'checkin joy', 'cansi', 'milk tea'...">
                 <button type="button" id="searchBtn">Search</button>
@@ -416,8 +250,8 @@
         <div id="categoriesSection" class="reveal">
             <h2 class="section-title"><i class="fas fa-utensils" style="color: var(--pink);"></i> Explore Categories</h2>
             <div class="categories" id="category-list">
-                <button class="cat-btn active" data-category="carinderia"><i class="fas fa-bowl-rice"></i> Local & Cansi</button>
-                <button class="cat-btn" data-category="fastfood"><i class="fas fa-burger"></i> Fast Food</button>
+                <button class="cat-btn active" data-category="fastfood"><i class="fas fa-bowl-rice"></i> Fast Food</button>
+                <button class="cat-btn" data-category="carinderia"><i class="fas fa-burger"></i> Local and Cansi</button>
                 <button class="cat-btn" data-category="cafe"><i class="fas fa-mug-hot"></i> Cafe & Snacks</button>
                 <button class="cat-btn" data-category="desserts"><i class="fas fa-ice-cream"></i> Desserts</button>
                 <button class="cat-btn" data-category="milktea"><i class="fas fa-coffee"></i> Milk Tea</button>
@@ -425,7 +259,6 @@
         </div>
 
         <div class="content-split">
-            
             <div id="trendingSection" class="reveal">
                 <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan</h2>
                 <div class="trending-grid" id="trending-grid"></div>
@@ -440,7 +273,6 @@
                 <h2 class="section-title" id="category-title"><i class="fas fa-list" style="color: var(--pink);"></i> All Local & Cansi</h2>
                 <div class="all-grid" id="all-restaurants-grid"></div>
             </div>
-
         </div>
 
         <div class="reviews-container reveal">
@@ -484,7 +316,6 @@
                 {% endfor %}
             </div>
         </div>
-
     </main>
 
     <footer>
@@ -533,7 +364,6 @@
         </div>
     </div>
 
-    <!-- LOGOUT MODAL -->
     <div id="logoutModal" class="logout-modal-overlay">
         <div class="logout-modal-content">
             <h3>Are you sure you want to logout?</h3>
@@ -546,63 +376,15 @@
     </div>
 
     <script>
-        const foodData = {
-            fastfood: [
-                { name: "Jollibee (Guanzon)", mapQuery: "Jollibee+Guanzon+St+Kabankalan", rating: "4.5", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", menu: [{ name: "Chickenjoy", price: "₱99", desc: "Crispy fried chicken", img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "McDonald's (Guanzon)", mapQuery: "McDonalds+Guanzon+St+Kabankalan", rating: "4.3", price: "₱80–₱180", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", menu: [{ name: "Big Mac", price: "₱180", desc: "Double burger", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Mang Inasal (Gaisano)", mapQuery: "Gaisano+Grand+Mall+Kabankalan", rating: "4.4", price: "₱120–₱250", img: "https://images.unsplash.com/photo-1513639776629-7b61b0ac49cb?q=80&w=800&auto=format&fit=crop", address: "Gaisano Grand Mall, City Proper", menu: [{ name: "1pc Chicken", price: "₱110", desc: "Original recipe", img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Chowking (City Mall)", mapQuery: "Chowking+City+Mall+Kabankalan", rating: "4.1", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop", address: "CityMall, City Proper", menu: [{ name: "Chao Fan", price: "₱95", desc: "Fried rice", img: "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Angel's Burger (Rizal)", mapQuery: "Angels+Burger+Rizal+Kabankalan", rating: "4.2", price: "₱25–₱60", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [{ name: "Burger Steak", price: "₱35", desc: "Classic burger", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Lola Nena's Lomi", mapQuery: "Lomi+House+Tan+Lorenzo+Kabankalan", rating: "4.7", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=800&auto=format&fit=crop", address: "Tan Lorenzo St, City Proper", menu: [{ name: "Special Lomi", price: "₱90", desc: "Noodle soup", img: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=200&auto=format&fit=crop" }] }
-            ],
-            carinderia: [
-                { name: "ALONSO's Cansi", mapQuery: "Alonsos+Cansi+Guanzon+Kabankalan", rating: "4.8", price: "₱150–₱300", img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Brgy. 1, City Proper", menu: [{ name: "Special Cansi", price: "₱130", desc: "Sour beef soup", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Kabankalan Ihaw-Ihaw", mapQuery: "Rizal+Street+Kabankalan+City", rating: "4.9", price: "₱50–₱150", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [{ name: "Pork BBQ", price: "₱100", desc: "Grilled skewers", img: "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Cansi House", mapQuery: "Cansi+House+Rizal+Kabankalan", rating: "4.7", price: "₱120–₱280", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop", address: "Rizal St, Brgy. 5, City Proper", menu: [{ name: "Cansi Bulalo", price: "₱280", desc: "Rich soup", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Sharyn's Cansi", mapQuery: "Sharyns+Cansi+National+Highway+Kabankalan", rating: "4.6", price: "₱150–₱260", img: "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=800&auto=format&fit=crop", address: "National Highway, Brgy. 1, City Proper", menu: [{ name: "Special Cansi", price: "₱260", desc: "Sour soup", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Aida's Carinderia", mapQuery: "Kabankalan+City+Public+Market", rating: "4.5", price: "₱50–₱100", img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop", address: "Public Market, City Proper", menu: [{ name: "Adobo with Rice", price: "₱70", desc: "Classic adobo", img: "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Tita Beth's Eatery", mapQuery: "Guanzon+Street+Kabankalan+City", rating: "4.6", price: "₱60–₱120", img: "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop", address: "Guanzon St., Brgy. 2, City Proper", menu: [{ name: "Kare-Kare", price: "₱120", desc: "Peanut stew", img: "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Myrna's Restaurant", mapQuery: "Myrnas+Restaurant+Kabankalan", rating: "4.4", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1626776876729-bab4369a5a5a?q=80&w=800&auto=format&fit=crop", address: "Tan Lorenzo St, City Proper", menu: [{ name: "Pork Adobo", price: "₱85", desc: "Home-cooked", img: "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "3RD Talabahan", mapQuery: "3RD+Talabahan+Lirazan+Kabankalan", rating: "4.5", price: "₱100–₱250", img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop", address: "Lirazan St, City Proper", menu: [{ name: "Baked Talaba", price: "₱150", desc: "Fresh oysters", img: "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=200&auto=format&fit=crop" }] }
-            ],
-            cafe: [
-                { name: "Gorio's Cafe", mapQuery: "Gorios+Cafe+Kabankalan", rating: "4.9", price: "₱100–₱250", img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, Kabankalan City Proper", menu: [{ name: "Iced Latte", price: "₱120", desc: "Espresso and milk", img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Taza La Bien", mapQuery: "Taza+La+Bien+Kabankalan", rating: "4.8", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop", address: "Los Angeles St, Brgy. 1, City Proper", menu: [{ name: "Caffe Latte", price: "₱120", desc: "Steamed milk", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Kalamay Artisan Cafe", mapQuery: "Kalamay+Artisan+Lirazan+Kabankalan", rating: "4.6", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=800&auto=format&fit=crop", address: "Lirazan St, Brgy. 4, City Proper", menu: [{ name: "Cappuccino", price: "₱110", desc: "Milk foam", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Kapehan sa Plaza", mapQuery: "Kabankalan+City+Plaza", rating: "4.5", price: "₱30–₱100", img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop", address: "Plaza Area, Brgy. 1, City Proper", menu: [{ name: "Native Coffee", price: "₱30", desc: "Brewed coffee", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "MOICA Pizzeria", mapQuery: "MOICA+Pizzeria+Coloso+Kabankalan", rating: "4.7", price: "₱150–₱400", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop", address: "Coloso St, Brgy. 6, City Proper", menu: [{ name: "Pepperoni Pizza", price: "₱350", desc: "Classic pizza", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Amore Mio Pizza", mapQuery: "Amore+Mio+Pizza+Rizal+Kabankalan", rating: "4.6", price: "₱120–₱350", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=800&auto=format&fit=crop", address: "Rizal St, Brgy. 9, City Proper", menu: [{ name: "Margherita", price: "₱299", desc: "Italian pizza", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Bo's Coffee (CityMall)", mapQuery: "Bos+Coffee+City+Mall+Kabankalan", rating: "4.4", price: "₱100–₱180", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=800&auto=format&fit=crop", address: "CityMall, City Proper", menu: [{ name: "Brewed Coffee", price: "₱100", desc: "Local beans", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=200&auto=format&fit=crop" }] }
-            ],
-            desserts: [
-                { name: "Cake Avenue", mapQuery: "Cake+Avenue+Rizal+Kabankalan", rating: "4.7", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [{ name: "Chocolate Cake", price: "₱120", desc: "Chocolate slice", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Melting Pot", mapQuery: "Melting+Pot+Rizal+Kabankalan", rating: "4.4", price: "₱55–₱165", img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?q=80&w=800&auto=format&fit=crop", address: "Rizal St, Brgy. 7, City Proper", menu: [{ name: "Sundae", price: "₱55", desc: "Ice cream", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Bibingka Station", mapQuery: "Kabankalan+City+Church", rating: "4.9", price: "₱40–₱100", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop", address: "Church Vicinity, City Proper", menu: [{ name: "Bibingka", price: "₱50", desc: "Rice cake", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Leche Flan ni Aling Rosa", mapQuery: "Kabankalan+Public+Market", rating: "4.8", price: "₱60–₱120", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop", address: "Public Market, City Proper", menu: [{ name: "Leche Flan", price: "₱70", desc: "Caramel custard", img: "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Don Benito's", mapQuery: "Don+Benitos+Guanzon+Kabankalan", rating: "4.5", price: "₱80–₱150", img: "https://images.unsplash.com/photo-1551024506-0bccd828d307?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, City Proper", menu: [{ name: "Halo-Halo", price: "₱99", desc: "Shaved ice dessert", img: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Red Ribbon (CityMall)", mapQuery: "Red+Ribbon+City+Mall+Kabankalan", rating: "4.6", price: "₱100–₱200", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop", address: "CityMall, City Proper", menu: [{ name: "Black Forest", price: "₱120", desc: "Cake slice", img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=200&auto=format&fit=crop" }] }
-            ],
-            milktea: [
-                { name: "Chatime (City Mall)", mapQuery: "CityMall+Kabankalan", rating: "4.8", price: "₱70–₱140", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop", address: "City Mall, City Proper", menu: [{ name: "Pearl Milk Tea", price: "₱85", desc: "Classic pearls", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Macao Imperial Tea", mapQuery: "Gaisano+Grand+Mall+Kabankalan", rating: "4.6", price: "₱90–₱160", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop", address: "Gaisano Grand Mall, City Proper", menu: [{ name: "Cream Cheese", price: "₱120", desc: "Cheesecake series", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "CoCo Fresh Tea", mapQuery: "CoCo+Fresh+Tea+Araneta+Kabankalan", rating: "4.5", price: "₱90–₱130", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=800&auto=format&fit=crop", address: "Araneta St, City Proper", menu: [{ name: "3Q Milk Tea", price: "₱110", desc: "Pearl, pudding, jelly", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "SereniTea", mapQuery: "SereniTea+Kabankalan", rating: "4.4", price: "₱70–₱120", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop", address: "Rizal St, City Proper", menu: [{ name: "Wintermelon", price: "₱75", desc: "Sweet and refreshing", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Tea Talk", mapQuery: "Tea+Talk+Guanzon+Kabankalan", rating: "4.3", price: "₱60–₱100", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop", address: "Guanzon St, City Proper", menu: [{ name: "Okinawa", price: "₱85", desc: "Brown sugar milk tea", img: "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=200&auto=format&fit=crop" }] },
-                { name: "Infinitea", mapQuery: "Infinitea+Kabankalan", rating: "4.5", price: "₱80–₱130", img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop", address: "City Proper, Kabankalan", menu: [{ name: "Hokkaido", price: "₱95", desc: "Creamy milk tea", img: "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=200&auto=format&fit=crop" }] }
-            ]
-        };
+        // ============================================================
+        // DATA HALIN SA views.py (JSON string → object)
+        // ============================================================
+        const foodData = {{ food_data|safe }};
+        const trendingData = {{ trending_data|safe }};
 
-        const trendingData = [
-            foodData.fastfood.find(item => item.name === "Jollibee (Guanzon)"),
-            foodData.fastfood.find(item => item.name === "Mang Inasal (Gaisano)"),
-            foodData.carinderia.find(item => item.name === "Kabankalan Ihaw-Ihaw"),
-            foodData.carinderia.find(item => item.name === "ALONSO's Cansi"),
-            foodData.cafe.find(item => item.name === "Taza La Bien"),
-            foodData.desserts.find(item => item.name === "Bibingka Station"),
-            foodData.milktea.find(item => item.name === "Chatime (City Mall)"),
-            foodData.milktea.find(item => item.name === "Macao Imperial Tea")
-        ];
-
+        // ============================================================
+        // DOM ELEMENTS
+        // ============================================================
         const categoryList = document.getElementById('category-list');
         const trendingGrid = document.getElementById('trending-grid');
         const allRestaurantsGrid = document.getElementById('all-restaurants-grid');
@@ -612,7 +394,7 @@
         const buttons = categoryList.querySelectorAll('.cat-btn');
         const searchInput = document.getElementById('searchInput');
         const searchBtn = document.getElementById('searchBtn');
-        
+
         const categoriesSection = document.getElementById('categoriesSection');
         const trendingSection = document.getElementById('trendingSection');
 
@@ -626,38 +408,23 @@
 
         let currentCategory = 'carinderia';
 
-        function toggleProfile() { document.getElementById('profileMenu').classList.toggle('active'); }
-        function toggleCart() { document.getElementById('cartPanel').classList.toggle('active'); }
-        
-        // Logout Modal Functions
+        // ============================================================
+        // LOGOUT MODAL
+        // ============================================================
         function openLogoutModal() {
             document.getElementById('logoutModal').classList.add('active');
         }
-
         function closeLogoutModal() {
             document.getElementById('logoutModal').classList.remove('active');
         }
-
-        // Close Logout modal if clicked outside
         window.addEventListener('click', function(e) {
             const logoutModal = document.getElementById('logoutModal');
-            if (e.target === logoutModal) {
-                closeLogoutModal();
-            }
+            if (e.target === logoutModal) closeLogoutModal();
         });
 
-        window.onclick = function(event) {
-            if (!event.target.matches('.fa-user-circle') && !event.target.matches('.nav-icon')) {
-                var dropdowns = document.getElementsByClassName("profile-menu");
-                for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('active')) {
-                        openDropdown.classList.remove('active');
-                    }
-                }
-            }
-        }
-
+        // ============================================================
+        // HELPERS
+        // ============================================================
         function getAllRestaurants() {
             let all = [];
             for (let key in foodData) { all = all.concat(foodData[key]); }
@@ -706,42 +473,36 @@
             `;
         }
 
-        function renderTrending(isSearch = false, searchResults = []) {
-            let itemsToRender = isSearch ? searchResults : trendingData;
+        // ============================================================
+        // RENDER FUNCTIONS
+        // ============================================================
+        function renderTrending() {
             trendingGrid.innerHTML = '';
-
-            if (itemsToRender.length === 0) {
+            if (trendingData.length === 0) {
                 trendingGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3></div>`;
                 return;
             }
-
-            itemsToRender.forEach(item => {
+            trendingData.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'trending-card'; 
-                card.setAttribute('onclick', `openModal("${item.name}")`); 
+                card.className = 'trending-card';
+                card.setAttribute('onclick', `openModal("${item.name}")`);
                 card.innerHTML = createTrendingCardHTML(item);
                 trendingGrid.appendChild(card);
             });
         }
 
-        function renderCategory(categoryKey, categoryName, searchQuery = "") {
+        function renderCategory(categoryKey, categoryName) {
             let items = categoryKey === 'all' ? getAllRestaurants() : (foodData[categoryKey] || []);
-            if (searchQuery.trim() !== "") {
-                items = items.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
-            }
-
             categoryTitle.innerHTML = `<i class="fas fa-list" style="color: var(--pink);"></i> All ${categoryName}`;
             allRestaurantsGrid.innerHTML = '';
-
             if (items.length === 0) {
-                allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3><p>We couldn't find "${searchQuery}" here.</p></div>`;
+                allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3></div>`;
                 return;
             }
-
             items.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'all-card'; 
-                card.setAttribute('onclick', `openModal("${item.name}")`); 
+                card.className = 'all-card';
+                card.setAttribute('onclick', `openModal("${item.name}")`);
                 card.innerHTML = createAllCardHTML(item);
                 allRestaurantsGrid.appendChild(card);
             });
@@ -752,120 +513,26 @@
             leftAllRestaurantsGrid.innerHTML = '';
             allItems.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'all-card-small'; 
-                card.setAttribute('onclick', `openModal("${item.name}")`); 
+                card.className = 'all-card-small';
+                card.setAttribute('onclick', `openModal("${item.name}")`);
                 card.innerHTML = createSmallCardHTML(item);
                 leftAllRestaurantsGrid.appendChild(card);
             });
         }
 
-        function isSimilar(word1, word2) {
-            if (word2.includes(word1) || word1.includes(word2)) return true;
-            const track = Array(word2.length + 1).fill(null).map(() => Array(word1.length + 1).fill(null));
-            for (let i = 0; i <= word1.length; i += 1) track[0][i] = i;
-            for (let j = 0; j <= word2.length; j += 1) track[j][0] = j;
-            for (let j = 1; j <= word2.length; j += 1) {
-                for (let i = 1; i <= word1.length; i += 1) {
-                    const indicator = word1[i - 1] === word2[j - 1] ? 0 : 1;
-                    track[j][i] = Math.min(track[j][i - 1] + 1, track[j - 1][i] + 1, track[j - 1][i - 1] + indicator);
-                }
-            }
-            return track[word2.length][word1.length] <= 2; 
-        }
-
-        function handleSearch(query) {
-            if (query.trim() !== "") {
-                categoriesSection.classList.add('hide-on-search');
-                trendingSection.classList.add('hide-on-search');
-                document.querySelector('.content-split').style.gridTemplateColumns = '1fr';
-                
-                categoryTitle.innerHTML = `<i class="fas fa-search" style="color: var(--pink);"></i> Search Results for "${query}"`;
-                trendingTitle.innerHTML = `<i class="fas fa-search" style="color: var(--pink);"></i> Search Results for "${query}"`;
-                
-                const searchTerm = query.toLowerCase().trim();
-                let allResults = [];
-                const searchWords = searchTerm.split(' ').filter(w => w.length > 0);
-
-                for (let key in foodData) {
-                    const filtered = foodData[key].filter(item => {
-                        let searchString = `${item.name} ${item.address} ${item.price}`;
-                        if (item.menu) {
-                            item.menu.forEach(m => { searchString += ` ${m.name} ${m.desc}`; });
-                        }
-                        const itemWords = searchString.toLowerCase().split(/[\s,.-]+/);
-                        return searchWords.every(searchWord => 
-                            itemWords.some(itemWord => isSimilar(searchWord, itemWord))
-                        );
-                    });
-                    allResults = allResults.concat(filtered);
-                }
-                
-                allRestaurantsGrid.innerHTML = '';
-                if (allResults.length === 0) {
-                    allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3><p>Wala kami makita nga "${query}".</p></div>`;
-                } else {
-                    allResults.forEach(item => {
-                        const card = document.createElement('div');
-                        card.className = 'all-card';
-                        card.setAttribute('onclick', `openModal("${item.name}")`); 
-                        card.innerHTML = createAllCardHTML(item);
-                        allRestaurantsGrid.appendChild(card);
-                    });
-                }
-            } else {
-                categoriesSection.classList.remove('hide-on-search');
-                trendingSection.classList.remove('hide-on-search');
-                document.querySelector('.content-split').style.gridTemplateColumns = '1fr 1fr';
-
-                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan`;
-                renderTrending(); 
-                
-                const activeBtn = document.querySelector('.cat-btn.active');
-                const catName = activeBtn ? activeBtn.innerText.trim() : 'Local & Cansi';
-                renderCategory(currentCategory, catName);
-            }
-        }
-
-        buttons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                buttons.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                currentCategory = this.dataset.category;
-                const categoryName = this.innerText.trim();
-                
-                searchInput.value = ""; 
-                categoriesSection.classList.remove('hide-on-search');
-                trendingSection.classList.remove('hide-on-search');
-                document.querySelector('.content-split').style.gridTemplateColumns = '1fr 1fr';
-
-                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan`;
-                
-                renderTrending(); 
-                renderCategory(currentCategory, categoryName);
-            });
-        });
-
-        searchBtn.addEventListener('click', function() { handleSearch(searchInput.value); });
-        searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault(); handleSearch(this.value); }
-        });
-        searchInput.addEventListener('input', function() {
-            if (this.value.trim() === "") { handleSearch(""); }
-        });
-
+        // ============================================================
+        // MODAL
+        // ============================================================
         function openModal(restaurantName) {
             let foundRestaurant = null;
             for (let key in foodData) {
                 const found = foodData[key].find(item => item.name === restaurantName);
                 if (found) { foundRestaurant = found; break; }
             }
-
             if (foundRestaurant) {
                 modalRestaurantName.textContent = foundRestaurant.name;
-                
                 modalMenuList.innerHTML = '';
-                if (foundRestaurant.menu) {
+                if (foundRestaurant.menu && foundRestaurant.menu.length > 0) {
                     foundRestaurant.menu.forEach(menuItem => {
                         const div = document.createElement('div');
                         div.className = 'menu-item';
@@ -877,21 +544,14 @@
                                     <p>${menuItem.desc}</p>
                                 </div>
                             </div>
-                            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
-                                <div class="menu-item-price">${menuItem.price}</div>
-                                <button class="btn-primary" style="padding: 8px 15px; font-size: 0.8rem; width: auto;" onclick="addToCart(event, '${menuItem.name}', '${menuItem.price}')">
-                                    <i class="fas fa-plus"></i> Add
-                                </button>
-                            </div>
+                            <div class="menu-item-price">${menuItem.price}</div>
                         `;
                         modalMenuList.appendChild(div);
                     });
                 } else {
-                    modalMenuList.innerHTML = '<p class="text-muted">No menu available.</p>';
+                    modalMenuList.innerHTML = '<p style="color:var(--text-muted)">No menu available.</p>';
                 }
-
                 modalAddress.textContent = foundRestaurant.address || 'Address not available';
-                
                 if (foundRestaurant.mapQuery) {
                     mapFrame.src = `https://maps.google.com/maps?q=${foundRestaurant.mapQuery}&t=&z=18&ie=UTF8&iwloc=&output=embed`;
                     openMapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${foundRestaurant.mapQuery}`;
@@ -907,18 +567,93 @@
 
         function closeModal() {
             infoModal.classList.remove('active');
-            mapFrame.src = ""; 
+            mapFrame.src = "";
         }
         infoModal.addEventListener('click', function(e) { if (e.target === infoModal) closeModal(); });
 
+        // ============================================================
+        // CATEGORY BUTTONS
+        // ============================================================
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                buttons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.dataset.category;
+                searchInput.value = "";
+                categoriesSection.classList.remove('hide-on-search');
+                trendingSection.classList.remove('hide-on-search');
+                document.querySelector('.content-split').style.gridTemplateColumns = '1fr 1fr';
+                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan`;
+                renderTrending();
+                renderCategory(currentCategory, this.innerText.trim());
+            });
+        });
+
+        // ============================================================
+        // SEARCH
+        // ============================================================
+        function handleSearch(query) {
+            if (query.trim() !== "") {
+                categoriesSection.classList.add('hide-on-search');
+                trendingSection.classList.add('hide-on-search');
+                document.querySelector('.content-split').style.gridTemplateColumns = '1fr';
+                categoryTitle.innerHTML = `<i class="fas fa-search" style="color: var(--pink);"></i> Search Results for "${query}"`;
+
+                const searchTerm = query.toLowerCase().trim();
+                let allResults = [];
+                for (let key in foodData) {
+                    const filtered = foodData[key].filter(item => {
+                        let searchString = `${item.name} ${item.address} ${item.price}`;
+                        if (item.menu) {
+                            item.menu.forEach(m => { searchString += ` ${m.name} ${m.desc}`; });
+                        }
+                        return searchString.toLowerCase().includes(searchTerm);
+                    });
+                    allResults = allResults.concat(filtered);
+                }
+
+                allRestaurantsGrid.innerHTML = '';
+                if (allResults.length === 0) {
+                    allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3><p>Wala kami makita nga "${query}".</p></div>`;
+                } else {
+                    allResults.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'all-card';
+                        card.setAttribute('onclick', `openModal("${item.name}")`);
+                        card.innerHTML = createAllCardHTML(item);
+                        allRestaurantsGrid.appendChild(card);
+                    });
+                }
+            } else {
+                categoriesSection.classList.remove('hide-on-search');
+                trendingSection.classList.remove('hide-on-search');
+                document.querySelector('.content-split').style.gridTemplateColumns = '1fr 1fr';
+                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan`;
+                renderTrending();
+                const activeBtn = document.querySelector('.cat-btn.active');
+                const catName = activeBtn ? activeBtn.innerText.trim() : 'Local & Cansi';
+                renderCategory(currentCategory, catName);
+            }
+        }
+
+        searchBtn.addEventListener('click', function() { handleSearch(searchInput.value); });
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); handleSearch(this.value); }
+        });
+        searchInput.addEventListener('input', function() {
+            if (this.value.trim() === "") { handleSearch(""); }
+        });
+
+        // ============================================================
+        // REVIEW FORM (AJAX)
+        // ============================================================
         const reviewForm = document.getElementById('reviewForm');
         const reviewList = document.getElementById('reviewList');
         const reviewText = document.getElementById('reviewText');
         const submitBtn = document.getElementById('submitBtn');
 
         reviewForm.addEventListener('submit', async function(e) {
-            e.preventDefault(); 
-            
+            e.preventDefault();
             const formData = new FormData();
             formData.append('name', document.getElementById('reviewName').value);
             formData.append('rating', document.getElementById('reviewRating').value);
@@ -926,9 +661,8 @@
             formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
 
             try {
-                const res = await fetch('/api/review/', { method: 'POST', body: formData });
+                const res = await fetch('/food_finder/api/review/', { method: 'POST', body: formData });
                 const data = await res.json();
-
                 if (data.ok) {
                     const newReview = document.createElement('div');
                     newReview.className = 'review-item';
@@ -947,7 +681,6 @@
                     showToast("May error sa pag-submit. Subukan muli.", 'fa-exclamation-circle');
                 }
             } catch (error) {
-                console.error("Error:", error);
                 showToast("Hindi maka-konekta sa server.", 'fa-exclamation-circle');
             }
         });
@@ -956,10 +689,16 @@
             if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitBtn.click(); }
         });
 
+        // ============================================================
+        // INITIAL RENDER
+        // ============================================================
         renderTrending();
         renderCategory('carinderia', 'Local & Cansi');
-        renderLeftAllRestaurants(); 
+        renderLeftAllRestaurants();
 
+        // ============================================================
+        // REVEAL ON SCROLL
+        // ============================================================
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
             for (var i = 0; i < reveals.length; i++) {
@@ -972,8 +711,11 @@
             }
         }
         window.addEventListener("scroll", reveal);
-        reveal(); 
+        reveal();
 
+        // ============================================================
+        // BACK TO TOP
+        // ============================================================
         window.onscroll = function() {
             var btn = document.getElementById("backToTopBtn");
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -982,56 +724,32 @@
                 btn.style.display = "none";
             }
         };
-
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // ============================================================
+        // PRELOADER
+        // ============================================================
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.getElementById('preloader').classList.add('hidden');
             }, 500);
         });
 
+        // ============================================================
+        // TOAST
+        // ============================================================
         function showToast(message, icon = 'fa-check-circle') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast';
             toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
             container.appendChild(toast);
-
             setTimeout(() => {
                 toast.classList.add('hiding');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
-        }
-
-        let cartCount = 2;
-        function addToCart(event, itemName, itemPrice) {
-            event.stopPropagation(); 
-            cartCount++;
-            const badge = document.getElementById('cartBadge');
-            badge.innerText = cartCount;
-            
-            badge.style.transform = 'scale(1.5)';
-            setTimeout(() => badge.style.transform = 'scale(1)', 300);
-            
-            showToast(`${itemName} added to cart!`, 'fa-shopping-bag');
-            
-            let currentTotal = parseInt(document.getElementById('cartTotal').innerText.replace('₱', ''));
-            let priceNum = parseInt(itemPrice.replace('₱', ''));
-            document.getElementById('cartTotal').innerText = `₱${currentTotal + priceNum}`;
-        }
-
-        function checkout() {
-            showToast("Order placed successfully! Thank you!", 'fa-check-double');
-            setTimeout(() => {
-                document.getElementById('cartBadge').innerText = "0";
-                document.getElementById('cartBody').innerHTML = '<div class="empty-state" style="padding:20px;"><p>Your cart is empty.</p></div>';
-                document.getElementById('cartTotal').innerText = '₱0';
-                cartCount = 0;
-                toggleCart();
-            }, 1500);
         }
     </script>
 
