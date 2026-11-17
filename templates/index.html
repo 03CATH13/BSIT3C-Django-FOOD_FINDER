@@ -7,24 +7,20 @@
     <title>Kabankalan Food Finder</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        /* --- BLACK & PINK THEME --- */
         :root {
             --bg-dark: #050505;
             --card-bg: #111111;
             --modal-bg: #0a0a0a;
-            --pink: #FF1493; 
+            --pink: #FF1493;
             --pink-hover: #FF69B4;
             --pink-glow: rgba(255, 20, 147, 0.4);
             --text-light: #ffffff;
             --text-muted: #a0a0a0;
             --border-color: #2a2a2a;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
         ::selection { background: var(--pink); color: white; }
-
         body {
             font-family: 'Outfit', sans-serif;
             background: radial-gradient(circle at 50% 0%, #1a0a12 0%, var(--bg-dark) 50%);
@@ -34,14 +30,11 @@
             scrollbar-color: var(--pink) var(--bg-dark);
             overflow-x: hidden;
         }
-
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; border: 2px solid var(--bg-dark); }
         ::-webkit-scrollbar-thumb:hover { background: var(--pink); }
-
         a { text-decoration: none; color: inherit; }
-
         .navbar {
             background: rgba(5, 5, 5, 0.85);
             backdrop-filter: blur(12px);
@@ -56,103 +49,52 @@
             border-bottom: 1px solid var(--border-color);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
-
         .navbar h2 { color: var(--pink); font-weight: 800; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; text-shadow: 0 0 10px var(--pink-glow); }
-
         .nav-links { display: flex; gap: 30px; align-items: center; }
         .nav-links a, .nav-links button { color: var(--text-light); font-weight: 500; font-size: 0.95rem; transition: 0.3s; position: relative; background: none; border: none; cursor: pointer; font-family: inherit; }
         .nav-links a::after, .nav-links button::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background-color: var(--pink); transition: width 0.3s ease; }
         .nav-links a:hover, .nav-links button:hover { color: var(--pink); }
         .nav-links a:hover::after, .nav-links button:hover::after { width: 100%; }
         @media (max-width: 768px) { .nav-links { display: none; } }
-
         .profile-menu { display: none; position: absolute; top: 40px; right: 0; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; width: 200px; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .profile-menu.active { display: flex; animation: slideDown 0.3s ease; }
         .profile-menu a { padding: 12px 20px; color: var(--text-light); font-size: 0.9rem; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
         .profile-menu a:hover { background: rgba(255, 20, 147, 0.1); color: var(--pink); padding-left: 25px; }
         .profile-menu .divider { height: 1px; background: var(--border-color); }
-
         .container { padding: 40px; max-width: 1400px; margin: 0 auto; }
-
         .hero { text-align: center; padding: 50px 20px; background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%); border-radius: 25px; margin-bottom: 40px; border: 1px solid var(--border-color); box-shadow: inset 0 0 50px rgba(0,0,0,0.5); position: relative; overflow: hidden; }
         .hero::before { content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(255,20,147,0.15) 0%, transparent 60%); z-index: 0; pointer-events: none; }
         .hero h1 { font-size: 3rem; margin-bottom: 10px; font-weight: 800; color: var(--text-light); position: relative; z-index: 1; }
         .hero h1 span { background: linear-gradient(90deg, var(--pink), #ff7f50, var(--pink)); background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text; animation: gradientText 3s linear infinite; }
         @keyframes gradientText { to { background-position: 200% center; } }
         .hero p { color: var(--text-muted); font-size: 1.1rem; position: relative; z-index: 1; }
-        
-        /* --- AI SYSTEM CHECK BADGE (INTERACTIVE) --- */
         .ai-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(255, 20, 147, 0.1);
-            border: 1px solid var(--pink);
-            color: var(--pink);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            box-shadow: 0 0 15px var(--pink-glow);
-            animation: aiPulse 2s infinite;
-            position: relative;
-            z-index: 1;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(255, 20, 147, 0.1); border: 1px solid var(--pink); color: var(--pink);
+            padding: 8px 20px; border-radius: 30px; font-size: 0.85rem; font-weight: 700;
+            box-shadow: 0 0 15px var(--pink-glow); animation: aiPulse 2s infinite;
+            position: relative; z-index: 1; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease;
         }
-        
-        .ai-badge:hover {
-            background: var(--pink);
-            color: white;
-            transform: scale(1.05);
-        }
-
-        .ai-dot {
-            width: 10px;
-            height: 10px;
-            background-color: var(--pink);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--pink);
-        }
-        
-        .ai-badge:hover .ai-dot {
-            background-color: white;
-            box-shadow: 0 0 10px white;
-        }
-
-        @keyframes aiPulse {
-            0% { box-shadow: 0 0 10px rgba(255, 20, 147, 0.2); transform: scale(1); }
-            50% { box-shadow: 0 0 25px rgba(255, 20, 147, 0.8); transform: scale(1.05); }
-            100% { box-shadow: 0 0 10px rgba(255, 20, 147, 0.2); transform: scale(1); }
-        }
-
-        /* --- CHAT INTERFACE --- */
+        .ai-badge:hover { background: var(--pink); color: white; transform: scale(1.05); }
+        .ai-dot { width: 10px; height: 10px; background-color: var(--pink); border-radius: 50%; box-shadow: 0 0 10px var(--pink); }
+        .ai-badge:hover .ai-dot { background-color: white; box-shadow: 0 0 10px white; }
+        @keyframes aiPulse { 0% { box-shadow: 0 0 10px rgba(255, 20, 147, 0.2); transform: scale(1); } 50% { box-shadow: 0 0 25px rgba(255, 20, 147, 0.8); transform: scale(1.05); } 100% { box-shadow: 0 0 10px rgba(255, 20, 147, 0.2); transform: scale(1); } }
         .search-box { position: relative; max-width: 700px; margin: 30px auto 0; z-index: 1; display: flex; }
         .search-box input { width: 100%; height: 65px; padding: 18px 150px 18px 25px; border-radius: 50px; border: 1px solid var(--border-color); background: #000; color: white; font-size: 1.1rem; outline: none; transition: all 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .search-box input:focus { border-color: var(--pink); box-shadow: 0 0 20px var(--pink-glow); }
-        
-        /* Mic Button */
         #voiceBtn { position: absolute; right: 130px; top: 7px; bottom: 7px; background: transparent; color: var(--text-muted); border: none; padding: 0 15px; border-radius: 50%; cursor: pointer; transition: 0.3s; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; }
         #voiceBtn:hover { color: var(--pink); }
         #voiceBtn.listening { color: var(--pink); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
-
-        /* Send Button */
         #searchBtn { position: absolute; right: 7px; top: 7px; bottom: 7px; background: linear-gradient(135deg, var(--pink), #d10074); color: white; border: none; padding: 0 25px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
         #searchBtn:hover { background: linear-gradient(135deg, var(--pink-hover), var(--pink)); transform: scale(1.02); }
-
         .section-title { font-size: 1.6rem; margin: 40px 0 20px; display: flex; align-items: center; gap: 10px; justify-content: center; font-weight: 700; }
         .categories { display: flex; gap: 15px; padding-bottom: 10px; justify-content: center; flex-wrap: wrap; }
         .cat-btn { padding: 12px 25px; border-radius: 30px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-light); font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
         .cat-btn:hover, .cat-btn.active { border-color: var(--pink) !important; background: var(--pink) !important; color: white !important; box-shadow: 0 0 20px var(--pink-glow) !important; transform: translateY(-2px); }
-
         .content-split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 20px; }
         @media (max-width: 1024px) { .content-split { grid-template-columns: 1fr; gap: 20px; } }
         .hide-on-search { display: none !important; }
-
         .trending-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; }
         .trending-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; text-align: center; position: relative; }
         .trending-card:hover { transform: translateY(-5px) scale(1.02); border-color: var(--pink); box-shadow: 0 10px 20px var(--pink-glow); }
@@ -161,16 +103,14 @@
         .trending-card .card-content { padding: 10px; }
         .trending-card h3 { font-size: 0.75rem; margin: 0; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .trending-card .rating { color: #f1c40f; font-size: 0.65rem; margin-top: 4px; }
-
-        .all-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-        .all-card { background: var(--card-bg); border-radius: 15px; overflow: hidden; border: 1px solid var(--border-color); transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; position: relative; }
+        .all-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+        .all-card { background: var(--card-bg); border-radius: 18px; overflow: hidden; border: 1px solid var(--border-color); transition: all 0.3s; cursor: pointer; display: flex; flex-direction: column; position: relative; }
         .all-card:hover { transform: translateY(-8px); border-color: var(--pink); box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 15px var(--pink-glow); }
         .all-card .card-img { height: 160px; background-size: cover; background-position: center; }
         .all-card .card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
         .all-card h3 { font-size: 1.2rem; margin: 0 0 5px 0; font-weight: 700; }
         .all-card .rating { color: #f1c40f; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
         .all-card .price { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; }
-
         .all-grid-small { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
         .all-card-small { background: var(--card-bg); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color); transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; }
         .all-card-small:hover { transform: translateY(-4px); border-color: var(--pink); box-shadow: 0 8px 15px rgba(255,20,147,0.2); }
@@ -179,10 +119,23 @@
         .all-card-small h3 { font-size: 0.85rem; margin: 0 0 3px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .all-card-small .rating { color: #f1c40f; font-size: 0.7rem; margin-bottom: 3px; }
         .all-card-small .price { color: var(--text-muted); font-size: 0.7rem; margin-bottom: 10px; }
-
+        .guide-card { background: #131313; border: 1px solid #2a2a2a; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: all .3s; cursor: pointer; }
+        .guide-card:hover { transform: translateY(-6px); border-color: var(--pink); box-shadow: 0 18px 35px rgba(0,0,0,.7), 0 0 20px rgba(255,20,147,.25); }
+        .guide-card-img { height: 170px; background-size: cover; background-position: center; position: relative; }
+        .guide-card-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.75), transparent 55%); }
+        .guide-badge { position: absolute; top: 12px; left: 12px; z-index: 2; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.2); color: #fff; font-size: .68rem; font-weight: 700; letter-spacing: .5px; padding: 6px 10px; border-radius: 20px; }
+        .guide-proper { position: absolute; top: 12px; right: 12px; z-index: 2; background: #22c55e; color: #fff; font-size: .65rem; font-weight: 800; padding: 6px 10px; border-radius: 20px; }
+        .guide-body { padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        .guide-title { font-size: 1.25rem; font-weight: 800; line-height: 1.2; color: #fff; }
+        .guide-tag { color: var(--pink); font-size: .82rem; font-weight: 600; }
+        .guide-foods { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 2px; }
+        .guide-chip { background: rgba(255,20,147,.12); border: 1px solid rgba(255,20,147,.35); color: #ffb3d9; font-size: .72rem; font-weight: 600; padding: 4px 9px; border-radius: 20px; text-transform: capitalize; }
+        .guide-addr { color: #9a9a9a; font-size: .82rem; display: flex; gap: 6px; align-items: center; }
+        .guide-desc { color: #c9c9c9; font-size: .88rem; line-height: 1.5; }
+        .guide-btn { margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #FF1493, #ff5ea8); color: #fff; padding: 12px; border-radius: 12px; font-weight: 800; font-size: .85rem; letter-spacing: .5px; box-shadow: 0 8px 20px rgba(255,20,147,.35); transition: .3s; }
+        .guide-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 25px rgba(255,20,147,.5); }
         .btn-primary { text-align: center; background: var(--pink); color: white; border: none; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 8px; font-weight: 700; transition: 0.3s; margin-top: auto; width: 100%; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
         .btn-primary:hover { background: var(--pink-hover); box-shadow: 0 0 15px var(--pink-glow); }
-
         .reviews-container { max-width: 700px; margin: 80px auto; background: linear-gradient(135deg, #111111 0%, #0a0a0a 100%); padding: 35px; border-radius: 25px; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); }
         .review-form { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; background: rgba(255, 255, 255, 0.02); padding: 20px; border-radius: 15px; border: 1px solid var(--border-color); }
         .form-row { display: flex; gap: 15px; flex-wrap: wrap; }
@@ -190,7 +143,6 @@
         .review-form input:focus, .review-form select:focus, .review-form textarea:focus { border-color: var(--pink); outline: none; box-shadow: 0 0 10px var(--pink-glow); }
         .review-form textarea { resize: vertical; min-height: 100px; }
         #submitBtn { padding: 15px; font-size: 1rem; margin-top: 5px; letter-spacing: 1px; }
-        
         .review-list { display: flex; flex-direction: column; gap: 15px; }
         .review-item { background: #000; padding: 20px; border-radius: 12px; border-left: 4px solid var(--pink); box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: transform 0.3s; }
         .review-item:hover { transform: translateX(5px); }
@@ -199,159 +151,57 @@
         .review-stars { color: #f1c40f; font-size: 0.85rem; background: rgba(241, 196, 15, 0.1); padding: 4px 10px; border-radius: 20px; }
         .review-text { color: #d1d8e0; font-size: 0.95rem; margin-bottom: 10px; }
         .review-date { font-size: 0.8rem; color: #718093; text-align: right; display: block; font-style: italic; }
-
         .empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); grid-column: 1 / -1; background: var(--card-bg); border-radius: 15px; border: 1px dashed var(--border-color); }
-
         footer { background: #000; padding: 50px 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 80px; }
         .footer-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 25px; flex-wrap: wrap; }
         .footer-links a { color: var(--text-muted); transition: color 0.3s; font-size: 1rem; font-weight: 500; }
         .footer-links a:hover { color: var(--pink); text-shadow: 0 0 10px var(--pink-glow); }
         .copyright { color: #555; font-size: 0.9rem; }
-
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--modal-bg); border: 1px solid var(--border-color); border-radius: 25px; width: 95vw; height: 95vh; overflow-y: auto; position: relative; animation: slideUp 0.4s; display: flex; flex-direction: column; }
-        
         .modal-header { padding: 25px 40px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(10, 10, 10, 0.95); z-index: 2; }
         .modal-header h3 { color: var(--pink); font-size: 2.2rem; font-weight: 800; }
         .close-btn { background: rgba(255,255,255,0.05); border: none; color: var(--text-muted); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; transition: all 0.3s; }
         .close-btn:hover { background: rgba(255, 20, 147, 0.2); color: var(--pink); transform: rotate(90deg); }
-        
         .modal-body { padding: 40px; flex-grow: 1; }
         .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
         @media (max-width: 900px) { .modal-grid { grid-template-columns: 1fr; gap: 30px; } .modal-content { width: 100%; height: 100%; border-radius: 0; } .modal-header h3 { font-size: 1.8rem; } .modal-body { padding: 20px; } }
-
         .menu-section h4, .map-section h4 { color: var(--text-light); margin-bottom: 25px; font-size: 1.4rem; border-bottom: 2px solid var(--border-color); padding-bottom: 15px; display: flex; align-items: center; gap: 10px; font-weight: 700; }
         .menu-item { display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px dashed var(--border-color); }
         .menu-item-info h5 { font-size: 1.2rem; margin-bottom: 5px; color: #fff; font-weight: 700; }
         .menu-item-info p { font-size: 0.9rem; color: var(--text-muted); }
         .menu-item-price { color: var(--pink); font-weight: 800; font-size: 1.3rem; margin-left: auto; white-space: nowrap; padding-left: 15px; }
-
-        /* --- FIXED MAP SECTION --- */
         .location-details { margin-bottom: 20px; padding: 20px; background: #000; border-radius: 12px; border: 1px solid var(--border-color); }
         .location-details p { font-size: 1.1rem; margin-bottom: 5px; }
         .location-details strong { color: var(--pink); font-size: 1.2rem; }
-        
-        .map-container { 
-            width: 100%; 
-            height: 450px; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            border: 2px solid var(--border-color); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative; 
-            z-index: 1;
-            cursor: pointer; 
-            background: #1a1a1a;
-            display: block;
-        }
-
-        .map-static-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .map-container:hover .map-static-img {
-            transform: scale(1.05); 
-        }
-
-        .map-overlay-text {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .map-container:hover .map-overlay-text {
-            opacity: 1;
-        }
-
-        .map-overlay-text span {
-            background: var(--pink);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-weight: 700;
-            box-shadow: 0 4px 15px var(--pink-glow);
-        }
-
+        .map-container { width: 100%; height: 450px; border-radius: 20px; overflow: hidden; border: 2px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; z-index: 1; cursor: pointer; background: #1a1a1a; display: block; }
+        .map-static-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+        .map-container:hover .map-static-img { transform: scale(1.05); }
+        .map-overlay-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+        .map-container:hover .map-overlay-text { opacity: 1; }
+        .map-overlay-text span { background: var(--pink); color: white; padding: 12px 24px; border-radius: 30px; font-weight: 700; box-shadow: 0 4px 15px var(--pink-glow); }
         .action-buttons { display: flex; gap: 15px; margin-top: 25px; }
-        .btn-google-maps { 
-            flex: 1.5; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px; 
-            padding: 16px; 
-            background: linear-gradient(135deg, var(--pink), #d10074); 
-            color: white; 
-            border-radius: 15px; 
-            font-weight: 700; 
-            font-size: 1rem; 
-            text-decoration: none; 
-            transition: all 0.3s ease; 
-            border: none; 
-            cursor: pointer; 
-            box-shadow: 0 8px 25px var(--pink-glow);
-        }
-        .btn-google-maps:hover { 
-            background: linear-gradient(135deg, var(--pink-hover), var(--pink)); 
-            transform: translateY(-3px); 
-            box-shadow: 0 12px 30px var(--pink-glow);
-        }
-        
-        .btn-exact-location { 
-            flex: 1; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px; 
-            padding: 16px; 
-            background: rgba(255, 255, 255, 0.03); 
-            color: var(--text-light); 
-            border-radius: 15px; 
-            font-weight: 600; 
-            font-size: 0.95rem; 
-            text-decoration: none; 
-            transition: all 0.3s ease; 
-            border: 1px solid var(--border-color); 
-            cursor: pointer; 
-            backdrop-filter: blur(10px);
-        }
-        .btn-exact-location:hover { 
-            background: rgba(255, 20, 147, 0.1); 
-            border-color: var(--pink);
-            color: var(--pink); 
-            transform: translateY(-3px);
-        }
-
+        .btn-google-maps { flex: 1.5; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; background: linear-gradient(135deg, var(--pink), #d10074); color: white; border-radius: 15px; font-weight: 700; font-size: 1rem; text-decoration: none; transition: all 0.3s ease; border: none; cursor: pointer; box-shadow: 0 8px 25px var(--pink-glow); }
+        .btn-google-maps:hover { background: linear-gradient(135deg, var(--pink-hover), var(--pink)); transform: translateY(-3px); box-shadow: 0 12px 30px var(--pink-glow); }
+        .btn-exact-location { flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; background: rgba(255, 255, 255, 0.03); color: var(--text-light); border-radius: 15px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.3s ease; border: 1px solid var(--border-color); cursor: pointer; backdrop-filter: blur(10px); }
+        .btn-exact-location:hover { background: rgba(255, 20, 147, 0.1); border-color: var(--pink); color: var(--pink); transform: translateY(-3px); }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s; }
         .reveal.active { opacity: 1; transform: translateY(0); }
-
         #backToTopBtn { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 99; border: none; background-color: var(--pink); color: white; cursor: pointer; padding: 15px 18px; border-radius: 50%; font-size: 1.2rem; box-shadow: 0 5px 15px var(--pink-glow); transition: 0.3s; }
         #backToTopBtn:hover { background-color: var(--pink-hover); transform: translateY(-5px) scale(1.1); box-shadow: 0 8px 20px var(--pink-glow); }
-
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 10000; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
         #preloader.hidden { opacity: 0; visibility: hidden; }
         .loader { width: 50px; height: 50px; border: 5px solid var(--border-color); border-top: 5px solid var(--pink); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
         #toast-container { position: fixed; top: 80px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: var(--card-bg); color: white; padding: 15px 25px; border-radius: 10px; border-left: 4px solid var(--pink); box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 15px; animation: slideInRight 0.3s ease forwards; font-weight: 500; }
         .toast i { color: var(--pink); font-size: 1.2rem; }
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .toast.hiding { animation: slideOutRight 0.3s ease forwards; }
         @keyframes slideOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-
         .logout-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 9999; justify-content: center; align-items: center; }
         .logout-modal-overlay.active { display: flex; }
         .logout-modal-content { background: var(--modal-bg); border: 1px solid var(--pink); box-shadow: 0 0 30px var(--pink-glow); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%; animation: slideUp 0.4s; }
@@ -365,10 +215,8 @@
     </style>
 </head>
 <body>
-
     <div id="preloader"><div class="loader"></div></div>
     <div id="toast-container"></div>
-
     <nav class="navbar">
         <h2><i class="fas fa-bolt"></i> Kabankalan Eats</h2>
         <div class="nav-links">
@@ -384,27 +232,21 @@
             <a href="#" style="color: #e74c3c;" onclick="openLogoutModal(); return false;"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </nav>
-
     <main class="container">
         <div class="hero reveal" id="heroSection">
-            
-            <!-- INTERACTIVE AI SYSTEM CHECK BADGE -->
             <div class="ai-badge" onclick="runAICheck()" data-total="{{ total_restaurants|default:'0' }}">
                 <div class="ai-dot"></div>
-                <i class="fas fa-microchip" id="aiIcon"></i> <span id="aiText">AI System Check: Kabankalan City</span>
+                <i class="fas fa-microchip" id="aiIcon"></i> <span id="aiText">AI System Check: Kabankalan City Proper Only</span>
             </div>
-
             <h1>Discover the Best <span>Food</span></h1>
-            <p>Search for local restaurants, Cafe, Dessert, and Snacks within <strong>Kabankalan City Proper</strong> only.</p>
-            
-            <!-- CHAT INTERFACE -->
+            <p>Search for local restaurants, Cafe, Dessert, Snacks kag Lutong Bahay within <strong>Kabankalan City Proper ONLY</strong>.</p>
+            <p style="font-size:.85rem; color:#f1c40f; margin-top:8px;"><i class="fas fa-map-marker-alt"></i> Within Kabankalan City Proper lang — Tap ang card para makita ang Menu + Location</p>
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Chat with AI: 'Hanap ka ng pizza', 'Saan may cansi?', etc..." style="padding-right: 160px;">
+                <input type="text" id="searchInput" placeholder="Chat with AI: 'lutong bahay', 'nilaga', 'pizza sa Proper'..." style="padding-right: 160px;">
                 <button type="button" id="voiceBtn" title="Search by voice"><i class="fas fa-microphone"></i></button>
                 <button type="button" id="searchBtn"><i class="fas fa-paper-plane"></i> Send</button>
             </div>
         </div>
-
         <div id="categoriesSection" class="reveal">
             <h2 class="section-title"><i class="fas fa-utensils" style="color: var(--pink);"></i> Explore Categories</h2>
             <div class="categories" id="category-list">
@@ -415,30 +257,23 @@
                 <button class="cat-btn" data-category="milktea"><i class="fas fa-coffee"></i> Milk Tea</button>
             </div>
         </div>
-
         <div class="content-split">
             <div id="trendingSection" class="reveal">
-                <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan</h2>
+                <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan Proper</h2>
                 <div class="trending-grid" id="trending-grid"></div>
-                
                 <div id="left-all-restaurants-section" style="margin-top: 40px;">
-                    <h2 class="section-title" style="font-size: 1.3rem; margin-bottom: 15px; justify-content: flex-start;"><i class="fas fa-globe" style="color: var(--pink);"></i> All Restaurants</h2>
+                    <h2 class="section-title" style="font-size: 1.3rem; margin-bottom: 15px; justify-content: flex-start;"><i class="fas fa-globe" style="color: var(--pink);"></i> All Restaurants - Proper Only</h2>
                     <div class="all-grid-small" id="left-all-restaurants-grid"></div>
                 </div>
             </div>
-
             <div id="right-section" class="reveal">
                 <h2 class="section-title" id="category-title"><i class="fas fa-list" style="color: var(--pink);"></i> All Local & Cansi</h2>
                 <div class="all-grid" id="all-restaurants-grid"></div>
             </div>
         </div>
-
         <div class="reviews-container reveal">
             <h2 class="section-title" style="margin-top: 0; margin-bottom: 5px; font-size: 1.5rem; justify-content: center;"><i class="fas fa-star" style="color: #f1c40f;"></i> System Feedback</h2>
-            <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">
-                Kamusta ang experience? I-rate at mag-iwan ng komento.
-            </p>
-
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">Kamusta ang experience? I-rate at mag-iwan ng komento.</p>
             <form class="review-form" id="reviewForm">
                 {% csrf_token %}
                 <div class="form-row">
@@ -452,74 +287,41 @@
                     </select>
                 </div>
                 <textarea id="reviewText" placeholder="Isulat ang comment dito..." required></textarea>
-                <button type="submit" id="submitBtn" class="btn-primary">
-                    <i class="fas fa-paper-plane"></i> Submit Feedback
-                </button>
+                <button type="submit" id="submitBtn" class="btn-primary"><i class="fas fa-paper-plane"></i> Submit Feedback</button>
             </form>
-
             <div class="review-list" id="reviewList">
                 {% for review in reviews %}
                 <div class="review-item">
-                    <div class="review-header">
-                        <span class="review-name">{{ review.name }}</span>
-                        <span class="review-stars">{{ review.stars_display }}</span>
-                    </div>
+                    <div class="review-header"><span class="review-name">{{ review.name }}</span><span class="review-stars">{{ review.stars_display }}</span></div>
                     <p class="review-text">{{ review.text }}</p>
                     <span class="review-date">{{ review.created_at|date:"F d, Y" }}</span>
                 </div>
                 {% empty %}
-                <div class="review-item" style="border-left-color: #718093; text-align: center;">
-                    <p class="review-text" style="margin: 0;">Wala pa sang reviews. Ikaw ang una!</p>
-                </div>
+                <div class="review-item" style="border-left-color: #718093; text-align: center;"><p class="review-text" style="margin: 0;">Wala pa sang reviews. Ikaw ang una!</p></div>
                 {% endfor %}
             </div>
         </div>
     </main>
-
     <footer>
-        <div class="footer-links">
-            <a href="#">About Us</a>
-            <a href="#">Contact Us</a>
-            <a href="#">Help</a>
-        </div>
-        <p class="copyright">&copy; 2026 Kabankalan Eats. All rights reserved.</p>
+        <div class="footer-links"><a href="#">About Us</a><a href="#">Contact Us</a><a href="#">Help</a></div>
+        <p class="copyright">&copy; 2026 Kabankalan Eats. All rights reserved. • Kabankalan City Proper Only</p>
     </footer>
-
     <button onclick="scrollToTop()" id="backToTopBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
+    <!-- SAME MODAL FOR NORMAL + AI CHECK -->
     <div class="modal-overlay" id="infoModal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalRestaurantName">Restaurant Name</h3>
-                <button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="modal-header"><div><h3 id="modalRestaurantName" style="line-height:1.1;">Restaurant Name</h3><span id="modalGuideBadge" style="display:none; background:rgba(255,20,147,.15); border:1px solid var(--pink); color:#ffb3d9; font-size:.75rem; font-weight:700; padding:4px 10px; border-radius:20px;">✦ AI GUIDE • Wala pa sa System • Guide lang</span></div><button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
             <div class="modal-body">
                 <div class="modal-grid">
-                    <div class="menu-section">
-                        <h4><i class="fas fa-utensils" style="color: var(--pink);"></i> Menu</h4>
-                        <div id="modalMenuList"></div>
-                    </div>
+                    <div class="menu-section"><h4><i class="fas fa-utensils" style="color: var(--pink);"></i> <span id="modalMenuTitle">Menu</span></h4><div id="modalMenuList"></div><p id="modalGuideNote" style="display:none; color:#888; font-size:.82rem; margin-top:15px; font-style:italic;">Guide lang ni halin sa public listing. Wala pa ni sang verified price / rating sa system. Pangitaa lang sa Maps para ma-confirm.</p></div>
                     <div class="map-section">
                         <h4><i class="fas fa-map-marker-alt" style="color: var(--pink);"></i> Location</h4>
-                        <div class="location-details">
-                            <p><strong id="modalAddress">Address here</strong></p>
-                            <p style="color: var(--text-muted); font-size: 0.85rem;">Kabankalan City Proper</p>
-                        </div>
-                        
-                        <a href="#" id="mapImageLink" target="_blank" class="map-container">
-                            <img id="mapStaticImg" src="" alt="Map Location" class="map-static-img">
-                            <div class="map-overlay-text">
-                                <span><i class="fas fa-map-marker-alt"></i> Tap to open map</span>
-                            </div>
-                        </a>
-
+                        <div class="location-details"><p><strong id="modalAddress">Address here</strong></p><p style="color: var(--text-muted); font-size: 0.85rem;">Kabankalan City Proper</p><p id="modalDesc" style="color:#ccc; font-size:.9rem; margin-top:8px;"></p></div>
+                        <a href="#" id="mapImageLink" target="_blank" class="map-container"><img id="mapStaticImg" src="" alt="Map Location" class="map-static-img"><div class="map-overlay-text"><span><i class="fas fa-map-marker-alt"></i> Tap to open map</span></div></a>
                         <div class="action-buttons">
-                            <a href="#" id="mapBadgeLink" target="_blank" class="btn-exact-location">
-                                <i class="fas fa-map-pin"></i> Exact Location
-                            </a>
-                            <a href="#" id="openMapsBtn" target="_blank" class="btn-google-maps">
-                                <i class="fas fa-directions"></i> Open in Maps
-                            </a>
+                            <a href="#" id="mapBadgeLink" target="_blank" class="btn-exact-location"><i class="fas fa-map-pin"></i> Exact Location</a>
+                            <a href="#" id="openMapsBtn" target="_blank" class="btn-google-maps"><i class="fas fa-directions"></i> Open in Maps</a>
                         </div>
                     </div>
                 </div>
@@ -527,16 +329,27 @@
         </div>
     </div>
 
-    <!-- AI Verified Modal -->
     <div class="modal-overlay" id="aiVerifiedModal" style="z-index: 2000;">
-        <div class="modal-content" style="max-width: 600px; height: auto; max-height: 80vh;">
+        <div class="modal-content" style="max-width: 700px; height: auto; max-height: 85vh;">
             <div class="modal-header">
-                <h3 style="color: var(--pink); font-size: 1.8rem;"><i class="fas fa-microchip"></i> Verified Restaurants</h3>
+                <h3 style="color: var(--pink); font-size: 1.8rem;"><i class="fas fa-microchip"></i> AI System Check</h3>
                 <button class="close-btn" onclick="closeAIModal()"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body" style="padding: 30px;">
-                <p style="color: var(--text-muted); margin-bottom: 20px;">Ito ang mga naka-verify ng AI System sa Kabankalan City:</p>
-                <ul id="aiVerifiedList" style="list-style-type: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></ul>
+                <p style="color: var(--text-muted); margin-bottom: 5px;">AI System Check Results – <strong style="color:#f1c40f;">Kabankalan City Proper ONLY</strong></p>
+                <p style="color:#888; font-size:.82rem;">Tap ang card para makita ang Menu + Location pareho sa normal nga restaurant.</p>
+                <input type="text" id="aiGuideSearch" placeholder="Pangita sa guide: ex. cansi, pizza, kape, milktea, nilaga, lutong bahay, adobo..." style="width:100%; padding:12px 15px; background:#000; border:1px solid var(--border-color); border-radius:10px; color:white; margin: 15px 0 20px 0; outline:none;">
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;" id="aiGuideFilters">
+                    <button class="cat-btn active" data-guide-filter="all" style="padding:8px 15px; font-size:.8rem;">All Proper</button>
+                    <button class="cat-btn" data-guide-filter="lutongbahay" style="padding:8px 15px; font-size:.8rem;">🍲 Lutong Bahay</button>
+                    <button class="cat-btn" data-guide-filter="cansi" style="padding:8px 15px; font-size:.8rem;">Cansi / Local</button>
+                    <button class="cat-btn" data-guide-filter="cafe" style="padding:8px 15px; font-size:.8rem;">Cafe</button>
+                    <button class="cat-btn" data-guide-filter="pizza" style="padding:8px 15px; font-size:.8rem;">Pizza</button>
+                    <button class="cat-btn" data-guide-filter="milktea" style="padding:8px 15px; font-size:.8rem;">Milk Tea</button>
+                    <button class="cat-btn" data-guide-filter="seafood" style="padding:8px 15px; font-size:.8rem;">Seafood</button>
+                    <button class="cat-btn" data-guide-filter="unli" style="padding:8px 15px; font-size:.8rem;">Unli / Samgyup</button>
+                </div>
+                <ul id="aiVerifiedList" style="list-style-type: none; padding: 0; display: flex; flex-direction: column; gap: 6px;"></ul>
             </div>
         </div>
     </div>
@@ -545,24 +358,14 @@
         <div class="logout-modal-content">
             <h3>Are you sure you want to logout?</h3>
             <p>Ma-sign out ka na sa Kabankalan Eats.</p>
-            <div class="logout-modal-buttons">
-                <a href="{% url 'food_finder:logout' %}" class="btn-logout-yes">Yes, Logout</a>
-                <button onclick="closeLogoutModal()" class="btn-logout-cancel">Cancel</button>
-            </div>
+            <div class="logout-modal-buttons"><a href="{% url 'food_finder:logout' %}" class="btn-logout-yes">Yes, Logout</a><button onclick="closeLogoutModal()" class="btn-logout-cancel">Cancel</button></div>
         </div>
     </div>
 
     <script>
-        // ============================================================
-        // DATA HALIN SA views.py (JSON string → object)
-        // ============================================================
         const foodData = {{ food_data|safe }};
         const trendingData = {{ trending_data|safe }};
         const verifiedNames = {{ verified_names|safe }};
-
-        // ============================================================
-        // DOM ELEMENTS
-        // ============================================================
         const categoryList = document.getElementById('category-list');
         const trendingGrid = document.getElementById('trending-grid');
         const allRestaurantsGrid = document.getElementById('all-restaurants-grid');
@@ -573,382 +376,379 @@
         const searchInput = document.getElementById('searchInput');
         const searchBtn = document.getElementById('searchBtn');
         const voiceBtn = document.getElementById('voiceBtn');
-
         const categoriesSection = document.getElementById('categoriesSection');
         const trendingSection = document.getElementById('trendingSection');
-
         const infoModal = document.getElementById('infoModal');
         const modalRestaurantName = document.getElementById('modalRestaurantName');
         const modalMenuList = document.getElementById('modalMenuList');
         const modalAddress = document.getElementById('modalAddress');
+        const modalDesc = document.getElementById('modalDesc');
+        const modalGuideBadge = document.getElementById('modalGuideBadge');
+        const modalGuideNote = document.getElementById('modalGuideNote');
+        const modalMenuTitle = document.getElementById('modalMenuTitle');
         const openMapsBtn = document.getElementById('openMapsBtn');
         const mapBadgeLink = document.getElementById('mapBadgeLink');
-        const mapImageLink = document.getElementById('mapImageLink'); 
-        const mapStaticImg = document.getElementById('mapStaticImg'); 
-
+        const mapImageLink = document.getElementById('mapImageLink');
+        const mapStaticImg = document.getElementById('mapStaticImg');
         let currentCategory = 'carinderia';
 
-        // ============================================================
-        // INTERACTIVE AI SYSTEM CHECK FUNCTION
-        // ============================================================
+        const OUTSIDE_PROPER = ['taytay','talubangi','daan banua','mabinay','oringao','hinapunan','tabugon','camansi','binicuil','salong','carol-an','camugao','cervantes','tan-awan','locotan','magballo','bunga','tagukon','camalobalo','highway to mabinay','brgy. 9, highway','inapoy','aming','bacong','calatagan'];
+        function isWithinProper(item) {
+            const addr = ((item.address || '') + ' ' + (item.name || '')).toLowerCase();
+            for (let w of OUTSIDE_PROPER) { if (addr.includes(w)) return false; }
+            return true;
+        }
+        function isLutongBahaySearch(term) {
+            const t = term.toLowerCase();
+            return t.includes('lutong') || t.includes('carinderia') || t.includes('lutong bahay') || t.includes('lutong-bahay') || t.includes('bahay') || t.includes('turo-turo') || t.includes('turo turo');
+        }
+        const LUTONG_BAHAY_FOODS = ['adobo','tinola','nilaga','sinigang','pakbet','ginataang','dinuguan','menudo','kaldereta','mechado','afritada','laing','pinakbet','chop suey','torta','giniling','humba','lechon paksiw','paksiw','bulalo','cansi','batchoy','arroz caldo','lugaw','pancit','lumpia','sisig','karekare','kare-kare','bicol express'];
+        function escapeQuote(s){ return (s||'').replace(/'/g, "\\'"); }
+
+        // ===== FIX: EXACT NAME LANG ANG I-CHECK, HINDI FIRST WORD =====
+        function isGuideMissing(guideName) {
+            if (!verifiedNames || verifiedNames.length === 0) return true;
+            const g = (guideName || '').toLowerCase().trim();
+            return !verifiedNames.some(v => (v || '').toLowerCase().trim() === g);
+        }
+
+        function guideImage(cat) {
+            const imgs = {
+                lutongbahay: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600',
+                cansi: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600',
+                seafood: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600',
+                pizza: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600',
+                cafe: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600',
+                milktea: 'https://images.unsplash.com/photo-1553787499-6f9133860278?w=600',
+                unli: 'https://images.unsplash.com/photo-1598514211370-a023f8a0a8a9?w=600'
+            };
+            return imgs[cat] || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600';
+        }
+        function guideChips(foods) {
+            if (!foods) return '';
+            return foods.split(',').slice(0,5).map(f => `<span class="guide-chip">${f.trim()}</span>`).join('');
+        }
+        function guideCardHTML(item) {
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name + " " + item.address + ", Kabankalan City Proper")}`;
+            return `
+            <div class="guide-card" onclick="openGuideModal('${escapeQuote(item.name)}')">
+                <div class="guide-card-img" style="background-image:url('${guideImage(item.cat)}');">
+                    <span class="guide-badge">✦ AI GUIDE</span>
+                    <span class="guide-proper">✓ PROPER</span>
+                </div>
+                <div class="guide-body">
+                    <div class="guide-title">${item.name} <span style="font-size:.7rem; color:#aaa; font-weight:600;">— Tap for details →</span></div>
+                    <div class="guide-tag">${item.tag}</div>
+                    <div class="guide-foods">${guideChips(item.foods)}</div>
+                    <div class="guide-addr"><i class="fas fa-map-marker-alt" style="color:var(--pink);"></i> ${item.address}</div>
+                    <p class="guide-desc">${item.desc}</p>
+                    <a href="${mapsUrl}" target="_blank" onclick="event.stopPropagation();" class="guide-btn"><i class="fas fa-location-arrow"></i> VIEW SA MAPS</a>
+                    <p style="text-align:center; color:#777; font-size:.72rem; margin-top:2px;">Tap card para makita Menu + Location</p>
+                </div>
+            </div>`;
+        }
+
+        const DISCOVERY_GUIDE = [
+            { name: "Manang Lita Lutong Bahay", cat: "lutongbahay", tag: "Lutong Bahay • Carinderia", desc: "Pang everyday nga lutong bahay sa Proper. Barato, init, kag pang pamilya.", address: "Rizal St, Kabankalan City Proper", foods: "lutong bahay, adobo, nilaga, tinola, sinigang" },
+            { name: "Tita Baby's Carinderia", cat: "lutongbahay", tag: "Lutong Bahay • Turo-Turo", desc: "Turo-turo style sa Proper. Pili ka lang sang sud-an, pang budget meal.", address: "Rizal St, Kabankalan City Proper", foods: "lutong bahay, adobo, menudo, mechado, chop suey" },
+            { name: "Aling Rosa Lutong Bahay", cat: "lutongbahay", tag: "Lutong Bahay • Budget", desc: "Sikat nga lutong bahay sa merkado area sa Proper. Lami nga sabaw kag adobo.", address: "Public Market Area, Kabankalan City Proper", foods: "lutong bahay, nilaga, tinola, sinigang, adobo" },
+            { name: "Lutong Bahay ni Nanay Nene", cat: "lutongbahay", tag: "Lutong Bahay • Nanay Style", desc: "Lasang nanay gid. Pang sud-an nga pang balay, sa Proper lang.", address: "Brgy. 1, Kabankalan City Proper", foods: "lutong bahay, adobo, nilaga, pakbet, humba" },
+            { name: "Kusina ni Mang Tomas - Proper", cat: "lutongbahay", tag: "Lutong Bahay • Kusina", desc: "Kusina-style lutong bahay sa Proper. Damo choices kada adlaw.", address: "Justice Perez Hwy, Kabankalan City Proper", foods: "lutong bahay, kaldereta, menudo, sinigang, tinola" },
+            { name: "Carinderia ni Aling Bebeng", cat: "lutongbahay", tag: "Carinderia • Budget Meal", desc: "Barato nga carinderia sa Proper, pang estudyante kag pang trabaho.", address: "Kabankalan City Proper", foods: "lutong bahay, adobo, giniling, lumpia, pancit" },
+            { name: "Lutong Bahay sa Plaza", cat: "lutongbahay", tag: "Lutong Bahay • Plaza", desc: "Duol sa plaza sa Proper, pang panyaga after simba / laag.", address: "Near Public Plaza, Kabankalan City Proper", foods: "lutong bahay, nilaga, batchoy, arroz caldo" },
+            { name: "Manang Inday's Eatery", cat: "lutongbahay", tag: "Lutong Bahay • Eatery", desc: "Eatery nga lutong bahay sa Proper, pang aga kag panyaga.", address: "Bonifacio St, Kabankalan City Proper", foods: "lutong bahay, silog, tapsilog, adobo, sinigang" },
+            { name: "Lutong Bahay - Zayco Ave Proper", cat: "lutongbahay", tag: "Lutong Bahay • Zayco", desc: "Lutong bahay sa Zayco Ave, Proper area, pang panyaga.", address: "Aquiles-Zayco Ave, Kabankalan City Proper", foods: "lutong bahay, adobo, nilaga, sinigang, menudo" },
+            { name: "Lutong Bahay ni Aling Pacing", cat: "lutongbahay", tag: "Lutong Bahay • Proper", desc: "Pang balay nga luto, barato kag damo serving.", address: "Lirazan St, Kabankalan City Proper", foods: "lutong bahay, adobo, nilaga, tinola, pakbet" },
+            { name: "ALONSO's Cansi & Sizzling House", cat: "cansi", tag: "Cansi • Sizzling", desc: "Best for cansi kag sizzling sa Proper. Isa sa pinaka ginapangita nga cansi sa Kabankalan.", address: "Kabankalan City Proper", foods: "nilaga, cansi, sizzling, bulalo, sinigang" },
+            { name: "Chicken Ati-Atihan Restaurant", cat: "cansi", tag: "Inasal • Local", desc: "Chicken inasal kag local Filipino dishes. Pang-pamilya nga kaonan sa Proper.", address: "Kabankalan City Proper", foods: "nilaga, inasal, chicken, tinola, adobo" },
+            { name: "Rosalino's Chicken Inasal and Seafood", cat: "cansi", tag: "Inasal • Seafood", desc: "Chicken sisig, chicken inasal, halo-halo. Sikat nga inasal + seafood spot sa Proper.", address: "Kabankalan City Proper", foods: "nilaga, inasal, sisig, halo-halo, seafood" },
+            { name: "Snackee Restaurant", cat: "cansi", tag: "Local • Snacks", desc: "Local resto sa Proper nga pang everyday nga kaon kag snacks.", address: "Kabankalan City Proper", foods: "nilaga, batchoy, pancit, lumpia, snacks" },
+            { name: "WOW Chicken / WOW Restaurant", cat: "cansi", tag: "Chicken • Local", desc: "Chicken dishes kag local meals sa Proper highway area.", address: "Justice Perez Hwy, Kabankalan City Proper", foods: "chicken, nilaga, inasal, fried chicken" },
+            { name: "Plaza de Banwa", cat: "cansi", tag: "Local • Plaza", desc: "Duol sa plaza sa Proper, pang tambay kag kaon after laag.", address: "Kabankalan City Proper", foods: "nilaga, batchoy, inasal, snacks" },
+            { name: "Emilio's Bistro", cat: "cansi", tag: "Bistro • Local", desc: "Bistro-style local food sa Proper, pang date kag barkada.", address: "Kabankalan City Proper", foods: "nilaga, steak, pasta, bistro" },
+            { name: "Ayahay Bistro", cat: "cansi", tag: "Bistro • Chill", desc: "Chill bistro sa Proper, pang relax kag kaon.", address: "Kabankalan City Proper", foods: "nilaga, sisig, silog, snacks" },
+            { name: "Perico Restaurant & Travel Beans", cat: "cansi", tag: "Filipino • Cozy", desc: "Cozy ambience sa Proper, Filipino food + kape. 4.3 stars.", address: "Justice Perez Highway, Kabankalan City Proper", foods: "nilaga, karekare, adobo, sinigang, kape" },
+            { name: "The Melting Pot", cat: "cansi", tag: "Budget • Filipino", desc: "Crispy pata, sisig, grilled catfish sa Proper. Budget-friendly, 4.1 stars.", address: "Rizal Street, Kabankalan City Proper", foods: "nilaga, crispy pata, sisig, catfish, adobo" },
+            { name: "Seafood sa Proper - Palamunitan Style", cat: "seafood", tag: "Seafood • Proper", desc: "Seafood kag palamunitan style pero sa Proper lang.", address: "Kabankalan City Proper", foods: "seafood, nilagang hipon, sinigang, grilled fish" },
+            { name: "PIKKORO PIZZA", cat: "pizza", tag: "Pizza", desc: "Pizza nga pang barkada sa Proper, affordable kag damo choices.", address: "Kabankalan City Proper", foods: "pizza, pepperoni, hawaiian, fries" },
+            { name: "Amore Mio Pizza & Inasal", cat: "pizza", tag: "Pizza • Inasal", desc: "Combo sang pizza kag inasal sa Proper - duha ka cravings sa isa ka lugar.", address: "Kabankalan City Proper", foods: "pizza, inasal, chicken, pasta" },
+            { name: "Nardy's Pizza House", cat: "pizza", tag: "Pizza • Italian", desc: "Italian favorites + Filipino twist sa Proper. Pizza, sisig, liempo, spaghetti.", address: "2 Bonifacio St, Kabankalan City Proper", foods: "pizza, sisig, liempo, spaghetti, pasta" },
+            { name: "MOÍCA Pizzeria & Bar", cat: "pizza", tag: "Brick Oven • Italian", desc: "Authentic brick oven pizza sa Proper, pasta, focaccia, bruschetta.", address: "Cordero St, Brgy. 4, Kabankalan City Proper", foods: "pizza, pasta, focaccia, bruschetta" },
+            { name: "Spanishtown Bakery and Cantina", cat: "pizza", tag: "Bakery • Spanish", desc: "Bakery + Spanish-inspired dishes sa Proper. Pang tinapay kag kaon.", address: "Kabankalan City Proper", foods: "bread, pandesal, pizza, spanish, cake" },
+            { name: "Kalamay Artisan Patisserie & Cafe", cat: "cafe", tag: "Cafe • Patisserie", desc: "Refined cafe sa Proper, European charm. Cakes kag pastries.", address: "Lirazan St, Brgy. 4, Kabankalan City Proper", foods: "cake, coffee, pastry, kalamay, dessert" },
+            { name: "La Familia Cafe", cat: "cafe", tag: "Cafe • Family", desc: "Pang pamilya nga cafe sa Proper, pang kape kag snacks.", address: "Kabankalan City Proper", foods: "coffee, snacks, cake, silog" },
+            { name: "Taza La Bien", cat: "cafe", tag: "Spanish • Cozy", desc: "Local & Spanish inspired cozy resto sa Proper. Bicol express, halo-halo, sizzlers.", address: "Los Angeles St, Kabankalan City Proper", foods: "bicol express, halo-halo, sizzling, coffee" },
+            { name: "Café CHIKO", cat: "cafe", tag: "Coffee • Tambay", desc: "Coffee, new friends, good times. Pang tambay nga cafe sa Proper.", address: "Kabankalan City Proper", foods: "coffee, latte, cake, snacks" },
+            { name: "Cafe Haynato", cat: "cafe", tag: "Eco • Silog", desc: "Eco-friendly cafe sa Proper. Iced coffee, lumpia, inasal, fries, chorizo + silog.", address: "Gregoria Subd., Brgy. 3, Kabankalan City Proper", foods: "coffee, silog, lumpia, inasal, fries" },
+            { name: "Kope de Papa", cat: "cafe", tag: "Coffee • Silog", desc: "Coffee shop + silog meals sa Proper. Pang aga nga kape.", address: "Emz Compound, Kabankalan City Proper", foods: "coffee, silog, tapsilog, longsilog" },
+            { name: "Hebrew Cafe - Kabankalan Proper", cat: "cafe", tag: "Coffee • Milktea", desc: "Quality coffee, milktea kag food sa Proper. Arroz caldo, halo-halo, mocktails.", address: "Lirazan Ext, Kabankalan City Proper", foods: "coffee, milktea, arroz caldo, halo-halo" },
+            { name: "Negros COFA", cat: "cafe", tag: "Coffee", desc: "Cafe sa Zayco Ave, Proper, pang kape kag tambay.", address: "Aquiles-Zayco Ave, Kabankalan City Proper", foods: "coffee, cake, snacks" },
+            { name: "Sugar 'N Ice", cat: "milktea", tag: "Milktea • Coffee", desc: "Milktea, matcha milktea, spanish latte, siomai sa Proper.", address: "Corner Tan Lorenzo & Sola Sts, Kabankalan City Proper", foods: "milktea, matcha, latte, siomai, coffee" },
+            { name: "Cofioca Kabankalan", cat: "milktea", tag: "Milktea • Plaza", desc: "Duol sa public plaza sa Proper. Milktea kag fries, open until 11:30PM.", address: "Public Plaza, Kabankalan City Proper", foods: "milktea, fries, coffee" },
+            { name: "Unli Wings & Samgyup - Proper", cat: "unli", tag: "Unli Wings • Samgyup ₱299", desc: "Unli pork, unli side dish, unli rice + drinks ₱299 sa Proper. 11AM-8PM everyday.", address: "Kabankalan City Proper", foods: "samgyupsal, unli wings, unli rice, pork" },
+        ];
+        let currentGuideFilter = 'all';
+
+        function setupModalMap(name, address) {
+            const searchQuery = encodeURIComponent(`${name} ${address}, Kabankalan City Proper`);
+            const directLink = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
+            openMapsBtn.href = directLink; mapBadgeLink.href = directLink; mapImageLink.href = directLink;
+            mapStaticImg.src = `https://static-maps.yandex.ru/1.x/?lang=en_US&ll=122.814,10.000&z=14&l=map&size=600,450`;
+        }
+
+        function renderAIGuide(searchText = "") {
+            const listContainer = document.getElementById('aiVerifiedList');
+            listContainer.innerHTML = '';
+            const vHeader = document.createElement('h4');
+            vHeader.innerHTML = `<i class="fas fa-check-circle" style="color: var(--pink);"></i> Verified sa System - Proper Only (${verifiedNames.length})`;
+            vHeader.style.cssText = "margin-bottom:12px; color:white; font-size:1.05rem;";
+            listContainer.appendChild(vHeader);
+            if (verifiedNames.length === 0) {
+                listContainer.innerHTML += `<li style="color:#888; font-size:.85rem;">Wala pa sang verified restaurant.</li>`;
+            } else {
+                verifiedNames.forEach(name => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check" style="color: var(--pink); margin-right:8px;"></i> ${name} <span style="color:#4CAF50; font-size:.75rem;">• Naka-save na • Proper</span>`;
+                    li.style.cssText = "color:white; font-size:.85rem; border-bottom:1px solid var(--border-color); padding-bottom:5px; cursor:pointer;";
+                    li.onclick = () => { closeAIModal(); openModal(name); };
+                    listContainer.appendChild(li);
+                });
+            }
+            const filtered = DISCOVERY_GUIDE.filter(item => {
+                if (!isWithinProper(item)) return false;
+                const matchCat = currentGuideFilter === 'all' || item.cat === currentGuideFilter;
+                let matchSearch = (item.name + " " + item.desc + " " + item.tag + " " + item.address + " " + (item.foods || "")).toLowerCase().includes(searchText.toLowerCase());
+                if (isLutongBahaySearch(searchText) && (item.cat === 'lutongbahay' || (item.foods || '').toLowerCase().includes('lutong bahay'))) matchSearch = true;
+                if (LUTONG_BAHAY_FOODS.some(f => searchText.toLowerCase().includes(f)) && item.cat === 'lutongbahay') matchSearch = true;
+                return isGuideMissing(item.name) && matchCat && matchSearch;
+            });
+            const gHeader = document.createElement('h4');
+            gHeader.innerHTML = `<i class="fas fa-compass" style="color:#f1c40f;"></i> Discovery Guide - Proper Only (${filtered.length}) — Tap card for Menu + Location`;
+            gHeader.style.cssText = "margin:25px 0 12px 0; color:#f1c40f; font-size:1.05rem;";
+            listContainer.appendChild(gHeader);
+            if (filtered.length === 0) {
+                listContainer.innerHTML += `<li style="color:#888; font-size:.85rem;">Wala sang match sa Proper. Try lain nga keyword o category.</li>`;
+                return;
+            }
+            filtered.forEach(item => {
+                const li = document.createElement('li');
+                li.style.cssText = "background:transparent; border:none; padding:0; margin-bottom:12px; list-style:none;";
+                li.innerHTML = guideCardHTML(item);
+                listContainer.appendChild(li);
+            });
+        }
         function runAICheck() {
             const aiText = document.getElementById('aiText');
             const aiIcon = document.getElementById('aiIcon');
-            
-            aiText.textContent = "Scanning Kabankalan Data...";
+            aiText.textContent = "Scanning Kabankalan Proper Data...";
             aiIcon.className = "fas fa-spinner fa-spin";
-            
             setTimeout(() => {
-                aiText.textContent = "System Check Complete!";
+                aiText.textContent = "System Check Complete! Proper Only";
                 aiIcon.className = "fas fa-check-circle";
-                
-                // Buksan ang Modal at ilagay ang listahan
-                const listContainer = document.getElementById('aiVerifiedList');
-                listContainer.innerHTML = ''; 
-                
-                verifiedNames.forEach(name => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<i class="fas fa-check" style="color: var(--pink); margin-right: 8px;"></i> ${name}`;
-                    li.style.color = "white";
-                    li.style.fontSize = "0.85rem";
-                    li.style.borderBottom = "1px solid var(--border-color)";
-                    li.style.paddingBottom = "5px";
-                    listContainer.appendChild(li);
-                });
-                
+                renderAIGuide();
                 document.getElementById('aiVerifiedModal').classList.add('active');
-                
-                setTimeout(() => {
-                    aiText.textContent = "AI System Check: Kabankalan City";
-                    aiIcon.className = "fas fa-microchip";
-                }, 3000);
-                
-            }, 1500); 
+                setTimeout(() => { aiText.textContent = "AI System Check: Kabankalan City Proper Only"; aiIcon.className = "fas fa-microchip"; }, 3000);
+            }, 1200);
         }
-
-        function closeAIModal() {
-            document.getElementById('aiVerifiedModal').classList.remove('active');
-        }
-
-        // ============================================================
-        // LOGOUT MODAL
-        // ============================================================
-        function openLogoutModal() {
-            document.getElementById('logoutModal').classList.add('active');
-        }
-        function closeLogoutModal() {
-            document.getElementById('logoutModal').classList.remove('active');
-        }
-        window.addEventListener('click', function(e) {
-            const logoutModal = document.getElementById('logoutModal');
-            if (e.target === logoutModal) closeLogoutModal();
+        function closeAIModal() { document.getElementById('aiVerifiedModal').classList.remove('active'); }
+        document.addEventListener('DOMContentLoaded', () => {
+            const guideSearch = document.getElementById('aiGuideSearch');
+            if (guideSearch) { guideSearch.addEventListener('input', (e) => renderAIGuide(e.target.value)); }
+            document.querySelectorAll('#aiGuideFilters .cat-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#aiGuideFilters .cat-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentGuideFilter = btn.dataset.guideFilter;
+                    renderAIGuide(document.getElementById('aiGuideSearch')?.value || "");
+                });
+            });
         });
 
-        // ============================================================
-        // HELPERS
-        // ============================================================
-        function getAllRestaurants() {
-            let all = [];
-            for (let key in foodData) { all = all.concat(foodData[key]); }
-            return all;
-        }
+        function openLogoutModal() { document.getElementById('logoutModal').classList.add('active'); }
+        function closeLogoutModal() { document.getElementById('logoutModal').classList.remove('active'); }
+        window.addEventListener('click', function(e) { const logoutModal = document.getElementById('logoutModal'); if (e.target === logoutModal) closeLogoutModal(); });
 
-        function createTrendingCardHTML(item) {
-            return `
-                <div class="card-img" style="background-image: url('${item.img}');"></div>
-                <div class="card-content">
-                    <h3>${item.name}</h3>
-                    <div class="rating"><i class="fas fa-star"></i> ${item.rating}</div>
-                </div>
-            `;
-        }
+        function getAllRestaurants() { let all = []; for (let key in foodData) { all = all.concat(foodData[key]); } return all; }
+        function createTrendingCardHTML(item) { return `<div class="card-img" style="background-image: url('${item.img}');"></div><div class="card-content"><h3>${item.name}</h3><div class="rating"><i class="fas fa-star"></i> ${item.rating}</div></div>`; }
+        function createAllCardHTML(item) { return `<div class="card-img" style="background-image: url('${item.img}');"></div><div class="card-content"><div class="header-row" style="display: flex; justify-content: space-between; align-items: flex-start;"><h3>${item.name}</h3><div class="rating"><i class="fas fa-star"></i> ${item.rating}</div></div><div class="price">${item.price}</div><button class="btn-primary"><i class="fas fa-utensils"></i> View Menu</button></div>`; }
+        function createSmallCardHTML(item) { return `<div class="card-img" style="background-image: url('${item.img}');"></div><div class="card-content"><div class="header-row" style="display: flex; justify-content: space-between; align-items: flex-start;"><h3>${item.name}</h3><div class="rating"><i class="fas fa-star"></i> ${item.rating}</div></div><div class="price">${item.price}</div><button class="btn-primary"><i class="fas fa-utensils"></i> View</button></div>`; }
 
-        function createAllCardHTML(item) {
-            return `
-                <div class="card-img" style="background-image: url('${item.img}');"></div>
-                <div class="card-content">
-                    <div class="header-row" style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <h3>${item.name}</h3>
-                        <div class="rating"><i class="fas fa-star"></i> ${item.rating}</div>
-                    </div>
-                    <div class="price">${item.price}</div>
-                    <button class="btn-primary">
-                        <i class="fas fa-utensils"></i> View Menu
-                    </button>
-                </div>
-            `;
-        }
-
-        function createSmallCardHTML(item) {
-            return `
-                <div class="card-img" style="background-image: url('${item.img}');"></div>
-                <div class="card-content">
-                    <div class="header-row" style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <h3>${item.name}</h3>
-                        <div class="rating"><i class="fas fa-star"></i> ${item.rating}</div>
-                    </div>
-                    <div class="price">${item.price}</div>
-                    <button class="btn-primary">
-                        <i class="fas fa-utensils"></i> View
-                    </button>
-                </div>
-            `;
-        }
-
-        // ============================================================
-        // RENDER FUNCTIONS
-        // ============================================================
         function renderTrending() {
             trendingGrid.innerHTML = '';
-            if (trendingData.length === 0) {
-                trendingGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3></div>`;
-                return;
-            }
-            trendingData.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'trending-card';
-                card.setAttribute('onclick', `openModal("${item.name}")`);
-                card.innerHTML = createTrendingCardHTML(item);
-                trendingGrid.appendChild(card);
-            });
+            if (trendingData.length === 0) { trendingGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3></div>`; return; }
+            trendingData.forEach(item => { const card = document.createElement('div'); card.className = 'trending-card'; card.setAttribute('onclick', `openModal("${item.name}")`); card.innerHTML = createTrendingCardHTML(item); trendingGrid.appendChild(card); });
         }
-
         function renderCategory(categoryKey, categoryName) {
             let items = categoryKey === 'all' ? getAllRestaurants() : (foodData[categoryKey] || []);
-            categoryTitle.innerHTML = `<i class="fas fa-list" style="color: var(--pink);"></i> All ${categoryName}`;
+            categoryTitle.innerHTML = `<i class="fas fa-list" style="color: var(--pink);"></i> All ${categoryName} - Proper Only`;
             allRestaurantsGrid.innerHTML = '';
-            if (items.length === 0) {
-                allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3></div>`;
-                return;
-            }
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'all-card';
-                card.setAttribute('onclick', `openModal("${item.name}")`);
-                card.innerHTML = createAllCardHTML(item);
-                allRestaurantsGrid.appendChild(card);
-            });
+            if (items.length === 0) { allRestaurantsGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3></div>`; return; }
+            items.forEach(item => { const card = document.createElement('div'); card.className = 'all-card'; card.setAttribute('onclick', `openModal("${item.name}")`); card.innerHTML = createAllCardHTML(item); allRestaurantsGrid.appendChild(card); });
         }
-
         function renderLeftAllRestaurants() {
             const allItems = getAllRestaurants();
             leftAllRestaurantsGrid.innerHTML = '';
-            allItems.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'all-card-small';
-                card.setAttribute('onclick', `openModal("${item.name}")`);
-                card.innerHTML = createSmallCardHTML(item);
-                leftAllRestaurantsGrid.appendChild(card);
-            });
+            allItems.forEach(item => { const card = document.createElement('div'); card.className = 'all-card-small'; card.setAttribute('onclick', `openModal("${item.name}")`); card.innerHTML = createSmallCardHTML(item); leftAllRestaurantsGrid.appendChild(card); });
         }
 
-        // ============================================================
-        // MODAL
-        // ============================================================
         function openModal(restaurantName) {
             let foundRestaurant = null;
-            for (let key in foodData) {
-                const found = foodData[key].find(item => item.name === restaurantName);
-                if (found) { foundRestaurant = found; break; }
-            }
+            for (let key in foodData) { const found = foodData[key].find(item => item.name === restaurantName); if (found) { foundRestaurant = found; break; } }
             if (foundRestaurant) {
+                modalGuideBadge.style.display = 'none';
+                modalGuideNote.style.display = 'none';
+                modalMenuTitle.textContent = 'Menu';
                 modalRestaurantName.textContent = foundRestaurant.name;
                 modalMenuList.innerHTML = '';
                 if (foundRestaurant.menu && foundRestaurant.menu.length > 0) {
-                    foundRestaurant.menu.forEach(menuItem => {
-                        const div = document.createElement('div');
-                        div.className = 'menu-item';
-                        div.innerHTML = `
-                            <div class="menu-item-details" style="flex: 1;">
-                                <div class="menu-item-info">
-                                    <h5>${menuItem.name}</h5>
-                                    <p>${menuItem.desc}</p>
-                                </div>
-                            </div>
-                            <div class="menu-item-price">${menuItem.price}</div>
-                        `;
-                        modalMenuList.appendChild(div);
-                    });
-                } else {
-                    modalMenuList.innerHTML = '<p style="color:var(--text-muted)">No menu available.</p>';
-                }
+                    foundRestaurant.menu.forEach(menuItem => { const div = document.createElement('div'); div.className = 'menu-item'; div.innerHTML = `<div class="menu-item-details" style="flex: 1;"><div class="menu-item-info"><h5>${menuItem.name}</h5><p>${menuItem.desc}</p></div></div><div class="menu-item-price">${menuItem.price}</div>`; modalMenuList.appendChild(div); });
+                } else { modalMenuList.innerHTML = '<p style="color:var(--text-muted)">No menu available.</p>'; }
                 modalAddress.textContent = foundRestaurant.address || 'Address not available';
-                
+                modalDesc.textContent = '';
                 if (foundRestaurant.mapQuery) {
-                    const searchQuery = encodeURIComponent(`${foundRestaurant.name} ${foundRestaurant.address}, Kabankalan City`);
+                    const searchQuery = encodeURIComponent(`${foundRestaurant.name} ${foundRestaurant.address}, Kabankalan City Proper`);
                     const directLink = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
-                    
-                    openMapsBtn.href = directLink;
-                    mapBadgeLink.href = directLink;
-                    mapImageLink.href = directLink; 
-
+                    openMapsBtn.href = directLink; mapBadgeLink.href = directLink; mapImageLink.href = directLink;
                     const coords = foundRestaurant.mapQuery.split(',').map(c => parseFloat(c.trim()));
-                    if (coords.length === 2 && !isNaN(coords[0])) {
-                        mapStaticImg.src = `https://static-maps.yandex.ru/1.x/?lang=en_US&ll=${coords[1]},${coords[0]}&z=17&l=map&size=600,450&pt=${coords[1]},${coords[0]},pm2rdm`;
-                    } else {
-                        mapStaticImg.src = "https://static-maps.yandex.ru/1.x/?lang=en_US&ll=122.814,10.000&z=14&l=map&size=600,450";
-                    }
-                } else {
-                    openMapsBtn.href = "#"; mapBadgeLink.href = "#"; mapImageLink.href = "#";
-                    mapStaticImg.src = "";
-                }
+                    if (coords.length === 2 && !isNaN(coords[0])) { mapStaticImg.src = `https://static-maps.yandex.ru/1.x/?lang=en_US&ll=${coords[1]},${coords[0]}&z=17&l=map&size=600,450&pt=${coords[1]},${coords[0]},pm2rdm`; }
+                    else { mapStaticImg.src = "https://static-maps.yandex.ru/1.x/?lang=en_US&ll=122.814,10.000&z=14&l=map&size=600,450"; }
+                } else { setupModalMap(foundRestaurant.name, foundRestaurant.address || ''); }
                 infoModal.classList.add('active');
-            } else {
-                showToast("Wala sang detalye nga available.", "fa-exclamation-circle");
-            }
+            } else { showToast("Wala sang detalye nga available.", "fa-exclamation-circle"); }
         }
 
-        function closeModal() {
-            infoModal.classList.remove('active');
+        function openGuideModal(restaurantName) {
+            let inSystem = false;
+            for (let key in foodData) { if (foodData[key].some(i => i.name === restaurantName)) { inSystem = true; break; } }
+            if (inSystem) { openModal(restaurantName); return; }
+            const item = DISCOVERY_GUIDE.find(g => g.name === restaurantName);
+            if (!item) { showToast("Wala sang detalye nga available.", "fa-exclamation-circle"); return; }
+            closeAIModal();
+            modalRestaurantName.textContent = item.name;
+            modalGuideBadge.style.display = 'inline-block';
+            modalGuideNote.style.display = 'block';
+            modalMenuTitle.textContent = 'What to Buy / Menu (Guide)';
+            modalAddress.textContent = item.address;
+            modalDesc.textContent = item.desc + ' • ' + item.tag;
+            modalMenuList.innerHTML = '';
+            const foods = (item.foods || '').split(',').map(f => f.trim()).filter(Boolean);
+            const foodDesc = {
+                'adobo': 'Classic Filipino adobo, pang sud-an',
+                'nilaga': 'Sabaw nga karne / nilaga, init kag manamit',
+                'tinola': 'Tinola nga manok, may sabaw',
+                'sinigang': 'Aslom nga sabaw, pang pamilya',
+                'pakbet': 'Gulay nga pinakbet / pakbet',
+                'cansi': 'Sour beef soup, sikat sa Kabankalan',
+                'batchoy': 'Batchoy nga init, pang merienda',
+                'pizza': 'Pizza nga pang barkada',
+                'coffee': 'Kape nga pang tambay',
+                'milktea': 'Milktea nga matam-is kag malamig'
+            };
+            foods.forEach(f => {
+                const div = document.createElement('div');
+                div.className = 'menu-item';
+                const niceName = f.charAt(0).toUpperCase() + f.slice(1);
+                div.innerHTML = `<div class="menu-item-details" style="flex:1;"><div class="menu-item-info"><h5>${niceName}</h5><p>${foodDesc[f.toLowerCase()] || item.tag + ' • Available sa ' + item.name}</p></div></div><div class="menu-item-price" style="font-size:.85rem; color:#aaa;">Ask in store</div>`;
+                modalMenuList.appendChild(div);
+            });
+            if (foods.length === 0) modalMenuList.innerHTML = '<p style="color:var(--text-muted)">Wala pa sang listahan. Check sa Maps.</p>';
+            setupModalMap(item.name, item.address);
+            infoModal.classList.add('active');
         }
+
+        function closeModal() { infoModal.classList.remove('active'); }
         infoModal.addEventListener('click', function(e) { if (e.target === infoModal) closeModal(); });
 
-        // ============================================================
-        // CATEGORY BUTTONS
-        // ============================================================
         buttons.forEach(btn => {
             btn.addEventListener('click', function() {
-                buttons.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                currentCategory = this.dataset.category;
-                searchInput.value = "";
-                categoriesSection.classList.remove('hide-on-search');
-                trendingSection.classList.remove('hide-on-search');
+                buttons.forEach(b => b.classList.remove('active')); this.classList.add('active');
+                currentCategory = this.dataset.category; searchInput.value = "";
+                categoriesSection.classList.remove('hide-on-search'); trendingSection.classList.remove('hide-on-search');
                 document.querySelector('.content-split').style.gridTemplateColumns = '1fr 1fr';
-                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan`;
-                renderTrending();
-                renderCategory(currentCategory, this.innerText.trim());
+                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan Proper`;
+                renderTrending(); renderCategory(currentCategory, this.innerText.trim());
             });
         });
 
-        // ============================================================
-        // CHAT AI SEARCH LOGIC
-        // ============================================================
         function handleSearch(query) {
             if (query.trim() !== "") {
-                categoriesSection.classList.add('hide-on-search');
-                trendingSection.classList.add('hide-on-search');
+                categoriesSection.classList.add('hide-on-search'); trendingSection.classList.add('hide-on-search');
                 document.querySelector('.content-split').style.gridTemplateColumns = '1fr';
-                categoryTitle.innerHTML = `<i class="fas fa-robot" style="color: var(--pink);"></i> AI Assistant Result`;
-
+                categoryTitle.innerHTML = `<i class="fas fa-robot" style="color: var(--pink);"></i> AI Assistant Result - Proper Only`;
                 const searchTerm = query.toLowerCase().trim();
-                
-                // AI Chat Response Container
-                let aiResponse = `
-                    <div style="display: flex; gap: 15px; margin-bottom: 30px; background: rgba(255,20,147,0.05); padding: 20px; border-radius: 15px; border: 1px solid var(--pink);">
-                        <div style="font-size: 2rem; color: var(--pink);"><i class="fas fa-robot"></i></div>
-                        <div>
-                            <h4 style="color: var(--pink); margin-bottom: 5px;">Kabankalan AI Assistant</h4>
-                            <p style="color: white;">Kumusta! Gipangita ko ang mga restaurant nga may ara sang <strong>"${query}"</strong>...</p>
-                        </div>
-                    </div>
-                `;
+                const isOutsideSearch = OUTSIDE_PROPER.some(w => searchTerm.includes(w));
+                let aiResponse = `<div style="display: flex; gap: 15px; margin-bottom: 30px; background: rgba(255,20,147,0.05); padding: 20px; border-radius: 15px; border: 1px solid var(--pink);"><div style="font-size: 2rem; color: var(--pink);"><i class="fas fa-robot"></i></div><div><h4 style="color: var(--pink); margin-bottom: 5px;">Kabankalan AI Assistant - Proper Only</h4><p style="color: white;">Kumusta! Gipangita ko ang mga restaurant nga may ara sang <strong>"${query}"</strong> sa <strong>Kabankalan City Proper lang</strong>...</p>${isOutsideSearch ? `<p style="color:#f1c40f; font-size:.9rem; margin-top:8px;"><i class="fas fa-exclamation-triangle"></i> Note: Ang "${query}" ara sa gwa sang Proper, kaya wala namon ginapagwa. Proper lang ang coverage sang system.</p>` : ''}</div></div>`;
 
-                // Search Logic (Restaurant Name, Address, Menu Name, Menu Desc)
                 let allResults = [];
-                
                 for (let key in foodData) {
                     foodData[key].forEach(item => {
+                        if (!isWithinProper(item)) return;
                         let hasMatch = false;
-                        
-                        if (item.name.toLowerCase().includes(searchTerm) || item.address.toLowerCase().includes(searchTerm)) {
-                            hasMatch = true;
-                        }
-                        
-                        if (item.menu) {
-                            item.menu.forEach(m => {
-                                if (m.name.toLowerCase().includes(searchTerm) || m.desc.toLowerCase().includes(searchTerm)) {
-                                    hasMatch = true;
-                                }
-                            });
-                        }
-
-                        if (hasMatch) {
-                            allResults.push(item);
-                        }
+                        if (item.name.toLowerCase().includes(searchTerm) || (item.address && item.address.toLowerCase().includes(searchTerm))) { hasMatch = true; }
+                        if (item.menu) { item.menu.forEach(m => { if (m.name.toLowerCase().includes(searchTerm) || m.desc.toLowerCase().includes(searchTerm)) { hasMatch = true; } }); }
+                        if (isLutongBahaySearch(searchTerm) && key === 'carinderia') hasMatch = true;
+                        if (hasMatch) { allResults.push(item); }
                     });
                 }
+
+                // ===== FIX: NILAGA DAPAT MAG-GWA GID =====
+                let guideResults = DISCOVERY_GUIDE.filter(item => {
+                    if (!isWithinProper(item)) return false;
+                    const haystack = (item.name + " " + item.tag + " " + item.desc + " " + item.address + " " + (item.foods || "")).toLowerCase();
+                    let matched = haystack.includes(searchTerm);
+                    if (isLutongBahaySearch(searchTerm) && (item.cat === 'lutongbahay' || haystack.includes('lutong bahay'))) matched = true;
+                    if (LUTONG_BAHAY_FOODS.some(f => searchTerm.includes(f)) && item.cat === 'lutongbahay') matched = true;
+                    // nilaga = dapat tanan nga may nilaga sa foods mag-gwa
+                    if (searchTerm === 'nilaga' && haystack.includes('nilaga')) matched = true;
+                    return isGuideMissing(item.name) && matched;
+                });
 
                 allRestaurantsGrid.innerHTML = '';
-                
-                if (allResults.length === 0) {
-                    // FALLBACK KUNG WALA GID
-                    aiResponse += `
-                        <div style="text-align: left; padding: 0 10px 20px 10px;">
-                            <p style="color: white; margin-bottom: 15px;">Pasensya na, wala ko makita ang eksakto nga "${query}" sa amon listahan. Pero ari ang mga trending restaurants subong sa Kabankalan:</p>
-                        </div>
-                    `;
-                    
-                    const allRestos = getAllRestaurants();
-                    const shuffled = allRestos.sort(() => 0.5 - Math.random());
-                    const suggestions = shuffled.slice(0, 3);
 
-                    let sugHTML = `<div class="all-grid" style="grid-column: 1 / -1;">`;
-                    suggestions.forEach(item => {
-                        sugHTML += `<div class="all-card" onclick="openModal('${item.name}')">${createAllCardHTML(item)}</div>`;
-                    });
-                    sugHTML += `</div>`;
-                    
-                    allRestaurantsGrid.innerHTML = aiResponse + sugHTML;
-                } else {
-                    // KUNG MAY NAKITA
-                    aiResponse += `
-                        <div style="text-align: left; padding: 0 10px 20px 10px;">
-                            <p style="color: white; margin-bottom: 15px; font-size: 1.1rem;">Nakita ko ang <strong>${allResults.length}</strong> ka restaurant nga may ara sang <strong>"${query}"</strong>!</p>
-                        </div>
-                        <div class="all-grid" style="grid-column: 1 / -1; margin-top: 10px;">
-                    `;
-                    
-                    allResults.forEach(item => {
-                        aiResponse += `
-                            <div class="all-card" onclick="openModal('${item.name}')">
-                                ${createAllCardHTML(item)}
-                            </div>
-                        `;
-                    });
-                    
+                if (allResults.length > 0) {
+                    aiResponse += `<div style="padding:0 10px 20px 10px;"><p style="color:white; font-size:1.1rem;">Nakita ko ang <strong>${allResults.length}</strong> ka restaurant sa system (Proper Only) nga may ara sang <strong>"${query}"</strong>!</p></div><div class="all-grid" style="grid-column: 1 / -1;">`;
+                    allResults.forEach(item => { aiResponse += `<div class="all-card" onclick="openModal('${item.name}')">${createAllCardHTML(item)}</div>`; });
                     aiResponse += `</div>`;
-                    allRestaurantsGrid.innerHTML = aiResponse;
                 }
 
-                categoriesSection.classList.add('hide-on-search');
-                trendingSection.classList.add('hide-on-search');
-                
+                if (guideResults.length > 0) {
+                    aiResponse += `
+                        <div style="margin:30px 10px 15px 10px; padding:18px; background:linear-gradient(135deg, rgba(255,20,147,.12), rgba(255,20,147,.03)); border:1px solid rgba(255,20,147,.4); border-radius:16px;">
+                            <h4 style="color:#fff;"><i class="fas fa-compass" style="color:var(--pink);"></i> AI Guide: Proper Only - Wala pa sa System pero may ara sang "${query}" (${guideResults.length})</h4>
+                            <p style="color:#ccc; font-size:.9rem; margin-top:5px;">Tap ang card para makita ang <strong>Menu + Location + Map</strong> pareho sa normal nga restaurant.</p>
+                        </div>
+                        <div class="all-grid" style="grid-column: 1 / -1; margin-top: 8px;">`;
+                    guideResults.forEach(item => { aiResponse += guideCardHTML(item); });
+                    aiResponse += `</div>`;
+                }
+
+                if (allResults.length === 0 && guideResults.length === 0) {
+                    aiResponse += `<div style="text-align: left; padding: 0 10px 20px 10px;"><p style="color: white; margin-bottom: 15px;">Pasensya na, wala ko makita ang eksakto nga "${query}" sa <strong>Kabankalan City Proper</strong>. ${isOutsideSearch ? 'Kay ang gina-pangita mo ara sa gwa sang Proper.' : 'Pero ari ang mga trending sa Proper subong:'}</p></div>`;
+                    if (!isOutsideSearch) {
+                        const allRestos = getAllRestaurants().filter(isWithinProper); const shuffled = allRestos.sort(() => 0.5 - Math.random()); const suggestions = shuffled.slice(0, 3);
+                        let sugHTML = `<div class="all-grid" style="grid-column: 1 / -1;">`; suggestions.forEach(item => { sugHTML += `<div class="all-card" onclick="openModal('${item.name}')">${createAllCardHTML(item)}</div>`; }); sugHTML += `</div>`;
+                        aiResponse += sugHTML;
+                    }
+                }
+
+                allRestaurantsGrid.innerHTML = aiResponse;
+                categoriesSection.classList.add('hide-on-search'); trendingSection.classList.add('hide-on-search');
             } else {
-                categoriesSection.classList.remove('hide-on-search');
-                trendingSection.classList.remove('hide-on-search');
+                categoriesSection.classList.remove('hide-on-search'); trendingSection.classList.remove('hide-on-search');
                 document.querySelector('.content-split').style.gridTemplateColumns = '1fr 1fr';
-                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan`;
-                renderTrending();
-                const activeBtn = document.querySelector('.cat-btn.active');
-                const catName = activeBtn ? activeBtn.innerText.trim() : 'Local & Cansi';
-                renderCategory(currentCategory, catName);
+                trendingTitle.innerHTML = `<i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan Proper`;
+                renderTrending(); const activeBtn = document.querySelector('.cat-btn.active'); const catName = activeBtn ? activeBtn.innerText.trim() : 'Local & Cansi'; renderCategory(currentCategory, catName);
             }
         }
-
         searchBtn.addEventListener('click', function() { handleSearch(searchInput.value); });
-        searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault(); handleSearch(this.value); }
-        });
-        searchInput.addEventListener('input', function() {
-            if (this.value.trim() === "") { handleSearch(""); }
-        });
+        searchInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); handleSearch(this.value); } });
+        searchInput.addEventListener('input', function() { if (this.value.trim() === "") { handleSearch(""); } });
+        voiceBtn.addEventListener('click', () => { window.open('https://www.google.com/search?q=restaurant+in+Kabankalan+City+Proper&hl=en&gl=ph', '_blank'); });
 
-        // ============================================================
-        // VOICE SEARCH (Google Redirect)
-        // ============================================================
-        voiceBtn.addEventListener('click', () => {
-            window.open('https://www.google.com/search?q=restaurant+in+Kabankalan+City&hl=en&gl=ph', '_blank');
-        });
-
-        // ============================================================
-        // REVIEW FORM (AJAX)
-        // ============================================================
         const reviewForm = document.getElementById('reviewForm');
         const reviewList = document.getElementById('reviewList');
         const reviewText = document.getElementById('reviewText');
         const submitBtn = document.getElementById('submitBtn');
-
         reviewForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             const formData = new FormData();
@@ -956,99 +756,29 @@
             formData.append('rating', document.getElementById('reviewRating').value);
             formData.append('text', reviewText.value);
             formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-
             try {
                 const res = await fetch('/food_finder/api/review/', { method: 'POST', body: formData });
                 const data = await res.json();
                 if (data.ok) {
-                    const newReview = document.createElement('div');
-                    newReview.className = 'review-item';
-                    newReview.innerHTML = `
-                        <div class="review-header">
-                            <span class="review-name">${data.name}</span>
-                            <span class="review-stars">${data.stars}</span>
-                        </div>
-                        <p class="review-text">${data.text}</p>
-                        <span class="review-date">${data.date}</span>
-                    `;
-                    reviewList.prepend(newReview);
-                    reviewForm.reset();
-                    showToast("Salamat sa feedback mo!", 'fa-star');
-                } else {
-                    showToast("May error sa pag-submit. Subukan muli.", 'fa-exclamation-circle');
-                }
-            } catch (error) {
-                showToast("Hindi maka-konekta sa server.", 'fa-exclamation-circle');
-            }
+                    const newReview = document.createElement('div'); newReview.className = 'review-item';
+                    newReview.innerHTML = `<div class="review-header"><span class="review-name">${data.name}</span><span class="review-stars">${data.stars}</span></div><p class="review-text">${data.text}</p><span class="review-date">${data.date}</span>`;
+                    reviewList.prepend(newReview); reviewForm.reset(); showToast("Salamat sa feedback mo!", 'fa-star');
+                } else { showToast("May error sa pag-submit. Subukan muli.", 'fa-exclamation-circle'); }
+            } catch (error) { showToast("Hindi maka-konekta sa server.", 'fa-exclamation-circle'); }
         });
+        reviewText.addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitBtn.click(); } });
 
-        reviewText.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitBtn.click(); }
-        });
-
-        // ============================================================
-        // INITIAL RENDER
-        // ============================================================
-        renderTrending();
-        renderCategory('carinderia', 'Local & Cansi');
-        renderLeftAllRestaurants();
-
-        // ============================================================
-        // REVEAL ON SCROLL
-        // ============================================================
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 100;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
-            }
-        }
-        window.addEventListener("scroll", reveal);
-        reveal();
-
-        // ============================================================
-        // BACK TO TOP
-        // ============================================================
-        window.onscroll = function() {
-            var btn = document.getElementById("backToTopBtn");
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                btn.style.display = "block";
-            } else {
-                btn.style.display = "none";
-            }
-        };
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // ============================================================
-        // PRELOADER
-        // ============================================================
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('preloader').classList.add('hidden');
-            }, 500);
-        });
-
-        // ============================================================
-        // TOAST
-        // ============================================================
+        renderTrending(); renderCategory('carinderia', 'Local & Cansi'); renderLeftAllRestaurants();
+        function reveal() { var reveals = document.querySelectorAll(".reveal"); for (var i = 0; i < reveals.length; i++) { var windowHeight = window.innerHeight; var elementTop = reveals[i].getBoundingClientRect().top; var elementVisible = 100; if (elementTop < windowHeight - elementVisible) { reveals[i].classList.add("active"); } } }
+        window.addEventListener("scroll", reveal); reveal();
+        window.onscroll = function() { var btn = document.getElementById("backToTopBtn"); if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { btn.style.display = "block"; } else { btn.style.display = "none"; } };
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        window.addEventListener('load', () => { setTimeout(() => { document.getElementById('preloader').classList.add('hidden'); }, 500); });
         function showToast(message, icon = 'fa-check-circle') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.add('hiding');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            const container = document.getElementById('toast-container'); const toast = document.createElement('div'); toast.className = 'toast';
+            toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`; container.appendChild(toast);
+            setTimeout(() => { toast.classList.add('hiding'); setTimeout(() => toast.remove(), 300); }, 3000);
         }
     </script>
-
 </body>
 </html>
