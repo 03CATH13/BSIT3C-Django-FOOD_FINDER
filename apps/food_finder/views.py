@@ -1,7 +1,5 @@
 import json
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
 from django.contrib.auth import logout, authenticate, login
 from django.urls import reverse
 from .models import Restaurant, Review
@@ -927,24 +925,17 @@ def login_user(request):
     return render(request, 'login.html')
 
 
-# ============================================================
-# SUBMIT REVIEW (AJAX)
-# ============================================================
-@require_POST
+# SUBMIT REVIEW - BAG-O NA
 def submit_review(request):
-    name = request.POST.get('name', '').strip()
-    rating = request.POST.get('rating', '5')
-    text = request.POST.get('text', '').strip()
-
-    if not name or not text:
-        return JsonResponse({'ok': False, 'error': 'Missing fields'}, status=400)
-
-    review = Review.objects.create(name=name, rating=int(rating), text=text)
-    return JsonResponse({
-        'ok': True,
-        'name': review.name,
-        'rating': review.rating,
-        'stars': review.stars_display,
-        'text': review.text,
-        'date': review.created_at.strftime('%B %d, %Y'),
-    })
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        rating = request.POST.get('rating', '5')
+        text = request.POST.get('text', '').strip()
+        if name and text:
+            try:
+                rating_int = int(rating)
+            except:
+                rating_int = 5
+            Review.objects.create(name=name, rating=rating_int, text=text)
+            return redirect('/?submitted=1#reviewForm#reviewForm')
+    return redirect('/')

@@ -275,11 +275,12 @@
         <div class="reviews-container reveal">
             <h2 class="section-title" style="margin-top: 0; margin-bottom: 5px; font-size: 1.5rem; justify-content: center;"><i class="fas fa-star" style="color: #f1c40f;"></i> System Feedback</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">Kamusta ang experience? I-rate at mag-iwan ng komento.</p>
-            <form class="review-form" id="reviewForm">
+            <!-- FIXED: Plain POST, may name= na tanan, wala na fetch -->
+            <form class="review-form" id="reviewForm" method="POST" action="{% url 'food_finder:submit_review' %}">
                 {% csrf_token %}
                 <div class="form-row">
-                    <input type="text" id="reviewName" placeholder="Iyong Pangalan" required style="flex: 1; min-width: 150px;">
-                    <select id="reviewRating" required style="flex: 1; min-width: 150px;">
+                    <input type="text" id="reviewName" name="name" placeholder="Iyong Pangalan" required style="flex: 1; min-width: 150px;">
+                    <select id="reviewRating" name="rating" required style="flex: 1; min-width: 150px;">
                         <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
                         <option value="4">⭐⭐⭐⭐ (Very Good)</option>
                         <option value="3">⭐⭐⭐ (Good)</option>
@@ -287,7 +288,7 @@
                         <option value="1">⭐ (Poor)</option>
                     </select>
                 </div>
-                <textarea id="reviewText" placeholder="Isulat ang comment dito..." required></textarea>
+                <textarea id="reviewText" name="text" placeholder="Isulat ang comment dito..." required></textarea>
                 <button type="submit" id="submitBtn" class="btn-primary"><i class="fas fa-paper-plane"></i> Submit Feedback</button>
             </form>
             <div class="review-list" id="reviewList">
@@ -745,27 +746,14 @@
                 else showToast("Voice error: " + e.error, "fa-exclamation-circle");
             };
         }
+        // FIXED FEEDBACK: Wala na fetch, plain POST na lang
         const reviewForm = document.getElementById('reviewForm');
-        const reviewList = document.getElementById('reviewList');
         const reviewText = document.getElementById('reviewText');
         const submitBtn = document.getElementById('submitBtn');
-        reviewForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const formData = new FormData();
-            formData.append('name', document.getElementById('reviewName').value);
-            formData.append('rating', document.getElementById('reviewRating').value);
-            formData.append('text', reviewText.value);
-            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-            try {
-                const res = await fetch('/food_finder/api/review/', { method: 'POST', body: formData });
-                const data = await res.json();
-                if (data.ok) {
-                    const newReview = document.createElement('div'); newReview.className = 'review-item';
-                    newReview.innerHTML = `<div class="review-header"><span class="review-name">${data.name}</span><span class="review-stars">${data.stars}</span></div><p class="review-text">${data.text}</p><span class="review-date">${data.date}</span>`;
-                    reviewList.prepend(newReview); reviewForm.reset(); showToast("Salamat sa feedback mo!", 'fa-star');
-                } else { showToast("May error sa pag-submit. Subukan muli.", 'fa-exclamation-circle'); }
-            } catch (error) { showToast("Hindi maka-konekta sa server.", 'fa-exclamation-circle'); }
-        });
+        // Kung nagbalik halin sa submit, ipakita ang toast
+        if (window.location.search.includes('submitted=1')) {
+            showToast("Salamat sa feedback mo!", 'fa-star');
+        }
         reviewText.addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitBtn.click(); } });
         renderTrending(); renderCategory('carinderia', 'Local & Cansi'); renderLeftAllRestaurants();
         function reveal() { var reveals = document.querySelectorAll(".reveal"); for (var i = 0; i < reveals.length; i++) { var windowHeight = window.innerHeight; var elementTop = reveals[i].getBoundingClientRect().top; var elementVisible = 100; if (elementTop < windowHeight - elementVisible) { reveals[i].classList.add("active"); } } }
