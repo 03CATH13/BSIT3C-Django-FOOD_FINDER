@@ -13,7 +13,7 @@ FOOD_DATA = {
     "fastfood": [
         {
             "name": "Jollibee (Guanzon)",
-            "mapQuery": "10.000345, 122.815678", # Exact Coordinates
+            "mapQuery": "Jollibee Guanzon St, Kabankalan City",
             "rating": "4.5",
             "price": "₱50–₱250",
             "img": "https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop",
@@ -34,7 +34,7 @@ FOOD_DATA = {
         },
         {
             "name": "McDonald's (Guanzon)",
-            "mapQuery": "10.000123, 122.816789", # Exact Coordinates
+            "mapQuery": "McDonalds Guanzon St, Kabankalan City",
             "rating": "4.3",
             "price": "₱50–₱650",
             "img": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop",
@@ -60,7 +60,7 @@ FOOD_DATA = {
         },
         {
             "name": "Mang Inasal (Gaisano)",
-            "mapQuery": "10.003210, 122.812345", # Exact Coordinates
+            "mapQuery": "Mang Inasal Gaisano Grand Mall Kabankalan",
             "rating": "4.4",
             "price": "₱50–₱1,175",
             "img": "https://images.unsplash.com/photo-1513639776629-7b61b0ac49cb?q=80&w=800&auto=format&fit=crop",
@@ -85,7 +85,7 @@ FOOD_DATA = {
         },
         {
             "name": "Chowking (City Mall)",
-            "mapQuery": "9.991234, 122.812345", # Exact Coordinates
+            "mapQuery": "Chowking CityMall Kabankalan",
             "rating": "4.1",
             "price": "₱18–₱1,474",
             "img": "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop",
@@ -108,7 +108,7 @@ FOOD_DATA = {
         },
         {
             "name": "Angel's Burger (Rizal)",
-            "mapQuery": "10.001234, 122.813456", # Exact Coordinates
+            "mapQuery": "Angels Burger Rizal St, Kabankalan City",
             "rating": "4.2",
             "price": "₱25–₱60",
             "img": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop",
@@ -121,7 +121,7 @@ FOOD_DATA = {
         },
         {
             "name": "Lola Nena's Lomi",
-            "mapQuery": "9.998765, 122.817654", # Exact Coordinates
+            "mapQuery": "Lola Nenas Lomi Tan Lorenzo Kabankalan",
             "rating": "4.7",
             "price": "₱80–₱150",
             "img": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=800&auto=format&fit=crop",
@@ -134,7 +134,7 @@ FOOD_DATA = {
         },
         {
             "name": "Greenwich (City Mall)",
-            "mapQuery": "9.991500, 122.812800", # Exact Coordinates
+            "mapQuery": "Greenwich CityMall Kabankalan",
             "rating": "4.3",
             "price": "₱100–₱250",
             "img": "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop",
@@ -147,7 +147,7 @@ FOOD_DATA = {
         },
         {
             "name": "KFC (Gaisano)",
-            "mapQuery": "10.003400, 122.812500", # Exact Coordinates
+            "mapQuery": "KFC Gaisano Grand Mall Kabankalan",
             "rating": "4.2",
             "price": "₱30–₱1,575",
             "img": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop",
@@ -167,7 +167,7 @@ FOOD_DATA = {
         },
         {
             "name": "Snackee (Mabini/Rizal)",
-            "mapQuery": "10.001500, 122.814000", # Exact Coordinates
+            "mapQuery": "Snackee Mabini Rizal Kabankalan",
             "rating": "4.5",
             "price": "₱78–₱219",
             "img": "https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop",
@@ -196,7 +196,7 @@ FOOD_DATA = {
     "carinderia": [
         {
             "name": "ALONSO's Cansi",
-            "mapQuery": "9.999000, 122.815000", # Exact Coordinates
+            "mapQuery": "Alonsos Cansi Guanzon Kabankalan",
             "rating": "4.8",
             "price": "₱150–₱300",
             "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
@@ -209,7 +209,7 @@ FOOD_DATA = {
         },
         {
             "name": "Kabankalan Ihaw-Ihaw",
-            "mapQuery": "10.002000, 122.818000", # Exact Coordinates
+            "mapQuery": "Kabankalan Ihaw-Ihaw Rizal St",
             "rating": "4.9",
             "price": "₱50–₱150",
             "img": "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=800&auto=format&fit=crop",
@@ -223,7 +223,7 @@ FOOD_DATA = {
         },
         {
             "name": "Cansi House",
-            "mapQuery": "9.989812, 122.812915", # Exact Coordinates based on your screenshot!
+            "mapQuery": "Cansi House Rizal Kabankalan",
             "rating": "4.7",
             "price": "₱120–₱280",
             "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
@@ -236,7 +236,7 @@ FOOD_DATA = {
         },
         {
             "name": "Sharyn's Cansi",
-            "mapQuery": "10.005000, 122.811000", # Exact Coordinates
+            "mapQuery": "Sharyns Cansi National Highway Kabankalan",
             "rating": "4.6",
             "price": "₱150–₱260",
             "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
@@ -248,7 +248,7 @@ FOOD_DATA = {
         },
         {
             "name": "Aida's Carinderia",
-            "mapQuery": "10.001000, 122.810000", # Exact Coordinates
+            "mapQuery": "Aidas Carinderia Public Market Kabankalan",
             "rating": "4.5",
             "price": "₱50–₱100",
             "img": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop",
@@ -261,7 +261,7 @@ FOOD_DATA = {
         },
         {
             "name": "Tita Beth's Eatery",
-            "mapQuery": "9.997000, 122.815000", # Exact Coordinates
+            "mapQuery": "Tita Beths Eatery Guanzon Kabankalan",
             "rating": "4.6",
             "price": "₱60–₱120",
             "img": "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=800&auto=format&fit=crop",
@@ -274,7 +274,7 @@ FOOD_DATA = {
         },
         {
             "name": "Myrna's Restaurant",
-            "mapQuery": "9.996000, 122.816000", # Exact Coordinates
+            "mapQuery": "Myrnas Restaurant Tan Lorenzo Kabankalan",
             "rating": "4.4",
             "price": "₱80–₱150",
             "img": "https://images.unsplash.com/photo-1626776876729-bab4369a5a5a?q=80&w=800&auto=format&fit=crop",
@@ -287,7 +287,7 @@ FOOD_DATA = {
         },
         {
             "name": "3RD Talabahan",
-            "mapQuery": "9.995000, 122.819000", # Exact Coordinates
+            "mapQuery": "3RD Talabahan Lirazan Kabankalan",
             "rating": "4.5",
             "price": "₱100–₱250",
             "img": "https://images.unsplash.com/photo-1559339352-11d035aa65de?q=80&w=800&auto=format&fit=crop",
@@ -300,7 +300,7 @@ FOOD_DATA = {
         },
         {
             "name": "Cansi ni Tatay Andoy",
-            "mapQuery": "10.002500, 122.813500", # Exact Coordinates
+            "mapQuery": "Cansi ni Tatay Andoy Kabankalan",
             "rating": "4.7",
             "price": "₱100–₱220",
             "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
@@ -312,7 +312,7 @@ FOOD_DATA = {
         },
         {
             "name": "Nena's Cansi Hauz",
-            "mapQuery": "10.000800, 122.814500", # Exact Coordinates
+            "mapQuery": "Nenas Cansi Hauz Kabankalan",
             "rating": "4.6",
             "price": "₱120–₱250",
             "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
@@ -324,7 +324,7 @@ FOOD_DATA = {
         },
         {
             "name": "Pares King Kabankalan",
-            "mapQuery": "9.998000, 122.811500", # Exact Coordinates
+            "mapQuery": "Pares King Kabankalan",
             "rating": "4.5",
             "price": "₱60–₱120",
             "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
@@ -337,7 +337,7 @@ FOOD_DATA = {
         },
         {
             "name": "Castaño's Dine and Drink",
-            "mapQuery": "10.001800, 122.815200", # Exact Coordinates
+            "mapQuery": "Castanos Dine and Drink Kabankalan",
             "rating": "4.5",
             "price": "₱80–₱250",
             "img": "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=800&auto=format&fit=crop",
@@ -350,7 +350,7 @@ FOOD_DATA = {
         },
         {
             "name": "Café CHIKO",
-            "mapQuery": "9.999500, 122.817500", # Exact Coordinates
+            "mapQuery": "Cafe CHIKO Aquiles Zayco Kabankalan",
             "rating": "4.4",
             "price": "₱70–₱150",
             "img": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop",
@@ -365,7 +365,7 @@ FOOD_DATA = {
         },
         {
             "name": "Emilio's Bistro",
-            "mapQuery": "10.000500, 122.812000", # Exact Coordinates
+            "mapQuery": "Emilios Bistro Rizal Kabankalan",
             "rating": "4.4",
             "price": "₱150–₱350",
             "img": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop",
@@ -377,7 +377,7 @@ FOOD_DATA = {
         },
         {
             "name": "Reegal's Refreshment",
-            "mapQuery": "10.001200, 122.813000", # Exact Coordinates
+            "mapQuery": "Reegals Refreshment Kabankalan",
             "rating": "4.3",
             "price": "₱50–₱120",
             "img": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?q=80&w=800&auto=format&fit=crop",
@@ -391,7 +391,7 @@ FOOD_DATA = {
     "cafe": [
         {
             "name": "Gorio's Cafe",
-            "mapQuery": "9.998500, 122.814000", # Exact Coordinates
+            "mapQuery": "Gorios Cafe Guanzon Kabankalan",
             "rating": "4.9",
             "price": "₱100–₱250",
             "img": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop",
@@ -404,7 +404,7 @@ FOOD_DATA = {
         },
         {
             "name": "Taza La Bien",
-            "mapQuery": "9.999900, 122.817000", # Exact Coordinates
+            "mapQuery": "Taza La Bien Los Angeles Kabankalan",
             "rating": "4.8",
             "price": "₱80–₱150",
             "img": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop",
@@ -417,7 +417,7 @@ FOOD_DATA = {
         },
         {
             "name": "Kalamay Artisan Cafe",
-            "mapQuery": "9.997500, 122.811500", # Exact Coordinates
+            "mapQuery": "Kalamay Artisan Lirazan Kabankalan",
             "rating": "4.6",
             "price": "₱100–₱200",
             "img": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800&auto=format&fit=crop",
@@ -430,7 +430,7 @@ FOOD_DATA = {
         },
         {
             "name": "Kapehan sa Plaza",
-            "mapQuery": "10.000100, 122.814800", # Exact Coordinates
+            "mapQuery": "Kapehan sa Plaza Kabankalan",
             "rating": "4.5",
             "price": "₱30–₱100",
             "img": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop",
@@ -442,7 +442,7 @@ FOOD_DATA = {
         },
         {
             "name": "MOICA Pizzeria",
-            "mapQuery": "9.994000, 122.818000", # Exact Coordinates
+            "mapQuery": "MOICA Pizzeria Coloso Kabankalan",
             "rating": "4.7",
             "price": "₱150–₱400",
             "img": "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop",
@@ -455,7 +455,7 @@ FOOD_DATA = {
         },
         {
             "name": "Amore Mio Pizza",
-            "mapQuery": "10.002800, 122.819500", # Exact Coordinates
+            "mapQuery": "Amore Mio Pizza Rizal Kabankalan",
             "rating": "4.6",
             "price": "₱120–₱350",
             "img": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?q=80&w=800&auto=format&fit=crop",
@@ -468,7 +468,7 @@ FOOD_DATA = {
         },
         {
             "name": "Bo's Coffee (CityMall)",
-            "mapQuery": "9.991234, 122.812345", # Exact Coordinates
+            "mapQuery": "Bos Coffee CityMall Kabankalan",
             "rating": "4.4",
             "price": "₱100–₱180",
             "img": "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=800&auto=format&fit=crop",
@@ -481,7 +481,7 @@ FOOD_DATA = {
         },
         {
             "name": "Sagay Cafe Kabankalan",
-            "mapQuery": "9.999000, 122.816500", # Exact Coordinates
+            "mapQuery": "Sagay Cafe Guanzon Kabankalan",
             "rating": "4.5",
             "price": "₱80–₱180",
             "img": "https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=800&auto=format&fit=crop",
@@ -493,7 +493,7 @@ FOOD_DATA = {
         },
         {
             "name": "The Coffee Project",
-            "mapQuery": "10.001000, 122.814200", # Exact Coordinates
+            "mapQuery": "The Coffee Project Rizal Kabankalan",
             "rating": "4.4",
             "price": "₱90–₱200",
             "img": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop",
@@ -505,7 +505,7 @@ FOOD_DATA = {
         },
         {
             "name": "Kape Centrale",
-            "mapQuery": "9.999800, 122.815100", # Exact Coordinates
+            "mapQuery": "Kape Centrale Punta Guanzon Kabankalan",
             "rating": "4.5",
             "price": "₱100–₱400",
             "img": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop",
@@ -520,7 +520,7 @@ FOOD_DATA = {
         },
         {
             "name": "MOÍCA Pizzeria & Bar",
-            "mapQuery": "9.997000, 122.814000", # Exact Coordinates
+            "mapQuery": "MOICA Pizzeria Cordero Kabankalan",
             "rating": "4.7",
             "price": "₱200–₱500",
             "img": "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop",
@@ -537,7 +537,7 @@ FOOD_DATA = {
     "desserts": [
         {
             "name": "Cake Avenue",
-            "mapQuery": "10.001500, 122.815500", # Exact Coordinates
+            "mapQuery": "Cake Avenue Rizal Kabankalan",
             "rating": "4.7",
             "price": "₱80–₱150",
             "img": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop",
@@ -550,7 +550,7 @@ FOOD_DATA = {
         },
         {
             "name": "Melting Pot",
-            "mapQuery": "10.002000, 122.816000", # Exact Coordinates
+            "mapQuery": "Melting Pot Rizal Kabankalan",
             "rating": "4.4",
             "price": "₱55–₱165",
             "img": "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?q=80&w=800&auto=format&fit=crop",
@@ -563,7 +563,7 @@ FOOD_DATA = {
         },
         {
             "name": "Bibingka Station",
-            "mapQuery": "9.999000, 122.812000", # Exact Coordinates
+            "mapQuery": "Bibingka Station Church Kabankalan",
             "rating": "4.9",
             "price": "₱40–₱100",
             "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop",
@@ -575,7 +575,7 @@ FOOD_DATA = {
         },
         {
             "name": "Leche Flan ni Aling Rosa",
-            "mapQuery": "10.000500, 122.811000", # Exact Coordinates
+            "mapQuery": "Leche Flan Public Market Kabankalan",
             "rating": "4.8",
             "price": "₱60–₱120",
             "img": "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop",
@@ -587,7 +587,7 @@ FOOD_DATA = {
         },
         {
             "name": "Don Benito's",
-            "mapQuery": "9.998000, 122.815500", # Exact Coordinates
+            "mapQuery": "Don Benitos Guanzon Kabankalan",
             "rating": "4.5",
             "price": "₱80–₱150",
             "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop",
@@ -599,7 +599,7 @@ FOOD_DATA = {
         },
         {
             "name": "Red Ribbon (CityMall)",
-            "mapQuery": "9.991234, 122.812345", # Exact Coordinates
+            "mapQuery": "Red Ribbon CityMall Kabankalan",
             "rating": "4.6",
             "price": "₱100–₱200",
             "img": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop",
@@ -612,7 +612,7 @@ FOOD_DATA = {
         },
         {
             "name": "Halo-Halo sa Plaza",
-            "mapQuery": "10.000000, 122.814000", # Exact Coordinates
+            "mapQuery": "Halo-Halo Plaza Kabankalan",
             "rating": "4.6",
             "price": "₱50–₱100",
             "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop",
@@ -624,7 +624,7 @@ FOOD_DATA = {
         },
         {
             "name": "Sweet Corner Bakeshop",
-            "mapQuery": "9.997000, 122.816000", # Exact Coordinates
+            "mapQuery": "Sweet Corner Bakeshop Guanzon Kabankalan",
             "rating": "4.5",
             "price": "₱40–₱120",
             "img": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop",
@@ -636,7 +636,7 @@ FOOD_DATA = {
         },
         {
             "name": "Puto Pao Master",
-            "mapQuery": "9.995000, 122.813000", # Exact Coordinates
+            "mapQuery": "Puto Pao Master Villa San Jose Kabankalan",
             "rating": "4.5",
             "price": "₱20–₱60",
             "img": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop",
@@ -650,7 +650,7 @@ FOOD_DATA = {
     "milktea": [
         {
             "name": "Chatime (City Mall)",
-            "mapQuery": "9.991234, 122.812345", # Exact Coordinates
+            "mapQuery": "Chatime CityMall Kabankalan",
             "rating": "4.8",
             "price": "₱70–₱140",
             "img": "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=800&auto=format&fit=crop",
@@ -663,7 +663,7 @@ FOOD_DATA = {
         },
         {
             "name": "Macao Imperial Tea",
-            "mapQuery": "10.003400, 122.812500", # Exact Coordinates
+            "mapQuery": "Macao Imperial Tea Gaisano Kabankalan",
             "rating": "4.6",
             "price": "₱90–₱160",
             "img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop",
@@ -675,7 +675,7 @@ FOOD_DATA = {
         },
         {
             "name": "CoCo Fresh Tea",
-            "mapQuery": "10.001000, 122.815000", # Exact Coordinates
+            "mapQuery": "CoCo Fresh Tea Araneta Kabankalan",
             "rating": "4.5",
             "price": "₱90–₱130",
             "img": "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=800&auto=format&fit=crop",
@@ -687,7 +687,7 @@ FOOD_DATA = {
         },
         {
             "name": "SereniTea",
-            "mapQuery": "10.000000, 122.816000", # Exact Coordinates
+            "mapQuery": "SereniTea Rizal Kabankalan",
             "rating": "4.4",
             "price": "₱70–₱120",
             "img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop",
@@ -699,7 +699,7 @@ FOOD_DATA = {
         },
         {
             "name": "Tea Talk",
-            "mapQuery": "9.999000, 122.815500", # Exact Coordinates
+            "mapQuery": "Tea Talk Guanzon Kabankalan",
             "rating": "4.3",
             "price": "₱60–₱100",
             "img": "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop",
@@ -712,7 +712,7 @@ FOOD_DATA = {
         },
         {
             "name": "Infinitea",
-            "mapQuery": "10.001500, 122.813000", # Exact Coordinates
+            "mapQuery": "Infinitea Kabankalan",
             "rating": "4.5",
             "price": "₱80–₱130",
             "img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop",
@@ -724,7 +724,7 @@ FOOD_DATA = {
         },
         {
             "name": "Dakasi (CityMall)",
-            "mapQuery": "9.991234, 122.812345", # Exact Coordinates
+            "mapQuery": "Dakasi CityMall Kabankalan",
             "rating": "4.5",
             "price": "₱70–₱130",
             "img": "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop",
@@ -736,7 +736,7 @@ FOOD_DATA = {
         },
         {
             "name": "Bubble Tea Station",
-            "mapQuery": "9.998000, 122.814500", # Exact Coordinates
+            "mapQuery": "Bubble Tea Station Guanzon Kabankalan",
             "rating": "4.4",
             "price": "₱60–₱110",
             "img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop",
@@ -748,7 +748,7 @@ FOOD_DATA = {
         },
         {
             "name": "Milk Tea ni Juan",
-            "mapQuery": "10.000500, 122.817500", # Exact Coordinates
+            "mapQuery": "Milk Tea ni Juan Rizal Kabankalan",
             "rating": "4.3",
             "price": "₱50–₱100",
             "img": "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop",
@@ -760,7 +760,7 @@ FOOD_DATA = {
         },
         {
             "name": "Sugar 'N Ice Milk Tea",
-            "mapQuery": "9.999500, 122.814000", # Exact Coordinates
+            "mapQuery": "Sugar N Ice Tan Lorenzo Kabankalan",
             "rating": "4.4",
             "price": "₱60–₱130",
             "img": "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop",
@@ -812,10 +812,19 @@ def get_trending_data():
 # ============================================================
 def home(request):
     reviews = Review.objects.all().order_by('-created_at')
+    
+    # AI CHECK LOGIC: Kunin lahat ng pangalan at bilang
+    all_names = []
+    for category, items in FOOD_DATA.items():
+        for item in items:
+            all_names.append(item['name'])
+            
     context = {
         'food_data': json.dumps(FOOD_DATA),
         'trending_data': json.dumps(get_trending_data()),
         'reviews': reviews,
+        'total_restaurants': len(all_names),
+        'verified_names': json.dumps(all_names), # Ipadala as JSON string
     }
     return render(request, 'index.html', context)
 
