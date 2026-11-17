@@ -1,15 +1,158 @@
-<h2>Sign In at Kabankalan Eats</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Kabankalan Eats</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #050505;
+      --card-bg: #111111;
+      --pink: #FF1493;
+      --pink-hover: #FF69B4;
+      --pink-glow: rgba(255, 20, 147, 0.4);
+      --text-light: #ffffff;
+      --text-muted: #a0a0a0;
+      --border-color: #2a2a2a;
+    }
 
-{% if error %}
-  <p style="color:red;">{{ error }}</p>
-{% endif %}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-<form method="POST">
-  {% csrf_token %}
-  <input type="text" name="username" placeholder="Username" required><br><br>
-  <input type="password" name="password" placeholder="Password" required><br><br>
-  <button type="submit">Sign In</button>
-</form>
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: radial-gradient(circle at 50% 0%, #1a0a12 0%, var(--bg-dark) 50%);
+      color: var(--text-light);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-<p>No account yet? <a href="#">Just register here</a></p>
-<p><a href="{% url 'food_finder:home' %}">Back to Home</a></p>
+    .login-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 40px 35px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 0 40px rgba(255, 20, 147, 0.15);
+    }
+
+    .logo { text-align: center; margin-bottom: 30px; }
+    .logo h1 { color: var(--pink); font-size: 1.8rem; font-weight: 800; }
+    .logo p { color: var(--text-muted); font-size: 0.95rem; margin-top: 8px; }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 18px;
+      background: #000;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: white;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px var(--pink-glow);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--pink), #d10074);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+      font-family: inherit;
+      margin-top: 10px;
+    }
+
+    .btn-login:hover {
+      background: linear-gradient(135deg, var(--pink-hover), var(--pink));
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px var(--pink-glow);
+    }
+
+    .error {
+      background: rgba(255, 0, 0, 0.15);
+      border: 1px solid #ff4444;
+      color: #ff6b6b;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .links { margin-top: 25px; text-align: center; font-size: 0.95rem; }
+    .links a { color: var(--pink); text-decoration: none; font-weight: 500; }
+    .links a:hover { text-decoration: underline; }
+    .links p { color: var(--text-muted); margin-bottom: 10px; }
+
+    .back-home {
+      display: block;
+      text-align: center;
+      margin-top: 25px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .back-home:hover { color: var(--pink); }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <div class="logo">
+      <h1>⚡ Kabankalan Eats</h1>
+      <p>Sign in to continue</p>
+    </div>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Enter your username" required>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter your password" required>
+      </div>
+
+      <button type="submit" class="btn-login">Sign In</button>
+    </form>
+
+    <div class="links">
+      <p>No account yet? <a href="/register/">Just register here</a></p>
+    </div>
+
+    <a href="/" class="back-home">← Back to Home</a>
+  </div>
+
+</body>
+</html>

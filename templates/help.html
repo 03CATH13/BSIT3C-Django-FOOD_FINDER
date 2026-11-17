@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Help Center | Kabankalan Eats</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+    }
+    h1 {
+      color: #ff2d95;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+    }
+    .help-card {
+      background: #111;
+      border: 1px solid #ff2d95;
+      border-radius: 16px;
+      padding: 20px 24px;
+      width: 100%;
+      max-width: 420px;
+      margin-bottom: 16px;
+    }
+    .help-card p {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      color: #eee;
+    }
+    .back-link {
+      margin-top: 50px;
+      color: #ff2d95;
+      text-decoration: none;
+      font-size: 1.15rem;
+      font-weight: 500;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Help Center</h1>
+
+  <div class="help-card">
+    <p>Paano mag-search? I-type lang ang pagkain sa search bar.</p>
+  </div>
+
+  <div class="help-card">
+    <p>Paano makita ang menu? I-click ang restaurant card.</p>
+  </div>
+
+  <!-- DIRETSO SA HOME PAGE -->
+  <a href="{% url 'food_finder:home' %}" class="back-link">← Balik sa Home</a>
+
+</body>
+</html>

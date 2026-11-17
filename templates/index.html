@@ -25,6 +25,9 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         ::selection { background: var(--pink); color: white; }
 
+        html { scroll-behavior: smooth; }
+        #search, #restaurants, #feedback { scroll-margin-top: 100px; }
+
         body {
             font-family: 'Outfit', sans-serif;
             background: radial-gradient(circle at 50% 0%, #1a0a12 0%, var(--bg-dark) 50%);
@@ -202,9 +205,9 @@
 
         .empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); grid-column: 1 / -1; background: var(--card-bg); border-radius: 15px; border: 1px dashed var(--border-color); }
 
-        footer { background: #000; padding: 50px 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 80px; }
+        footer { background: #000; padding: 50px 20px; text-align: center; border-top: 1px solid var(--border-color); margin-top: 80px; position: relative; z-index: 10; }
         .footer-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 25px; flex-wrap: wrap; }
-        .footer-links a { color: var(--text-muted); transition: color 0.3s; font-size: 1rem; font-weight: 500; }
+        .footer-links a { color: var(--text-muted); transition: color 0.3s; font-size: 1rem; font-weight: 500; cursor: pointer; }
         .footer-links a:hover { color: var(--pink); text-shadow: 0 0 10px var(--pink-glow); }
         .copyright { color: #555; font-size: 0.9rem; }
 
@@ -341,7 +344,7 @@
         #backToTopBtn:hover { background-color: var(--pink-hover); transform: translateY(-5px) scale(1.1); box-shadow: 0 8px 20px var(--pink-glow); }
 
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 10000; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
-        #preloader.hidden { opacity: 0; visibility: hidden; }
+        #preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         .loader { width: 50px; height: 50px; border: 5px solid var(--border-color); border-top: 5px solid var(--pink); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -398,7 +401,7 @@
             <p>Search for local restaurants, Cafe, Dessert, and Snacks within <strong>Kabankalan City Proper</strong> only.</p>
             
             <!-- CHAT INTERFACE -->
-            <div class="search-box">
+            <div class="search-box" id="search">
                 <input type="text" id="searchInput" placeholder="Chat with AI: 'Hanap ka ng pizza', 'Saan may cansi?', etc..." style="padding-right: 160px;">
                 <button type="button" id="voiceBtn" title="Search by voice"><i class="fas fa-microphone"></i></button>
                 <button type="button" id="searchBtn"><i class="fas fa-paper-plane"></i> Send</button>
@@ -416,7 +419,7 @@
             </div>
         </div>
 
-        <div class="content-split">
+        <div class="content-split" id="restaurants">
             <div id="trendingSection" class="reveal">
                 <h2 class="section-title" id="trending-title"><i class="fas fa-fire" style="color: var(--pink);"></i> Trending sa Kabankalan</h2>
                 <div class="trending-grid" id="trending-grid"></div>
@@ -433,7 +436,7 @@
             </div>
         </div>
 
-        <div class="reviews-container reveal">
+        <div class="reviews-container reveal" id="feedback">
             <h2 class="section-title" style="margin-top: 0; margin-bottom: 5px; font-size: 1.5rem; justify-content: center;"><i class="fas fa-star" style="color: #f1c40f;"></i> System Feedback</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">
                 Kamusta ang experience? I-rate at mag-iwan ng komento.
@@ -478,9 +481,9 @@
 
     <footer>
         <div class="footer-links">
-            <a href="#">About Us</a>
-            <a href="#">Contact Us</a>
-            <a href="#">Help</a>
+            <a href="{% url 'food_finder:about' %}">About Us</a>
+            <a href="{% url 'food_finder:contact' %}">Contact Us</a>
+            <a href="{% url 'food_finder:help' %}">Help</a>
         </div>
         <p class="copyright">&copy; 2026 Kabankalan Eats. All rights reserved.</p>
     </footer>

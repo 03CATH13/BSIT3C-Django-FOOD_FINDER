@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth import logout, authenticate, login
+from django.urls import reverse
 from .models import Restaurant, Review
 
 
@@ -798,6 +799,7 @@ TRENDING_NAMES = [
     ("milktea", "Sugar 'N Ice Milk Tea"),
 ]
 
+
 def get_trending_data():
     trending = []
     for category, name in TRENDING_NAMES:
@@ -807,26 +809,27 @@ def get_trending_data():
                 break
     return trending
 
+
 # ============================================================
 # HOME VIEW
 # ============================================================
 def home(request):
     reviews = Review.objects.all().order_by('-created_at')
-    
-    # AI CHECK LOGIC: Kunin lahat ng pangalan at bilang
+
     all_names = []
     for category, items in FOOD_DATA.items():
         for item in items:
             all_names.append(item['name'])
-            
+
     context = {
         'food_data': json.dumps(FOOD_DATA),
         'trending_data': json.dumps(get_trending_data()),
         'reviews': reviews,
         'total_restaurants': len(all_names),
-        'verified_names': json.dumps(all_names), # Ipadala as JSON string
+        'verified_names': json.dumps(all_names),
     }
     return render(request, 'index.html', context)
+
 
 # ============================================================
 # ABOUT
@@ -846,12 +849,67 @@ def about(request):
     }
     return render(request, 'about.html', context)
 
+
+# ============================================================
+# CONTACT US
+# ============================================================
+def contact(request):
+    contact_details = {
+        'email': 'support@kabankalaneats.com',
+        'phone': '+63 912 345 6789',
+        'address': 'Kabankalan City Proper, Negros Occidental',
+        'facebook': 'https://facebook.com/kabankalaneats',
+        'instagram': 'https://instagram.com/kabankalaneats'
+    }
+    return render(request, 'contact.html', {'contact_details': contact_details})
+
+
+# ============================================================
+# HELP PAGE (with clickable links)
+# ============================================================
+def help_page(request):
+    faqs = [
+        {
+            'question': 'Paano mag-search ng pagkain?',
+            'answer': 'I-type lang ang gusto mong pagkain sa search bar (hal. "pizza", "cansi", "milk tea") at pindutin ang Send. Awtomatikong hahanapin ng AI ang mga restaurant na may ganoong pagkain.',
+            'link': reverse('food_finder:home') + '#search',
+            'link_text': 'Pumunta sa Search Bar',
+        },
+        {
+            'question': 'Paano makita ang menu at presyo?',
+            'answer': 'I-click lang ang restaurant card na gusto mo. Lalabas ang buong menu, presyo, address, at mapa para madali mo silang mahanap.',
+            'link': reverse('food_finder:home') + '#restaurants',
+            'link_text': 'Tingnan ang mga Restaurant',
+        },
+        {
+            'question': 'Paano pumunta sa restaurant?',
+            'answer': 'Sa loob ng menu modal, may "Open in Maps" button. I-click lang iyon para direkta kang mapunta sa Google Maps at makita ang exact location.',
+            'link': reverse('food_finder:home') + '#restaurants',
+            'link_text': 'Pumili ng Restaurant',
+        },
+        {
+            'question': 'Paano mag-iwan ng review?',
+            'answer': 'Scroll down sa home page, hanapin ang "System Feedback" section. Isulat ang iyong pangalan, pumili ng rating, at i-type ang iyong komento. I-click ang Submit Feedback.',
+            'link': reverse('food_finder:home') + '#feedback',
+            'link_text': 'Mag-iwan ng Review',
+        },
+        {
+            'question': 'Kailangan mo pa ng tulong?',
+            'answer': 'Kung hindi pa rin nasagot ang tanong mo, makipag-ugnayan sa amin.',
+            'link': reverse('food_finder:contact'),
+            'link_text': 'Contact Us',
+        },
+    ]
+    return render(request, 'help.html', {'faqs': faqs})
+
+
 # ============================================================
 # LOGOUT
 # ============================================================
 def logout_user(request):
     logout(request)
     return redirect('food_finder:home')
+
 
 # ============================================================
 # LOGIN
@@ -867,6 +925,7 @@ def login_user(request):
         else:
             return render(request, 'login.html', {'error': 'username or password is incorrect.'})
     return render(request, 'login.html')
+
 
 # ============================================================
 # SUBMIT REVIEW (AJAX)
