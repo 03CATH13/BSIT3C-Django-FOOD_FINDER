@@ -743,7 +743,42 @@
         searchBtn.addEventListener('click', function() { handleSearch(searchInput.value); });
         searchInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); handleSearch(this.value); } });
         searchInput.addEventListener('input', function() { if (this.value.trim() === "") { handleSearch(""); } });
-        voiceBtn.addEventListener('click', () => { window.open('https://www.google.com/search?q=restaurant+in+Kabankalan+City+Proper&hl=en&gl=ph', '_blank'); });
+
+        // ===== VOICE SEARCH: result mag-gwa sa system, indi sa Google =====
+        const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRec) {
+            voiceBtn.addEventListener('click', () => {
+                showToast("Indi supported ang voice search sa sini nga browser. Gamita ang Chrome ukon Edge.", "fa-exclamation-circle");
+            });
+        } else {
+            const recognition = new SpeechRec();
+            recognition.lang = 'fil-PH';          // pwede i-ilis sa 'en-US' kon English ang food names
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            voiceBtn.addEventListener('click', () => {
+                try {
+                    recognition.start();
+                    voiceBtn.classList.add('listening');
+                    showToast("Nagapamati... magsulti na!", "fa-microphone");
+                } catch (e) { /* nagapamati na */ }
+            });
+
+            recognition.onresult = (event) => {
+                const spoken = event.results[0][0].transcript.replace(/[.,!?]+$/, '').trim();
+                searchInput.value = spoken;      // ibutang sa search box
+                handleSearch(spoken);            // i-search sa system, indi sa Google
+            };
+
+            recognition.onend = () => voiceBtn.classList.remove('listening');
+
+            recognition.onerror = (e) => {
+                voiceBtn.classList.remove('listening');
+                if (e.error === 'not-allowed') showToast("I-allow ang microphone sa browser.", "fa-microphone-slash");
+                else if (e.error === 'no-speech') showToast("Wala ko mabatian. Subukan liwat.", "fa-exclamation-circle");
+                else showToast("Voice error: " + e.error, "fa-exclamation-circle");
+            };
+        }
 
         const reviewForm = document.getElementById('reviewForm');
         const reviewList = document.getElementById('reviewList');
