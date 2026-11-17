@@ -218,8 +218,9 @@
     <div id="preloader"><div class="loader"></div></div>
     <div id="toast-container"></div>
     <nav class="navbar">
-        <h2><i class="fas fa-bolt"></i> Kabankalan Eats</h2>
+        <a href="/"><h2><i class="fas fa-bolt"></i> Kabankalan Eats</h2></a>
         <div class="nav-links">
+             <a href="/admin/">Admin</a>
             <a href="{% url 'food_finder:about' %}">About</a>
             <a href="{% url 'food_finder:login' %}">Login</a>
             <button onclick="openLogoutModal()">Logout</button>
@@ -303,12 +304,10 @@
         </div>
     </main>
     <footer>
-        <div class="footer-links"><a href="#">About Us</a><a href="#">Contact Us</a><a href="#">Help</a></div>
+        <div class="footer-links"><a href="{% url 'food_finder:about' %}">About Us</a><a href="#">Contact Us</a><a href="#">Help</a><a href="/admin/">Admin</a></div>
         <p class="copyright">&copy; 2026 Kabankalan Eats. All rights reserved. • Kabankalan City Proper Only</p>
     </footer>
     <button onclick="scrollToTop()" id="backToTopBtn" title="Go to top"><i class="fas fa-arrow-up"></i></button>
-
-    <!-- SAME MODAL FOR NORMAL + AI CHECK -->
     <div class="modal-overlay" id="infoModal">
         <div class="modal-content">
             <div class="modal-header"><div><h3 id="modalRestaurantName" style="line-height:1.1;">Restaurant Name</h3><span id="modalGuideBadge" style="display:none; background:rgba(255,20,147,.15); border:1px solid var(--pink); color:#ffb3d9; font-size:.75rem; font-weight:700; padding:4px 10px; border-radius:20px;">✦ AI GUIDE • Wala pa sa System • Guide lang</span></div><button class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i></button></div>
@@ -328,7 +327,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal-overlay" id="aiVerifiedModal" style="z-index: 2000;">
         <div class="modal-content" style="max-width: 700px; height: auto; max-height: 85vh;">
             <div class="modal-header">
@@ -353,7 +351,6 @@
             </div>
         </div>
     </div>
-
     <div id="logoutModal" class="logout-modal-overlay">
         <div class="logout-modal-content">
             <h3>Are you sure you want to logout?</h3>
@@ -361,7 +358,6 @@
             <div class="logout-modal-buttons"><a href="{% url 'food_finder:logout' %}" class="btn-logout-yes">Yes, Logout</a><button onclick="closeLogoutModal()" class="btn-logout-cancel">Cancel</button></div>
         </div>
     </div>
-
     <script>
         const foodData = {{ food_data|safe }};
         const trendingData = {{ trending_data|safe }};
@@ -391,7 +387,6 @@
         const mapImageLink = document.getElementById('mapImageLink');
         const mapStaticImg = document.getElementById('mapStaticImg');
         let currentCategory = 'carinderia';
-
         const OUTSIDE_PROPER = ['taytay','talubangi','daan banua','mabinay','oringao','hinapunan','tabugon','camansi','binicuil','salong','carol-an','camugao','cervantes','tan-awan','locotan','magballo','bunga','tagukon','camalobalo','highway to mabinay','brgy. 9, highway','inapoy','aming','bacong','calatagan'];
         function isWithinProper(item) {
             const addr = ((item.address || '') + ' ' + (item.name || '')).toLowerCase();
@@ -404,14 +399,11 @@
         }
         const LUTONG_BAHAY_FOODS = ['adobo','tinola','nilaga','sinigang','pakbet','ginataang','dinuguan','menudo','kaldereta','mechado','afritada','laing','pinakbet','chop suey','torta','giniling','humba','lechon paksiw','paksiw','bulalo','cansi','batchoy','arroz caldo','lugaw','pancit','lumpia','sisig','karekare','kare-kare','bicol express'];
         function escapeQuote(s){ return (s||'').replace(/'/g, "\\'"); }
-
-        // ===== FIX: EXACT NAME LANG ANG I-CHECK, HINDI FIRST WORD =====
         function isGuideMissing(guideName) {
             if (!verifiedNames || verifiedNames.length === 0) return true;
             const g = (guideName || '').toLowerCase().trim();
             return !verifiedNames.some(v => (v || '').toLowerCase().trim() === g);
         }
-
         function guideImage(cat) {
             const imgs = {
                 lutongbahay: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600',
@@ -447,7 +439,6 @@
                 </div>
             </div>`;
         }
-
         const DISCOVERY_GUIDE = [
             { name: "Manang Lita Lutong Bahay", cat: "lutongbahay", tag: "Lutong Bahay • Carinderia", desc: "Pang everyday nga lutong bahay sa Proper. Barato, init, kag pang pamilya.", address: "Rizal St, Kabankalan City Proper", foods: "lutong bahay, adobo, nilaga, tinola, sinigang" },
             { name: "Tita Baby's Carinderia", cat: "lutongbahay", tag: "Lutong Bahay • Turo-Turo", desc: "Turo-turo style sa Proper. Pili ka lang sang sud-an, pang budget meal.", address: "Rizal St, Kabankalan City Proper", foods: "lutong bahay, adobo, menudo, mechado, chop suey" },
@@ -488,14 +479,12 @@
             { name: "Unli Wings & Samgyup - Proper", cat: "unli", tag: "Unli Wings • Samgyup ₱299", desc: "Unli pork, unli side dish, unli rice + drinks ₱299 sa Proper. 11AM-8PM everyday.", address: "Kabankalan City Proper", foods: "samgyupsal, unli wings, unli rice, pork" },
         ];
         let currentGuideFilter = 'all';
-
         function setupModalMap(name, address) {
             const searchQuery = encodeURIComponent(`${name} ${address}, Kabankalan City Proper`);
             const directLink = `https://www.google.com/maps/search/?api=1&query=${searchQuery}`;
             openMapsBtn.href = directLink; mapBadgeLink.href = directLink; mapImageLink.href = directLink;
             mapStaticImg.src = `https://static-maps.yandex.ru/1.x/?lang=en_US&ll=122.814,10.000&z=14&l=map&size=600,450`;
         }
-
         function renderAIGuide(searchText = "") {
             const listContainer = document.getElementById('aiVerifiedList');
             listContainer.innerHTML = '';
@@ -563,16 +552,13 @@
                 });
             });
         });
-
         function openLogoutModal() { document.getElementById('logoutModal').classList.add('active'); }
         function closeLogoutModal() { document.getElementById('logoutModal').classList.remove('active'); }
         window.addEventListener('click', function(e) { const logoutModal = document.getElementById('logoutModal'); if (e.target === logoutModal) closeLogoutModal(); });
-
         function getAllRestaurants() { let all = []; for (let key in foodData) { all = all.concat(foodData[key]); } return all; }
         function createTrendingCardHTML(item) { return `<div class="card-img" style="background-image: url('${item.img}');"></div><div class="card-content"><h3>${item.name}</h3><div class="rating"><i class="fas fa-star"></i> ${item.rating}</div></div>`; }
         function createAllCardHTML(item) { return `<div class="card-img" style="background-image: url('${item.img}');"></div><div class="card-content"><div class="header-row" style="display: flex; justify-content: space-between; align-items: flex-start;"><h3>${item.name}</h3><div class="rating"><i class="fas fa-star"></i> ${item.rating}</div></div><div class="price">${item.price}</div><button class="btn-primary"><i class="fas fa-utensils"></i> View Menu</button></div>`; }
         function createSmallCardHTML(item) { return `<div class="card-img" style="background-image: url('${item.img}');"></div><div class="card-content"><div class="header-row" style="display: flex; justify-content: space-between; align-items: flex-start;"><h3>${item.name}</h3><div class="rating"><i class="fas fa-star"></i> ${item.rating}</div></div><div class="price">${item.price}</div><button class="btn-primary"><i class="fas fa-utensils"></i> View</button></div>`; }
-
         function renderTrending() {
             trendingGrid.innerHTML = '';
             if (trendingData.length === 0) { trendingGrid.innerHTML = `<div class="empty-state"><h3>No results found</h3></div>`; return; }
@@ -590,7 +576,6 @@
             leftAllRestaurantsGrid.innerHTML = '';
             allItems.forEach(item => { const card = document.createElement('div'); card.className = 'all-card-small'; card.setAttribute('onclick', `openModal("${item.name}")`); card.innerHTML = createSmallCardHTML(item); leftAllRestaurantsGrid.appendChild(card); });
         }
-
         function openModal(restaurantName) {
             let foundRestaurant = null;
             for (let key in foodData) { const found = foodData[key].find(item => item.name === restaurantName); if (found) { foundRestaurant = found; break; } }
@@ -616,7 +601,6 @@
                 infoModal.classList.add('active');
             } else { showToast("Wala sang detalye nga available.", "fa-exclamation-circle"); }
         }
-
         function openGuideModal(restaurantName) {
             let inSystem = false;
             for (let key in foodData) { if (foodData[key].some(i => i.name === restaurantName)) { inSystem = true; break; } }
@@ -655,10 +639,8 @@
             setupModalMap(item.name, item.address);
             infoModal.classList.add('active');
         }
-
         function closeModal() { infoModal.classList.remove('active'); }
         infoModal.addEventListener('click', function(e) { if (e.target === infoModal) closeModal(); });
-
         buttons.forEach(btn => {
             btn.addEventListener('click', function() {
                 buttons.forEach(b => b.classList.remove('active')); this.classList.add('active');
@@ -669,7 +651,6 @@
                 renderTrending(); renderCategory(currentCategory, this.innerText.trim());
             });
         });
-
         function handleSearch(query) {
             if (query.trim() !== "") {
                 categoriesSection.classList.add('hide-on-search'); trendingSection.classList.add('hide-on-search');
@@ -678,7 +659,6 @@
                 const searchTerm = query.toLowerCase().trim();
                 const isOutsideSearch = OUTSIDE_PROPER.some(w => searchTerm.includes(w));
                 let aiResponse = `<div style="display: flex; gap: 15px; margin-bottom: 30px; background: rgba(255,20,147,0.05); padding: 20px; border-radius: 15px; border: 1px solid var(--pink);"><div style="font-size: 2rem; color: var(--pink);"><i class="fas fa-robot"></i></div><div><h4 style="color: var(--pink); margin-bottom: 5px;">Kabankalan AI Assistant - Proper Only</h4><p style="color: white;">Kumusta! Gipangita ko ang mga restaurant nga may ara sang <strong>"${query}"</strong> sa <strong>Kabankalan City Proper lang</strong>...</p>${isOutsideSearch ? `<p style="color:#f1c40f; font-size:.9rem; margin-top:8px;"><i class="fas fa-exclamation-triangle"></i> Note: Ang "${query}" ara sa gwa sang Proper, kaya wala namon ginapagwa. Proper lang ang coverage sang system.</p>` : ''}</div></div>`;
-
                 let allResults = [];
                 for (let key in foodData) {
                     foodData[key].forEach(item => {
@@ -690,27 +670,21 @@
                         if (hasMatch) { allResults.push(item); }
                     });
                 }
-
-                // ===== FIX: NILAGA DAPAT MAG-GWA GID =====
                 let guideResults = DISCOVERY_GUIDE.filter(item => {
                     if (!isWithinProper(item)) return false;
                     const haystack = (item.name + " " + item.tag + " " + item.desc + " " + item.address + " " + (item.foods || "")).toLowerCase();
                     let matched = haystack.includes(searchTerm);
                     if (isLutongBahaySearch(searchTerm) && (item.cat === 'lutongbahay' || haystack.includes('lutong bahay'))) matched = true;
                     if (LUTONG_BAHAY_FOODS.some(f => searchTerm.includes(f)) && item.cat === 'lutongbahay') matched = true;
-                    // nilaga = dapat tanan nga may nilaga sa foods mag-gwa
                     if (searchTerm === 'nilaga' && haystack.includes('nilaga')) matched = true;
                     return isGuideMissing(item.name) && matched;
                 });
-
                 allRestaurantsGrid.innerHTML = '';
-
                 if (allResults.length > 0) {
                     aiResponse += `<div style="padding:0 10px 20px 10px;"><p style="color:white; font-size:1.1rem;">Nakita ko ang <strong>${allResults.length}</strong> ka restaurant sa system (Proper Only) nga may ara sang <strong>"${query}"</strong>!</p></div><div class="all-grid" style="grid-column: 1 / -1;">`;
                     allResults.forEach(item => { aiResponse += `<div class="all-card" onclick="openModal('${item.name}')">${createAllCardHTML(item)}</div>`; });
                     aiResponse += `</div>`;
                 }
-
                 if (guideResults.length > 0) {
                     aiResponse += `
                         <div style="margin:30px 10px 15px 10px; padding:18px; background:linear-gradient(135deg, rgba(255,20,147,.12), rgba(255,20,147,.03)); border:1px solid rgba(255,20,147,.4); border-radius:16px;">
@@ -721,7 +695,6 @@
                     guideResults.forEach(item => { aiResponse += guideCardHTML(item); });
                     aiResponse += `</div>`;
                 }
-
                 if (allResults.length === 0 && guideResults.length === 0) {
                     aiResponse += `<div style="text-align: left; padding: 0 10px 20px 10px;"><p style="color: white; margin-bottom: 15px;">Pasensya na, wala ko makita ang eksakto nga "${query}" sa <strong>Kabankalan City Proper</strong>. ${isOutsideSearch ? 'Kay ang gina-pangita mo ara sa gwa sang Proper.' : 'Pero ari ang mga trending sa Proper subong:'}</p></div>`;
                     if (!isOutsideSearch) {
@@ -730,7 +703,6 @@
                         aiResponse += sugHTML;
                     }
                 }
-
                 allRestaurantsGrid.innerHTML = aiResponse;
                 categoriesSection.classList.add('hide-on-search'); trendingSection.classList.add('hide-on-search');
             } else {
@@ -743,8 +715,6 @@
         searchBtn.addEventListener('click', function() { handleSearch(searchInput.value); });
         searchInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); handleSearch(this.value); } });
         searchInput.addEventListener('input', function() { if (this.value.trim() === "") { handleSearch(""); } });
-
-        // ===== VOICE SEARCH: result mag-gwa sa system, indi sa Google =====
         const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRec) {
             voiceBtn.addEventListener('click', () => {
@@ -752,26 +722,22 @@
             });
         } else {
             const recognition = new SpeechRec();
-            recognition.lang = 'fil-PH';          // pwede i-ilis sa 'en-US' kon English ang food names
+            recognition.lang = 'fil-PH';
             recognition.interimResults = false;
             recognition.maxAlternatives = 1;
-
             voiceBtn.addEventListener('click', () => {
                 try {
                     recognition.start();
                     voiceBtn.classList.add('listening');
                     showToast("Nagapamati... magsulti na!", "fa-microphone");
-                } catch (e) { /* nagapamati na */ }
+                } catch (e) { }
             });
-
             recognition.onresult = (event) => {
                 const spoken = event.results[0][0].transcript.replace(/[.,!?]+$/, '').trim();
-                searchInput.value = spoken;      // ibutang sa search box
-                handleSearch(spoken);            // i-search sa system, indi sa Google
+                searchInput.value = spoken;
+                handleSearch(spoken);
             };
-
             recognition.onend = () => voiceBtn.classList.remove('listening');
-
             recognition.onerror = (e) => {
                 voiceBtn.classList.remove('listening');
                 if (e.error === 'not-allowed') showToast("I-allow ang microphone sa browser.", "fa-microphone-slash");
@@ -779,7 +745,6 @@
                 else showToast("Voice error: " + e.error, "fa-exclamation-circle");
             };
         }
-
         const reviewForm = document.getElementById('reviewForm');
         const reviewList = document.getElementById('reviewList');
         const reviewText = document.getElementById('reviewText');
@@ -802,7 +767,6 @@
             } catch (error) { showToast("Hindi maka-konekta sa server.", 'fa-exclamation-circle'); }
         });
         reviewText.addEventListener('keydown', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitBtn.click(); } });
-
         renderTrending(); renderCategory('carinderia', 'Local & Cansi'); renderLeftAllRestaurants();
         function reveal() { var reveals = document.querySelectorAll(".reveal"); for (var i = 0; i < reveals.length; i++) { var windowHeight = window.innerHeight; var elementTop = reveals[i].getBoundingClientRect().top; var elementVisible = 100; if (elementTop < windowHeight - elementVisible) { reveals[i].classList.add("active"); } } }
         window.addEventListener("scroll", reveal); reveal();

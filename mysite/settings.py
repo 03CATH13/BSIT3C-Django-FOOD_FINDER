@@ -110,7 +110,7 @@ JAZZMIN_SETTINGS = {
     "copyright": "ProjectV3 - BSIT3C",
     "search_model": ["food_finder.Restaurant", "auth.User"],
     "topmenu_links": [
-        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "🏠 Home", "url": "/", "new_window": False},
         {"name": "View Site", "url": "/", "new_window": True}, # Gin-ilisan ang /finder/ sa /
     ],
     "icons": {
