@@ -608,7 +608,7 @@ FOOD_DATA = {
             "mapQuery": "Bibingka Station Church Kabankalan",
             "rating": "4.9",
             "price": "₱40–₱100",
-            "img": "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/bibingka-station.jpg",
             "address": "Church Vicinity, City Proper",
             "menu": [
                 {"name": "Bibingka", "price": "₱50", "desc": "Rice cake"},
@@ -620,7 +620,7 @@ FOOD_DATA = {
             "mapQuery": "Leche Flan Public Market Kabankalan",
             "rating": "4.8",
             "price": "₱60–₱120",
-            "img": "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/leche-flan-ni-aling.jpg",
             "address": "Public Market, City Proper",
             "menu": [
                 {"name": "Leche Flan", "price": "₱70", "desc": "Caramel custard"},
@@ -632,7 +632,7 @@ FOOD_DATA = {
             "mapQuery": "Don Benitos Guanzon Kabankalan",
             "rating": "4.5",
             "price": "₱80–₱150",
-            "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/don-benitos.jpg",
             "address": "Guanzon St, City Proper",
             "menu": [
                 {"name": "Halo-Halo", "price": "₱99", "desc": "Shaved ice dessert"},
@@ -644,7 +644,7 @@ FOOD_DATA = {
             "mapQuery": "Red Ribbon CityMall Kabankalan",
             "rating": "4.6",
             "price": "₱100–₱200",
-            "img": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/red-ribbon.jpg",
             "address": "CityMall, City Proper",
             "menu": [
                 {"name": "Black Forest", "price": "₱120", "desc": "Cake slice"},
@@ -657,7 +657,7 @@ FOOD_DATA = {
             "mapQuery": "Halo-Halo Plaza Kabankalan",
             "rating": "4.6",
             "price": "₱50–₱100",
-            "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/halo-halo-sa-plaza.jpg",
             "address": "Plaza Area, City Proper",
             "menu": [
                 {"name": "Special Halo-Halo", "price": "₱85", "desc": "Loaded shaved ice dessert"},
@@ -669,7 +669,7 @@ FOOD_DATA = {
             "mapQuery": "Sweet Corner Bakeshop Guanzon Kabankalan",
             "rating": "4.5",
             "price": "₱40–₱120",
-            "img": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/sweet-corner-bakery.jpg",
             "address": "Guanzon St, City Proper",
             "menu": [
                 {"name": "Mango Graham", "price": "₱90", "desc": "Layered mango dessert"},
@@ -681,7 +681,7 @@ FOOD_DATA = {
             "mapQuery": "Puto Pao Master Villa San Jose Kabankalan",
             "rating": "4.5",
             "price": "₱20–₱60",
-            "img": "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/puto-pao-master.jpg",
             "address": "Villa San Jose Subdivision, Brgy. 6, City Proper",
             "menu": [
                 {"name": "Puto Pao", "price": "₱25", "desc": "Steamed rice cake with filling"},
@@ -695,7 +695,7 @@ FOOD_DATA = {
             "mapQuery": "Chatime CityMall Kabankalan",
             "rating": "4.8",
             "price": "₱70–₱140",
-            "img": "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/chatime.jpg",
             "address": "City Mall, City Proper",
             "menu": [
                 {"name": "Pearl Milk Tea", "price": "₱85", "desc": "Classic pearls"},
@@ -708,7 +708,7 @@ FOOD_DATA = {
             "mapQuery": "Macao Imperial Tea Gaisano Kabankalan",
             "rating": "4.6",
             "price": "₱90–₱160",
-            "img": "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/macao.jpg",
             "address": "Gaisano Grand Mall, City Proper",
             "menu": [
                 {"name": "Cream Cheese", "price": "₱120", "desc": "Cheesecake series"},
@@ -720,7 +720,7 @@ FOOD_DATA = {
             "mapQuery": "CoCo Fresh Tea Araneta Kabankalan",
             "rating": "4.5",
             "price": "₱90–₱130",
-            "img": "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/coco.jpg",
             "address": "Araneta St, City Proper",
             "menu": [
                 {"name": "3Q Milk Tea", "price": "₱110", "desc": "Pearl, pudding, jelly"},
@@ -732,7 +732,7 @@ FOOD_DATA = {
             "mapQuery": "SereniTea Rizal Kabankalan",
             "rating": "4.4",
             "price": "₱70–₱120",
-            "img": "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/serenitea.jpg",
             "address": "Rizal St, City Proper",
             "menu": [
                 {"name": "Wintermelon", "price": "₱75", "desc": "Sweet and refreshing"},
@@ -744,7 +744,7 @@ FOOD_DATA = {
             "mapQuery": "Tea Talk Guanzon Kabankalan",
             "rating": "4.3",
             "price": "₱60–₱100",
-            "img": "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/tea-talk.jpg",
             "address": "Guanzon St, City Proper",
             "menu": [
                 {"name": "Okinawa", "price": "₱85", "desc": "Brown sugar milk tea"},
@@ -757,7 +757,7 @@ FOOD_DATA = {
             "mapQuery": "Infinitea Kabankalan",
             "rating": "4.5",
             "price": "₱80–₱130",
-            "img": "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/infinitea.jpg",
             "address": "City Proper, Kabankalan",
             "menu": [
                 {"name": "Hokkaido", "price": "₱95", "desc": "Creamy milk tea"},
@@ -769,7 +769,7 @@ FOOD_DATA = {
             "mapQuery": "Dakasi CityMall Kabankalan",
             "rating": "4.5",
             "price": "₱70–₱130",
-            "img": "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/dakasi.jpg",
             "address": "CityMall, City Proper",
             "menu": [
                 {"name": "Cheesecake Milk Tea", "price": "₱99", "desc": "Creamy cheesecake series"},
@@ -781,7 +781,7 @@ FOOD_DATA = {
             "mapQuery": "Bubble Tea Station Guanzon Kabankalan",
             "rating": "4.4",
             "price": "₱60–₱110",
-            "img": "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/bubble-tea-station.jpg",
             "address": "Guanzon St, City Proper",
             "menu": [
                 {"name": "Brown Sugar Boba", "price": "₱85", "desc": "Classic brown sugar"},
@@ -793,7 +793,7 @@ FOOD_DATA = {
             "mapQuery": "Milk Tea ni Juan Rizal Kabankalan",
             "rating": "4.3",
             "price": "₱50–₱100",
-            "img": "https://images.unsplash.com/photo-1553787499-6f9133860278?q=80&w=800&auto=format&fit=crop",
+            "img": "/static/images/milk-tea-ni-juan.jpg",
             "address": "Rizal St, City Proper",
             "menu": [
                 {"name": "Taro Milk Tea", "price": "₱75", "desc": "Taro-flavored milk tea"},
