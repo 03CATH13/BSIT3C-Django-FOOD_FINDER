@@ -1,65 +1,50 @@
 from django.contrib import admin
-from django.apps import apps
-from .models import Review
+from .models import Restaurant, MenuItem, Review
+
+admin.site.site_header = "FOOD FINDER Admin"
+admin.site.site_title = "Food Finder"
+admin.site.index_title = "Welcome to Food Finder Admin"
+
+class MenuItemInline(admin.TabularInline):
+    model = MenuItem
+    extra = 1
+    fields = ('name', 'price', 'desc', 'img')
+
+@admin.register(Restaurant)
+class RestaurantAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'category', 'rating', 'price_range', 'address', 'is_trending')
+    list_filter = ('category', 'is_trending')
+    search_fields = ('name', 'address')
+    list_editable = ('is_trending', 'rating')
+    inlines = [MenuItemInline]
+    fieldsets = (
+        ('Restaurant Info', {
+            'fields': ('name', 'category', 'address', 'map_query')
+        }),
+        ('Details', {
+            'fields': ('rating', 'price_range', 'img', 'is_trending')
+        }),
+    )
+
+@admin.register(MenuItem)
+class MenuItemAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'restaurant', 'price', 'desc')
+    list_filter = ('restaurant',)
+    search_fields = ('name', 'restaurant__name')
+    fieldsets = (
+        (None, {
+            'fields': ('restaurant', 'name', 'price', 'desc', 'img')
+        }),
+    )
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('name', 'rating_stars', 'short_text', 'created_at')
+    list_display = ('id', 'name', 'rating', 'stars_display', 'created_at')
     list_filter = ('rating', 'created_at')
     search_fields = ('name', 'text')
-    ordering = ()
-    list_per_page = 20
-    readonly_fields = ('created_at',)
+    readonly_fields = ('created_at', 'stars_display')
     fieldsets = (
-        ('Feedback', {'fields': ('name', 'rating', 'text')}),
-        ('Info', {'fields': ('created_at',)}),
+        (None, {
+            'fields': ('name', 'rating', 'text', 'stars_display', 'created_at')
+        }),
     )
-    def short_text(self, obj):
-        text = obj.text or ''
-        if len(text) > 50:
-            return text[:50] + '...'
-        return text
-    def rating_stars(self, obj):
-        try:
-            r = int(obj.rating or 0)
-        except:
-            r = 0
-        return '★' * r + '☆' * (5 - r)
-    rating_stars.short_description = 'Rating'
-    short_text.short_description = 'Comment'
-
-try:
-    from .models import MenuItem
-    @admin.register(MenuItem)
-    class MenuItemAdmin(admin.ModelAdmin):
-        list_display = ('name', 'restaurant', 'price')
-        list_filter = ('restaurant',)
-        search_fields = ('name', 'restaurant__name')
-        list_per_page = 100
-        ordering = ()
-except Exception:
-    pass
-
-try:
-    from .models import Restaurant
-    @admin.register(Restaurant)
-    class RestaurantAdmin(admin.ModelAdmin):
-        list_display = ('name', 'address_with_space', 'category', 'rating', 'is_trending')
-        list_filter = ('category', 'is_trending')
-        search_fields = ('name', 'address')
-        list_per_page = 100
-        ordering = ()
-        def address_with_space(self, obj):
-            a = (obj.address or '').replace(',', ', ').replace('  ', ' ').strip()
-            return a
-        address_with_space.short_description = 'Address'
-except Exception:
-    pass
-
-for _m in apps.get_app_config('food_finder').get_models():
-    if _m.__name__ in ('Review', 'MenuItem', 'Restaurant'):
-        continue
-    try:
-        admin.site.register(_m)
-    except Exception:
-        pass
