@@ -1,19 +1,15 @@
-import copy
 import json
-from urllib.parse import quote
-
-from django.conf import settings
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.staticfiles import finders
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from django.shortcuts import redirect, render
-from django.templatetags.static import static
-from django.utils.html import escape
-from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
-
+from django.contrib.auth import logout, authenticate, login
+from django.urls import reverse
 from .models import Restaurant, Review
 
+
+# ============================================================
+# FOOD DATA
+# ============================================================
 FOOD_DATA = {
     "fastfood": [
         {
@@ -21,7 +17,7 @@ FOOD_DATA = {
             "mapQuery": "Jollibee Guanzon St, Kabankalan City",
             "rating": "4.5",
             "price": "₱50–₱250",
-            "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzB9l-kZmFoJPgem5i0XPU5I8cpqvjCZIJpF5W4m4vjrhpQ2OXr7gYJzrc&s=10",
+            "img": "https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop",
             "address": "Guanzon St, Kabankalan City Proper",
             "menu": [
                 {"name": "1-pc. Breakfast Chickenjoy Solo", "price": "₱99", "desc": "Crispy fried chicken with garlic rice and egg"},
@@ -42,7 +38,7 @@ FOOD_DATA = {
             "mapQuery": "McDonalds Guanzon St, Kabankalan City",
             "rating": "4.3",
             "price": "₱50–₱650",
-            "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEzC9WY08bwHZYAAmJRWh990g4Ad1HU9-NPnWDcdu--w&s=10",
+            "img": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop",
             "address": "Guanzon St, Kabankalan City Proper",
             "menu": [
                 {"name": "Big Mac", "price": "₱209", "desc": "Double-decker burger"},
@@ -93,7 +89,7 @@ FOOD_DATA = {
             "mapQuery": "Chowking CityMall Kabankalan",
             "rating": "4.1",
             "price": "₱18–₱1,474",
-            "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZZwhZxixf4-l8MyYxuqSmeIeIPteO6WIN6j9w27CIsQ&s=10",
+            "img": "https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=800&auto=format&fit=crop",
             "address": "CityMall, City Proper",
             "menu": [
                 {"name": "Chao Fan", "price": "₱92", "desc": "Fried rice with toppings"},
@@ -116,7 +112,7 @@ FOOD_DATA = {
             "mapQuery": "Angels Burger Rizal St, Kabankalan City",
             "rating": "4.2",
             "price": "₱25–₱60",
-            "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNTnmxaz3zXgWILSZ_zyfahwpja3N1r8N0qTtIjtx9IQ&s=10",
+            "img": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=800&auto=format&fit=crop",
             "address": "Rizal St, City Proper",
             "menu": [
                 {"name": "Burger Steak", "price": "₱35", "desc": "Classic burger"},
@@ -143,7 +139,7 @@ FOOD_DATA = {
             "rating": "4.3",
             "price": "₱100–₱250",
             "img": "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop",
-            "address": "L1, Gaisano Grand, Tan Lorenzo Street National Road, Corner Barangay 1, Kabankalan City, 6111 Negros Occidental",
+            "address": "CityMall, City Proper",
             "menu": [
                 {"name": "Hawaiian Overload", "price": "₱199", "desc": "Pizza"},
                 {"name": "Carbonara", "price": "₱150", "desc": "Creamy pasta"},
@@ -151,11 +147,11 @@ FOOD_DATA = {
             ],
         },
         {
-            "name": "Jollibee (Gaisano)",
-            "mapQuery": "Jollibee Gaisano Grand Mall Kabankalan",
+            "name": "KFC (Gaisano)",
+            "mapQuery": "KFC Gaisano Grand Mall Kabankalan",
             "rating": "4.2",
             "price": "₱30–₱1,575",
-            "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuonu74mrJUGvQFvOgTK_kUhmnybmaHN1wJLdQ7s0v2zdU1NVgM9Ns3F8J&s=10",
+            "img": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop",
             "address": "Gaisano Grand Mall, City Proper",
             "menu": [
                 {"name": "1-PC Chicken Ala Carte", "price": "₱115", "desc": "Crispy fried chicken"},
@@ -171,12 +167,12 @@ FOOD_DATA = {
             ],
         },
         {
-            "name": "Snackee Restaurant",
-            "mapQuery": "Snackee Restaurant South National Road Repollo St Kabankalan City",
-            "rating": "4.1",
-            "price": "₱1–₱500",
+            "name": "Snackee (Mabini/Rizal)",
+            "mapQuery": "Snackee Mabini Rizal Kabankalan",
+            "rating": "4.5",
+            "price": "₱78–₱219",
             "img": "https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop",
-            "address": "South National Road, corner Repollo St",
+            "address": "Mabini St. corner Rizal St., City Proper",
             "menu": [
                 {"name": "Honey Glazed Fried Chicken", "price": "₱168", "desc": "Crispy honey-glazed fried chicken"},
                 {"name": "Honey Glazed With Iced Tea", "price": "₱203", "desc": "Honey glazed chicken with iced tea"},
@@ -198,27 +194,15 @@ FOOD_DATA = {
             ],
         },
     ],
-    "carinderia": [
+    "grillhouse": [
         {
-            "name": "ALONSO's Cansi & Sizzling House",
-            "mapQuery": "Alonsos Cansi Guanzon Kabankalan",
-            "rating": "3.9",
-            "price": "₱1–₱2,000",
-            "img": "https://lh3.googleusercontent.com/gps-cs-s/ANWiy9QOdV1oTuUr8nm9Ao3dWiszHRPZUeMel-uhRIXBLB6jvJEOuYmFhIw3RSwN9YfYbtT4g83d8i2sWOQfjUpfQf25MUkryK_-X6wToOtkRZQ33uHJC9QzHXJhgGbkHtx2WIIt0HF-=w224-h298-n-k-no",
-            "address": "Guanzon St, Brgy. 1, Kabankalan City, 6111 Negros Occidental",
-            "menu": [
-                {"name": "Special Cansi", "price": "₱130", "desc": "Sour beef soup"},
-                {"name": "Cansi Bulalo", "price": "₱250", "desc": "Rich beef marrow soup"},
-                {"name": "Pork BBQ", "price": "₱100", "desc": "Grilled pork skewers"},
-            ],
-        },
-        {
-            "name": "Alma's Ihaw-Ihaw",
-            "mapQuery": "Almas Ihaw-Ihaw Rizal St Kabankalan City",
-            "rating": "4.9",
-            "price": "₱50–₱150",
-            "img": "/static/images/almas-ihaw-ihaw.png",
-            "address": "Rizal St, City Proper",
+            "name": "Rosalino's Chicken Inasal and Seafood",
+            "mapQuery": "Kabankalan Ihaw-Ihaw Rizal St",
+            "rating": "4.5",
+            "price": "₱1–₱500",
+            "hours": "Open daily, 10:00 AM – 8:30 PM",
+            "img": "https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=800&auto=format&fit=crop",
+            "address": "Near the city center (XRW7+79M), Kabankalan City",
             "menu": [
                 {"name": "Pork BBQ", "price": "₱100", "desc": "Grilled skewers"},
                 {"name": "Chicken BBQ", "price": "₱120", "desc": "Grilled chicken skewers"},
@@ -227,11 +211,55 @@ FOOD_DATA = {
             ],
         },
         {
+            "name": "MG's Grill House Kabankalan",
+            "mapQuery": "MGs Grill House Aquiles Zayco Avenue Kabankalan",
+            "rating": "4.5",
+            "price": "₱50–₱300",
+            "hours": "Open daily, 9:00 AM – 9:00 PM",
+            "img": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop",
+            "address": "Aquiles - Zayco Avenue, Barangay 4, Kabankalan City",
+            "menu": [
+                {"name": "Chicken Inasal", "price": "₱100", "desc": "Budget-friendly grilled chicken inasal with rice"},
+                {"name": "Grilled Platter", "price": "₱150", "desc": "Grilled platter served with rice"},
+            ],
+        },
+        {
+            "name": "Amore Mio Pizza & Inasal",
+            "mapQuery": "Amore Mio Pizza Rizal Kabankalan",
+            "rating": "4.3",
+            "price": "₱1–₱500",
+            "hours": "Wed & Fri–Tue 12:00 PM – 8:30 PM (closed Thursdays)",
+            "img": "/static/images/amore_mio.webp",
+            "address": "SNC Building, Rizal Street, Barangay 9, Kabankalan City",
+            "menu": [
+                {"name": "Margherita", "price": "₱299", "desc": "Italian pizza"},
+                {"name": "Pepperoni", "price": "₱320", "desc": "Pepperoni pizza"},
+                {"name": "Four Cheese", "price": "₱350", "desc": "Cheese pizza"},
+                {"name": "Pasta", "price": "Ask in store", "desc": "Italian-style pasta"},
+                {"name": "Chicken Inasal", "price": "Ask in store", "desc": "Grilled chicken inasal with rice"},
+            ],
+        },
+    ],
+    "carinderia": [
+        {
+            "name": "ALONSO's Cansi",
+            "mapQuery": "Alonsos Cansi Guanzon Kabankalan",
+            "rating": "4.8",
+            "price": "₱150–₱300",
+            "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
+            "address": "Guanzon St, Brgy. 1, City Proper",
+            "menu": [
+                {"name": "Special Cansi", "price": "₱130", "desc": "Sour beef soup"},
+                {"name": "Cansi Bulalo", "price": "₱250", "desc": "Rich beef marrow soup"},
+                {"name": "Pork BBQ", "price": "₱100", "desc": "Grilled pork skewers"},
+            ],
+        },
+        {
             "name": "Cansi House",
             "mapQuery": "Cansi House Rizal Kabankalan",
             "rating": "4.7",
             "price": "₱120–₱280",
-            "img": "",
+            "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
             "address": "Rizal St, Brgy. 5, City Proper",
             "menu": [
                 {"name": "Cansi Bulalo", "price": "₱280", "desc": "Rich soup"},
@@ -244,7 +272,7 @@ FOOD_DATA = {
             "mapQuery": "Sharyns Cansi National Highway Kabankalan",
             "rating": "4.6",
             "price": "₱150–₱260",
-            "img": "",
+            "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
             "address": "National Highway, Brgy. 1, City Proper",
             "menu": [
                 {"name": "Special Cansi", "price": "₱260", "desc": "Sour soup"},
@@ -252,11 +280,11 @@ FOOD_DATA = {
             ],
         },
         {
-            "name": "Aida's Chicken - Manokan Country",
-            "mapQuery": "Aidas Chicken Manokan Country Kabankalan City",
+            "name": "Aida's Carinderia",
+            "mapQuery": "Aidas Carinderia Public Market Kabankalan",
             "rating": "4.5",
             "price": "₱50–₱100",
-            "img": "/static/images/aidas-chicken.png",
+            "img": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop",
             "address": "Public Market, City Proper",
             "menu": [
                 {"name": "Adobo with Rice", "price": "₱70", "desc": "Classic adobo"},
@@ -265,12 +293,26 @@ FOOD_DATA = {
             ],
         },
         {
+            "name": "Tita Beth's Eatery",
+            "mapQuery": "Tita Beths Eatery Guanzon Kabankalan",
+            "rating": "4.6",
+            "price": "₱60–₱120",
+            "img": "https://images.unsplash.com/photo-1626804475297-41609ea0d498?q=80&w=800&auto=format&fit=crop",
+            "address": "Guanzon St., Brgy. 2, City Proper",
+            "menu": [
+                {"name": "Kare-Kare", "price": "₱120", "desc": "Peanut stew"},
+                {"name": "Pork Adobo", "price": "₱85", "desc": "Home-cooked adobo"},
+                {"name": "Sinigang na Hipon", "price": "₱100", "desc": "Shrimp sour soup"},
+            ],
+        },
+        {
             "name": "Myrna's Restaurant",
             "mapQuery": "Myrnas Restaurant Tan Lorenzo Kabankalan",
             "rating": "4.4",
             "price": "₱80–₱150",
-            "img": "/static/images/myrnas-restaurant.png",
-            "address": "Tan Lorenzo St, City Proper",
+            "hours": "Open daily, 6:00 AM – 3:30 PM (cash only)",
+            "img": "/static/images/myrnas.jpg",
+            "address": "Tan Lorenzo Street, Kabankalan City, Negros Occidental",
             "menu": [
                 {"name": "Pork Adobo", "price": "₱85", "desc": "Home-cooked"},
                 {"name": "Chicken Inasal", "price": "₱110", "desc": "Grilled chicken"},
@@ -282,343 +324,657 @@ FOOD_DATA = {
             "mapQuery": "3RD Talabahan Lirazan Kabankalan",
             "rating": "4.5",
             "price": "₱100–₱250",
-            "img": "/static/images/3rd-talabahan.png",
-            "address": "Lirazan St, City Proper",
+            "hours": "Open daily, 9:00 AM – 9:30 PM",
+            "img": "/static/images/3rd_talabahan.webp",
+            "address": "Lirazan Street, Kabankalan City, Negros Occidental",
             "menu": [
                 {"name": "Baked Talaba", "price": "₱150", "desc": "Fresh oysters"},
                 {"name": "Grilled Talaba", "price": "₱120", "desc": "Grilled oysters"},
                 {"name": "Kilawin na Talaba", "price": "₱130", "desc": "Fresh oyster ceviche"},
+                {"name": "Mixed Seafood", "price": "Ask in store", "desc": "Assorted fresh seafood"},
             ],
         },
         {
-            "name": "Crispy King",
-            "mapQuery": "Crispy King Rizal Street Barangay 9 Kabankalan City",
+            "name": "Cansi ni Tatay Andoy",
+            "mapQuery": "Cansi ni Tatay Andoy Kabankalan",
+            "rating": "4.7",
+            "price": "₱100–₱220",
+            "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
+            "address": "Rizal St, Brgy. 3, City Proper",
+            "menu": [
+                {"name": "Cansi Special", "price": "₱120", "desc": "Batwan-soured beef soup"},
+                {"name": "Cansi Bulalo", "price": "₱200", "desc": "Rich beef marrow cansi"},
+            ],
+        },
+        {
+            "name": "Nena's Cansi Hauz",
+            "mapQuery": "Nenas Cansi Hauz Kabankalan",
+            "rating": "4.6",
+            "price": "₱120–₱250",
+            "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
+            "address": "Guanzon St, Brgy. 4, City Proper",
+            "menu": [
+                {"name": "Cansi with Saging", "price": "₱140", "desc": "Cansi with banana"},
+                {"name": "Special Cansi", "price": "₱130", "desc": "Sour beef soup"},
+            ],
+        },
+        {
+            "name": "Pares King Kabankalan",
+            "mapQuery": "Pares King Kabankalan",
             "rating": "4.5",
             "price": "₱60–₱120",
-            "img": "/static/images/crispy-king.png",
-            "address": "XRP8+FV8, Rizal Street, Barangay 9, Kabankalan City, 6111 Negros Occidental",
+            "img": "https://images.unsplash.com/photo-1547592180-85f173990554?q=80&w=800&auto=format&fit=crop",
+            "address": "Araneta St, City Proper",
             "menu": [
-                {"name": "Chicken Joy", "price": "—", "desc": "Fried chicken"},
+                {"name": "Beef Pares", "price": "₱80", "desc": "Sweet-savory beef stew"},
+                {"name": "Pares with Rice", "price": "₱95", "desc": "Beef pares with rice"},
+                {"name": "Pares Mami", "price": "₱90", "desc": "Pares noodle soup"},
             ],
         },
         {
-            "name": "Perico Restaurant",
-            "mapQuery": "Perico Restaurant Justice Perez Highway Kabankalan City",
-            "rating": "3.9",
-            "price": "₱3,000–₱3,500",
-            "img": "/static/images/perico-restaurant.png",
-            "address": "2R25+4VQ, Justice Perez Highway, Kabankalan City",
-            "menu": [],
-        },
-        {
-            "name": "The Melting Pot",
-            "mapQuery": "The Melting Pot Rizal Street Kabankalan City",
-            "rating": "4.1",
-            "price": "",
-            "img": "/static/images/melting-pot.png",
-            "address": "Rizal Street, Kabankalan City",
-            "menu": [],
-        },
-        {
-            "name": "Rosalino's Chicken Inasal and Seafood",
-            "mapQuery": "Rosalinos Chicken Inasal and Seafood Sola Street Kabankalan City",
+            "name": "Castaño's Dine and Drink",
+            "mapQuery": "Castanos Dine and Drink Kabankalan",
             "rating": "4.5",
-            "price": "₱200–₱400",
-            "img": "/static/images/rosalinos.png",
-            "address": "Sola Street (Plus Code: XRW7+79M), Kabankalan City, Negros Occidental",
+            "price": "₱80–₱250",
+            "img": "/static/images/castanos.jpg",
+            "address": "G. Cordova Street, Kabankalan City, Negros Occidental",
             "menu": [
-                {"name": "Chicken Inasal", "price": "—", "desc": "Signature charcoal-grilled chicken marinated in lemongrass, garlic, and ginger"},
-                {"name": "Sisig", "price": "—", "desc": "Popular sizzling sisig"},
-                {"name": "Seafood", "price": "—", "desc": "Assorted seafood dishes"},
-                {"name": "Boneless Fried Fish", "price": "—", "desc": "Highly recommended by diners"},
-                {"name": "Tacos Salad", "price": "—", "desc": ""},
-                {"name": "Coffee Jelly", "price": "—", "desc": "Dessert"},
-                {"name": "Leche Flan", "price": "—", "desc": "Dessert"},
-                {"name": "Buko Salad", "price": "—", "desc": "Recommended by guests"},
+                {"name": "Chicken Inasal + Belly + Unli Rice + Coke", "price": "₱220", "desc": "Sulit meal combo"},
+                {"name": "Lechon Belly", "price": "Package starts ₱4,900", "desc": "Original Lechon Belly of Kabankalan (pre-order)"},
+                {"name": "Belly + Dinuguan + Fish Tinola", "price": "Unli Rice meal", "desc": "Warm meal set"},
+                {"name": "Shrimp and Prawn Dishes", "price": "Ask in store", "desc": "Seafood dishes, dine-in or takeout"},
+            ],
+        },
+        {
+            "name": "Café CHIKO",
+            "mapQuery": "Cafe CHIKO Aquiles Zayco Kabankalan",
+            "rating": "4.4",
+            "price": "₱70–₱150",
+            "img": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=800&auto=format&fit=crop",
+            "address": "Aquiles/Obi Zayco Avenue, City Proper",
+            "menu": [
+                {"name": "KBL (Kadyos, Baboy, Langka)", "price": "₱90", "desc": "Ilonggo sour soup"},
+                {"name": "Kilawin", "price": "₱100", "desc": "Fresh fish ceviche"},
+                {"name": "Ginataan nga Langka", "price": "₱80", "desc": "Jackfruit in coconut milk"},
+                {"name": "Chicken Adobo with Pineapples", "price": "₱90", "desc": "Adobo with pineapple chunks"},
+                {"name": "Humba", "price": "₱95", "desc": "Sweet-savory braised pork"},
+            ],
+        },
+        {
+            "name": "Emilio's Bistro",
+            "mapQuery": "Emilios Bistro Rizal Kabankalan",
+            "rating": "4.4",
+            "price": "₱150–₱350",
+            "img": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=800&auto=format&fit=crop",
+            "address": "#64 Rizal St., City Proper",
+            "menu": [
+                {"name": "Adobo sa Gata (Chicken/Pork)", "price": "₱180", "desc": "Adobo in rich coconut milk"},
+                {"name": "Garlic Fried Rice", "price": "₱60", "desc": "Perfect pair for Adobo sa Gata"},
+            ],
+        },
+        {
+            "name": "Reegal's Refreshment",
+            "mapQuery": "Reegals Refreshment Kabankalan",
+            "rating": "4.3",
+            "price": "₱1–₱500",
+            "img": "/static/images/reegals.webp",
+            "address": "Rizal Street (near the Kabankalan City Public Plaza), Barangay 7, Kabankalan City, Negros Occidental",
+            "menu": [
+                {"name": "Super Special Batchoy", "price": "₱85", "desc": "Known for their batchoy"},
+                {"name": "Pancit Canton", "price": "₱75", "desc": "Stir-fried noodles"},
+                {"name": "Halo-Halo", "price": "Ask in store", "desc": "Shaved ice dessert"},
+                {"name": "Cakes and Pastries", "price": "Ask in store", "desc": "Assorted cakes and pastries"},
+                {"name": "Siopao", "price": "Ask in store", "desc": "Steamed bun with filling"},
+                {"name": "Silog Breakfast Meal", "price": "Ask in store", "desc": "Garlic rice, fried egg, and choice of meat"},
             ],
         },
     ],
     "cafe": [
         {
-            "name": "Sol's Garden Cafe",
-            "mapQuery": "Sols Garden Cafe Don Emilio Village Phase One Kabankalan",
-            "rating": "4.5",
-            "price": "₱1–₱500",
-            "img": "/static/images/sols-garden-cafe.png",
-            "address": "Don Emilio Village Phase One, Brgy. 9, Kabankalan City, 6111 Negros Occidental",
+            "name": "Gorio's Cafe",
+            "mapQuery": "Gorios Cafe Guanzon Kabankalan",
+            "rating": "4.9",
+            "price": "₱100–₱250",
+            "img": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop",
+            "address": "Guanzon St, Kabankalan City Proper",
             "menu": [
-                {"name": "Sizzling Bangus", "price": "—", "desc": "One of their best-known dishes"},
-                {"name": "Garlic Pepper Steak", "price": "—", "desc": "One of their best-known dishes"},
+                {"name": "Iced Latte", "price": "₱120", "desc": "Espresso and milk"},
+                {"name": "Cappuccino", "price": "₱110", "desc": "Espresso with milk foam"},
+                {"name": "Caramel Macchiato", "price": "₱130", "desc": "Sweet caramel coffee"},
+            ],
+        },
+        {
+            "name": "Taza La Bien",
+            "mapQuery": "Taza La Bien Los Angeles Kabankalan",
+            "rating": "4.8",
+            "price": "₱80–₱150",
+            "img": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop",
+            "address": "Los Angeles St, Brgy. 1, City Proper",
+            "menu": [
+                {"name": "Caffe Latte", "price": "₱120", "desc": "Steamed milk"},
+                {"name": "Americano", "price": "₱90", "desc": "Black coffee"},
+                {"name": "Spanish Latte", "price": "₱130", "desc": "Sweet espresso drink"},
             ],
         },
         {
             "name": "Kalamay Artisan Patisserie & Cafe",
-            "mapQuery": "Kalamay Artisan Patisserie & Cafe 42 Lirazan St Kabankalan City",
+            "mapQuery": "Kalamay Artisan Lirazan Kabankalan",
             "rating": "4.4",
             "price": "₱1–₱500",
-            "img": "/static/images/kalamay-cafe.jpg",
-            "address": "42 Lirazan St, Barangay 4, Kabankalan City",
-            "menu": [],
+            "hours": "Mon–Thu 8:30 AM – 7:30 PM; Fri–Sun 7:30 AM – 7:30 PM",
+            "img": "/static/images/kalamay.webp",
+            "address": "42 Lirazan Street, Barangay 4, Kabankalan City",
+            "menu": [
+                {"name": "Cappuccino", "price": "₱110", "desc": "Milk foam"},
+                {"name": "Matcha Latte", "price": "₱130", "desc": "Green tea latte"},
+                {"name": "Chocolate Cake", "price": "₱120", "desc": "Chocolate slice"},
+                {"name": "British Dish", "price": "Ask in store", "desc": "British-inspired main dish"},
+                {"name": "European Bread", "price": "Ask in store", "desc": "Freshly baked European-style bread"},
+            ],
         },
         {
-            "name": "Ayahay Bistro",
-            "mapQuery": "Ayahay Bistro Oklahoma Street Kabankalan City",
-            "rating": "5.0",
-            "price": "",
-            "img": "/static/images/ayahay-bistro.png",
-            "address": "Oklahoma Street, Brgy 1, Kabankalan City",
+            "name": "Kapehan sa Plaza",
+            "mapQuery": "Kapehan sa Plaza Kabankalan",
+            "rating": "4.5",
+            "price": "₱30–₱100",
+            "img": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop",
+            "address": "Plaza Area, Brgy. 1, City Proper",
             "menu": [
-                {"name": "Silog Meals (such as Hotsilog)", "price": "₱59", "desc": "Known for silog meals, such as Hotsilog for ₱59"},
-                {"name": "Locally Sourced Dishes", "price": "—", "desc": "Known for locally sourced dishes"},
+                {"name": "Native Coffee", "price": "₱30", "desc": "Brewed coffee"},
+                {"name": "3-in-1 Coffee", "price": "₱40", "desc": "Instant coffee"},
+            ],
+        },
+        {
+            "name": "MOICA Pizzeria",
+            "mapQuery": "MOICA Pizzeria Coloso Kabankalan",
+            "rating": "4.7",
+            "price": "₱150–₱400",
+            "img": "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop",
+            "address": "Coloso St, Brgy. 6, City Proper",
+            "menu": [
+                {"name": "Pepperoni Pizza", "price": "₱350", "desc": "Classic pizza"},
+                {"name": "Margherita Pizza", "price": "₱299", "desc": "Italian pizza"},
+                {"name": "Carbonara", "price": "₱180", "desc": "Creamy pasta"},
+            ],
+        },
+        {
+            "name": "Bo's Coffee (CityMall)",
+            "mapQuery": "Bos Coffee CityMall Kabankalan",
+            "rating": "4.4",
+            "price": "₱100–₱180",
+            "img": "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=800&auto=format&fit=crop",
+            "address": "CityMall, City Proper",
+            "menu": [
+                {"name": "Brewed Coffee", "price": "₱100", "desc": "Local beans"},
+                {"name": "Iced Americano", "price": "₱120", "desc": "Iced black coffee"},
+                {"name": "Cheesecake", "price": "₱150", "desc": "Creamy cheesecake slice"},
+            ],
+        },
+        {
+            "name": "Sagay Cafe Kabankalan",
+            "mapQuery": "Sagay Cafe Guanzon Kabankalan",
+            "rating": "4.5",
+            "price": "₱80–₱180",
+            "img": "https://images.unsplash.com/photo-1445116572660-236099ec97a0?q=80&w=800&auto=format&fit=crop",
+            "address": "Guanzon St, City Proper",
+            "menu": [
+                {"name": "Spanish Latte", "price": "₱110", "desc": "Sweet espresso drink"},
+                {"name": "Iced Matcha", "price": "₱120", "desc": "Green tea latte"},
+            ],
+        },
+        {
+            "name": "The Coffee Project",
+            "mapQuery": "The Coffee Project Rizal Kabankalan",
+            "rating": "4.4",
+            "price": "₱90–₱200",
+            "img": "https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800&auto=format&fit=crop",
+            "address": "Rizal St, City Proper",
+            "menu": [
+                {"name": "Caramel Macchiato", "price": "₱130", "desc": "Sweet caramel coffee"},
+                {"name": "Mocha Frappe", "price": "₱150", "desc": "Blended mocha drink"},
             ],
         },
         {
             "name": "Kape Centrale",
-            "mapQuery": "Kape Centrale Punta Guanzon St Kabankalan City",
-            "rating": "",
-            "price": "",
-            "img": "/static/images/kape-centrale.png",
-            "address": "Punta, Guanzon St, Kabankalan City, Negros Occidental",
+            "mapQuery": "Kape Centrale Punta Guanzon Kabankalan",
+            "rating": "4.5",
+            "price": "₱100–₱400",
+            "img": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=800&auto=format&fit=crop",
+            "address": "Punta, Guanzon St., City Proper (near Public Plaza)",
             "menu": [
-                {"name": "Pork Steak", "price": "—", "desc": "Served with rice and corn"},
-                {"name": "Tuna Pesto Pasta", "price": "—", "desc": "Pasta with tuna and pesto"},
-                {"name": "Carbonara", "price": "—", "desc": "Creamy pasta"},
-                {"name": "Caffè Latte", "price": "—", "desc": "Latte coffee"},
-                {"name": "Coffee of the Day", "price": "—", "desc": "Brewed coffee"},
-                {"name": "Chocolate Cookie Latte", "price": "—", "desc": "Iced chocolate cookie latte"},
-                {"name": "Dark Chocolate Milkshake", "price": "—", "desc": "Dark chocolate milkshake with whipped cream"},
-                {"name": "Chocolate Cake", "price": "—", "desc": "Dark chocolate cake"},
-                {"name": "Choco Cake and Coffee", "price": "—", "desc": "Chocolate cake served with coffee"},
+                {"name": "Squid Ink Pasta", "price": "₱280", "desc": "Standout pasta dish"},
+                {"name": "Pork Steak", "price": "₱250", "desc": "Customer favorite"},
+                {"name": "Tuna Melt", "price": "₱180", "desc": "Sandwich melt"},
+                {"name": "Strawberry Smoothie", "price": "₱150", "desc": "Fresh fruit smoothie"},
+                {"name": "Iced Coffee", "price": "₱120", "desc": "Beautifully presented iced coffee"},
             ],
         },
         {
-            "name": "Cafe Mateo",
-            "mapQuery": "Cafe Mateo 44 Bonifacio St Kabankalan City",
-            "rating": "",
-            "price": "",
-            "img": "/static/images/cafe-mateo.png",
-            "address": "44 Bonifacio St, Kabankalan City, 6111 Negros Occidental",
+            "name": "MOÍCA Pizzeria & Bar",
+            "mapQuery": "MOICA Pizzeria Cordero Kabankalan",
+            "rating": "4.7",
+            "price": "₱200–₱500",
+            "img": "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800&auto=format&fit=crop",
+            "address": "Cordero St., Brgy. 4, City Proper (in front of Kabankalan National High School)",
             "menu": [
-                {"name": "Plain Coffee", "price": "₱20", "desc": "Hot drink"},
-                {"name": "Café au Lait", "price": "—", "desc": "Hot drink"},
-                {"name": "Café Latte", "price": "—", "desc": "Hot drink"},
-                {"name": "Bisoffee", "price": "—", "desc": "Hot drink"},
-                {"name": "Tablea", "price": "—", "desc": "Hot chocolate drink"},
-                {"name": "Bischoco", "price": "—", "desc": "Hot drink"},
-                {"name": "Mocha", "price": "—", "desc": "Hot drink"},
-                {"name": "Milk", "price": "—", "desc": "Hot drink"},
-                {"name": "Sweet Tea", "price": "—", "desc": "Hot tea"},
-                {"name": "Herbal Tea", "price": "—", "desc": "Hot tea"},
-                {"name": "Budbud", "price": "₱20", "desc": "Food menu item"},
-                {"name": "Siopao", "price": "₱30", "desc": "Steamed bun"},
-                {"name": "Nacho Fries", "price": "—", "desc": "Food menu item"},
-                {"name": "French Fries", "price": "—", "desc": "Food menu item"},
+                {"name": "Brick Oven Pizza", "price": "₱350–₱500", "desc": "Authentic Italian pizza, oven built by owner"},
+                {"name": "Pasta in a Bowl", "price": "₱250", "desc": "Italian pasta"},
+                {"name": "Focaccia Bread", "price": "₱150", "desc": "Italian flatbread"},
+                {"name": "Bruschetta", "price": "₱150", "desc": "Toasted bread with toppings"},
+                {"name": "Ice-cold Lemonade", "price": "₱80", "desc": "Refreshing drink"},
+            ],
+        },
+    ],
+    "desserts": [
+        {
+            "name": "Cake Avenue",
+            "mapQuery": "Cake Avenue Rizal Kabankalan",
+            "rating": "4.7",
+            "price": "₱80–₱150",
+            "img": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop",
+            "address": "Rizal St, City Proper",
+            "menu": [
+                {"name": "Chocolate Cake", "price": "₱120", "desc": "Chocolate slice"},
+                {"name": "Red Velvet Cake", "price": "₱130", "desc": "Red velvet slice"},
+                {"name": "Cheesecake", "price": "₱140", "desc": "Creamy cheesecake"},
+            ],
+        },
+        {
+            "name": "Melting Pot",
+            "mapQuery": "Melting Pot Rizal Kabankalan",
+            "rating": "4.4",
+            "price": "₱55–₱165",
+            "img": "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?q=80&w=800&auto=format&fit=crop",
+            "address": "Rizal St, Brgy. 7, City Proper",
+            "menu": [
+                {"name": "Sundae", "price": "₱55", "desc": "Ice cream"},
+                {"name": "Halo-Halo", "price": "₱99", "desc": "Shaved ice dessert"},
+                {"name": "Banana Split", "price": "₱120", "desc": "Banana with ice cream"},
+            ],
+        },
+        {
+            "name": "Bibingka Station",
+            "mapQuery": "Bibingka Station Church Kabankalan",
+            "rating": "4.9",
+            "price": "₱40–₱100",
+            "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop",
+            "address": "Church Vicinity, City Proper",
+            "menu": [
+                {"name": "Bibingka", "price": "₱50", "desc": "Rice cake"},
+                {"name": "Puto Bumbong", "price": "₱60", "desc": "Purple rice cake"},
+            ],
+        },
+        {
+            "name": "Leche Flan ni Aling Rosa",
+            "mapQuery": "Leche Flan Public Market Kabankalan",
+            "rating": "4.8",
+            "price": "₱60–₱120",
+            "img": "https://images.unsplash.com/photo-1488477181946-6428a0291777?q=80&w=800&auto=format&fit=crop",
+            "address": "Public Market, City Proper",
+            "menu": [
+                {"name": "Leche Flan", "price": "₱70", "desc": "Caramel custard"},
+                {"name": "Leche Flan (Large)", "price": "₱120", "desc": "Large caramel custard"},
+            ],
+        },
+        {
+            "name": "Don Benito's",
+            "mapQuery": "Don Benitos Guanzon Kabankalan",
+            "rating": "4.5",
+            "price": "₱80–₱150",
+            "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop",
+            "address": "Guanzon St, City Proper",
+            "menu": [
+                {"name": "Halo-Halo", "price": "₱99", "desc": "Shaved ice dessert"},
+                {"name": "Mais con Yelo", "price": "₱85", "desc": "Sweet corn with ice"},
+            ],
+        },
+        {
+            "name": "Red Ribbon (CityMall)",
+            "mapQuery": "Red Ribbon CityMall Kabankalan",
+            "rating": "4.6",
+            "price": "₱100–₱200",
+            "img": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop",
+            "address": "CityMall, City Proper",
+            "menu": [
+                {"name": "Black Forest", "price": "₱120", "desc": "Cake slice"},
+                {"name": "Chocolate Mousse", "price": "₱130", "desc": "Chocolate mousse cake"},
+                {"name": "Mango Cake", "price": "₱140", "desc": "Mango cake slice"},
+            ],
+        },
+        {
+            "name": "Halo-Halo sa Plaza",
+            "mapQuery": "Halo-Halo Plaza Kabankalan",
+            "rating": "4.6",
+            "price": "₱50–₱100",
+            "img": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?q=80&w=800&auto=format&fit=crop",
+            "address": "Plaza Area, City Proper",
+            "menu": [
+                {"name": "Special Halo-Halo", "price": "₱85", "desc": "Loaded shaved ice dessert"},
+                {"name": "Halo-Halo Regular", "price": "₱60", "desc": "Regular halo-halo"},
+            ],
+        },
+        {
+            "name": "Sweet Corner Bakeshop",
+            "mapQuery": "Sweet Corner Bakeshop Guanzon Kabankalan",
+            "rating": "4.5",
+            "price": "₱40–₱120",
+            "img": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop",
+            "address": "Guanzon St, City Proper",
+            "menu": [
+                {"name": "Mango Graham", "price": "₱90", "desc": "Layered mango dessert"},
+                {"name": "Graham Cake", "price": "₱80", "desc": "Graham cake slice"},
+            ],
+        },
+        {
+            "name": "Puto Pao Master",
+            "mapQuery": "Puto Pao Master Villa San Jose Kabankalan",
+            "rating": "4.5",
+            "price": "₱20–₱60",
+            "img": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop",
+            "address": "Villa San Jose Subdivision, Brgy. 6, City Proper",
+            "menu": [
+                {"name": "Puto Pao", "price": "₱25", "desc": "Steamed rice cake with filling"},
+                {"name": "Puto", "price": "₱15", "desc": "Traditional steamed rice cake"},
+            ],
+        },
+    ],
+    "milktea": [
+        {
+            "name": "Chatime (City Mall)",
+            "mapQuery": "Chatime CityMall Kabankalan",
+            "rating": "4.8",
+            "price": "₱70–₱140",
+            "img": "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=800&auto=format&fit=crop",
+            "address": "City Mall, City Proper",
+            "menu": [
+                {"name": "Pearl Milk Tea", "price": "₱85", "desc": "Classic pearls"},
+                {"name": "Grass Jelly Milk Tea", "price": "₱90", "desc": "With grass jelly"},
+                {"name": "Taro Milk Tea", "price": "₱95", "desc": "Taro-flavored milk tea"},
+            ],
+        },
+        {
+            "name": "Macao Imperial Tea",
+            "mapQuery": "Macao Imperial Tea Gaisano Kabankalan",
+            "rating": "4.6",
+            "price": "₱90–₱160",
+            "img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop",
+            "address": "Gaisano Grand Mall, City Proper",
+            "menu": [
+                {"name": "Cream Cheese", "price": "₱120", "desc": "Cheesecake series"},
+                {"name": "Brown Sugar Milk Tea", "price": "₱110", "desc": "Brown sugar pearls"},
+            ],
+        },
+        {
+            "name": "CoCo Fresh Tea",
+            "mapQuery": "CoCo Fresh Tea Araneta Kabankalan",
+            "rating": "4.5",
+            "price": "₱90–₱130",
+            "img": "https://images.unsplash.com/photo-1558857563-b371033873b8?q=80&w=800&auto=format&fit=crop",
+            "address": "Araneta St, City Proper",
+            "menu": [
+                {"name": "3Q Milk Tea", "price": "₱110", "desc": "Pearl, pudding, jelly"},
+                {"name": "Pearl Milk Tea", "price": "₱95", "desc": "Classic pearl milk tea"},
+            ],
+        },
+        {
+            "name": "SereniTea",
+            "mapQuery": "SereniTea Rizal Kabankalan",
+            "rating": "4.4",
+            "price": "₱70–₱120",
+            "img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop",
+            "address": "Rizal St, City Proper",
+            "menu": [
+                {"name": "Wintermelon", "price": "₱75", "desc": "Sweet and refreshing"},
+                {"name": "Okinawa", "price": "₱85", "desc": "Brown sugar milk tea"},
+            ],
+        },
+        {
+            "name": "Tea Talk",
+            "mapQuery": "Tea Talk Guanzon Kabankalan",
+            "rating": "4.3",
+            "price": "₱60–₱100",
+            "img": "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop",
+            "address": "Guanzon St, City Proper",
+            "menu": [
+                {"name": "Okinawa", "price": "₱85", "desc": "Brown sugar milk tea"},
+                {"name": "Wintermelon", "price": "₱75", "desc": "Sweet wintermelon milk tea"},
+                {"name": "Hokkaido", "price": "₱85", "desc": "Creamy Hokkaido milk tea"},
+            ],
+        },
+        {
+            "name": "Infinitea",
+            "mapQuery": "Infinitea Kabankalan",
+            "rating": "4.5",
+            "price": "₱80–₱130",
+            "img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop",
+            "address": "City Proper, Kabankalan",
+            "menu": [
+                {"name": "Hokkaido", "price": "₱95", "desc": "Creamy milk tea"},
+                {"name": "Wintermelon", "price": "₱85", "desc": "Sweet wintermelon"},
+            ],
+        },
+        {
+            "name": "Dakasi (CityMall)",
+            "mapQuery": "Dakasi CityMall Kabankalan",
+            "rating": "4.5",
+            "price": "₱70–₱130",
+            "img": "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop",
+            "address": "CityMall, City Proper",
+            "menu": [
+                {"name": "Cheesecake Milk Tea", "price": "₱99", "desc": "Creamy cheesecake series"},
+                {"name": "Brown Sugar Boba", "price": "₱89", "desc": "Brown sugar pearls"},
+            ],
+        },
+        {
+            "name": "Bubble Tea Station",
+            "mapQuery": "Bubble Tea Station Guanzon Kabankalan",
+            "rating": "4.4",
+            "price": "₱60–₱110",
+            "img": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?q=80&w=800&auto=format&fit=crop",
+            "address": "Guanzon St, City Proper",
+            "menu": [
+                {"name": "Brown Sugar Boba", "price": "₱85", "desc": "Classic brown sugar"},
+                {"name": "Taro Milk Tea", "price": "₱80", "desc": "Taro-flavored milk tea"},
+            ],
+        },
+        {
+            "name": "Milk Tea ni Juan",
+            "mapQuery": "Milk Tea ni Juan Rizal Kabankalan",
+            "rating": "4.3",
+            "price": "₱50–₱100",
+            "img": "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop",
+            "address": "Rizal St, City Proper",
+            "menu": [
+                {"name": "Taro Milk Tea", "price": "₱75", "desc": "Taro-flavored milk tea"},
+                {"name": "Okinawa", "price": "₱80", "desc": "Brown sugar milk tea"},
+            ],
+        },
+        {
+            "name": "Sugar 'N Ice Milk Tea",
+            "mapQuery": "Sugar N Ice Tan Lorenzo Kabankalan",
+            "rating": "4.4",
+            "price": "₱60–₱130",
+            "img": "https://images.unsplash.com/photo-1525803377221-4f6ccdaa5133?q=80&w=800&auto=format&fit=crop",
+            "address": "Corner Tan Lorenzo & Sola St., City Proper",
+            "menu": [
+                {"name": "Classic Milk Tea", "price": "₱75", "desc": "Classic flavor"},
+                {"name": "Oat Spanish Latte", "price": "₱120", "desc": "Coffee with oat milk"},
+                {"name": "Siomai", "price": "₱50", "desc": "Pair with milk tea"},
             ],
         },
     ],
 }
 
-
-def _to_float(value):
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return 0.0
-
-
-def _restaurant_to_dict(restaurant):
-    return {
-        "name": restaurant.name,
-        "mapQuery": restaurant.map_query or restaurant.name,
-        "rating": restaurant.rating,
-        "price": restaurant.price_range,
-        "img": restaurant.img,
-        "address": restaurant.address,
-        "menu": [
-            {"name": m.name, "price": m.price, "desc": m.desc}
-            for m in restaurant.menu_items.all()
-        ],
-    }
-
-
-CATEGORY_COLORS = {
-    "fastfood": ("#e8452c", "#f6a623"),
-    "carinderia": ("#2f7d4f", "#9bcf53"),
-    "cafe": ("#6b4226", "#c69c6d"),
-}
+# ============================================================
+# TRENDING NAMES
+# ============================================================
+TRENDING_NAMES = [
+    ("fastfood", "Jollibee (Guanzon)"),
+    ("fastfood", "KFC (Gaisano)"),
+    ("fastfood", "Snackee (Mabini/Rizal)"),
+    ("grillhouse", "Rosalino's Chicken Inasal and Seafood"),
+    ("carinderia", "ALONSO's Cansi"),
+    ("carinderia", "Cansi ni Tatay Andoy"),
+    ("carinderia", "Castaño's Dine and Drink"),
+    ("carinderia", "Emilio's Bistro"),
+    ("cafe", "Taza La Bien"),
+    ("cafe", "The Coffee Project"),
+    ("cafe", "Kape Centrale"),
+    ("cafe", "MOÍCA Pizzeria & Bar"),
+    ("desserts", "Bibingka Station"),
+    ("desserts", "Halo-Halo sa Plaza"),
+    ("milktea", "Chatime (City Mall)"),
+    ("milktea", "Macao Imperial Tea"),
+    ("milktea", "Dakasi (CityMall)"),
+    ("milktea", "Sugar 'N Ice Milk Tea"),
+]
 
 
-def _placeholder_image(name, category):
-    """Offline SVG placeholder (data URI) so a card never shows a broken image."""
-    c1, c2 = CATEGORY_COLORS.get(category, ("#555555", "#999999"))
-    label = escape((name or "Restaurant")[:28])
-    svg = (
-        '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">'
-        f'<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
-        f'<stop offset="0" stop-color="{c1}"/><stop offset="1" stop-color="{c2}"/>'
-        "</linearGradient></defs>"
-        '<rect width="800" height="500" fill="url(#g)"/>'
-        '<text x="400" y="250" font-family="Arial, sans-serif" font-size="44" font-weight="bold" '
-        f'fill="#ffffff" text-anchor="middle" dominant-baseline="middle">{label}</text>'
-        "</svg>"
-    )
-    return "data:image/svg+xml;charset=utf-8," + quote(svg)
-
-
-def _resolve_image(img, name, category):
-    """Return a usable image URL; fall back to a placeholder when it can't be shown."""
-    img = str(img or "").strip()
-    fallback = _placeholder_image(name, category)
-
-    if not img:
-        return fallback
-
-    if img.startswith(("http://", "https://", "data:")):
-        return img
-
-    # Local static file: make sure it really exists, otherwise use the placeholder.
-    static_url = settings.STATIC_URL or "/static/"
-    rel = img[len(static_url):] if img.startswith(static_url) else img.lstrip("/")
-    if rel.startswith("static/"):
-        rel = rel[len("static/"):]
-    if finders.find(rel):
-        return static(rel)
-    return fallback
-
-
-def _apply_images(data):
-    for category, bucket in data.items():
-        for entry in bucket:
-            entry["fallbackImg"] = _placeholder_image(entry["name"], category)
-            entry["img"] = _resolve_image(entry.get("img"), entry["name"], category)
-
-
-def _build_food_data():
-    data = copy.deepcopy(FOOD_DATA)
+def get_trending_data():
     trending = []
-
-    for restaurant in Restaurant.objects.prefetch_related("menu_items"):
-        entry = _restaurant_to_dict(restaurant)
-        bucket = data.setdefault(restaurant.category, [])
-        bucket[:] = [r for r in bucket if r["name"] != entry["name"]]
-        bucket.append(entry)
-        if restaurant.is_trending:
-            trending.append(entry)
-
-    _apply_images(data)  # trending entries share these dicts, so they get fixed too
-
-    if not trending:
-        everything = [r for bucket in data.values() for r in bucket]
-        trending = sorted(everything, key=lambda r: _to_float(r["rating"]), reverse=True)[:6]
-
-    return data, trending
+    for category, name in TRENDING_NAMES:
+        for item in FOOD_DATA.get(category, []):
+            if item["name"] == name:
+                trending.append(item)
+                break
+    return trending
 
 
-def _json_for_script(value):
-    return (
-        json.dumps(value, ensure_ascii=False)
-        .replace("<", "\\u003c")
-        .replace(">", "\\u003e")
-        .replace("&", "\\u0026")
-    )
-
-
+# ============================================================
+# HOME VIEW
+# ============================================================
 def home(request):
-    food_data, trending = _build_food_data()
-    names = [r["name"] for bucket in food_data.values() for r in bucket]
+    reviews = Review.objects.all().order_by('-created_at')
+
+    all_names = []
+    for category, items in FOOD_DATA.items():
+        for item in items:
+            all_names.append(item['name'])
 
     context = {
-        "food_data": _json_for_script(food_data),
-        "trending_data": _json_for_script(trending),
-        "verified_names": _json_for_script(names),
-        "total_restaurants": len(names),
-        "reviews": Review.objects.all()[:20],
+        'food_data': json.dumps(FOOD_DATA),
+        'trending_data': json.dumps(get_trending_data()),
+        'reviews': reviews,
+        'total_restaurants': len(all_names),
+        'verified_names': json.dumps(all_names),
     }
-    return render(request, "index.html", context)
+    return render(request, 'index.html', context)
 
 
+# ============================================================
+# ABOUT
+# ============================================================
 def about(request):
-    return render(request, "about.html")
+    context = {
+        'title': 'About Kabankalan Eats',
+        'description': 'Kabankalan Eats is your dedicated local food guide, exclusively covering the heart of Kabankalan City Proper. We built this platform to help locals and visitors easily discover the best local restaurants, hidden food gems, and trending cafes in the city.',
+        'features': [
+            {'icon': '🔍', 'title': 'Discover Local Restaurants', 'desc': 'Makapangita ka sang mga kainan sa Kabankalan City Proper. Gikan sa mga local nga pagkaon pareho sang Cansi, fast-food, desserts, cafe and milk tea shops.'},
+            {'icon': '📂', 'title': 'Browse by Category', 'desc': 'Pwede ka magpili sang kategorya sang pagkaon nga gusto mo — halin sa Local Favorites, Fast Food, Cafe, Cansi tubtob sa Milk Tea shop.'},
+            {'icon': '🍽️', 'title': 'View Full Menu & Prices', 'desc': 'Makita mo dayon ang menu, presyo, kag detalye sang kada pagkaon, para kabalo ka na kung ano orderon mo bag-o ka pa magkadto.'},
+            {'icon': '⭐', 'title': 'Ratings & Reviews', 'desc': 'Makabasa ka sang reviews sang iban, kag makahatag ka man sang imo kaugalingon nga rating kag review.'},
+            {'icon': '🔥', 'title': 'Trending Spots', 'desc': 'Makita mo kung ano ang pinaka-trending kag ginadagsa nga kalan-an subong sa Kabankalan.'},
+            {'icon': '📍', 'title': 'Map & Location', 'desc': 'May kompleto nga address kag map link ang kada restaurant, para dali mo gid sila makit-an kag indi ka na maglibog kung din ka magkadto.'},
+        ]
+    }
+    return render(request, 'about.html', context)
 
 
+# ============================================================
+# CONTACT US
+# ============================================================
 def contact(request):
-    return render(request, "contact.html")
+    contact_details = {
+        'email': 'support@kabankalaneats.com',
+        'phone': '+63 912 345 6789',
+        'address': 'Kabankalan City Proper, Negros Occidental',
+        'facebook': 'https://facebook.com/kabankalaneats',
+        'instagram': 'https://instagram.com/kabankalaneats'
+    }
+    return render(request, 'contact.html', {'contact_details': contact_details})
 
 
+# ============================================================
+# HELP PAGE (with clickable links)
+# ============================================================
 def help_page(request):
-    return render(request, "help.html")
+    faqs = [
+        {
+            'question': 'Paano mag-search ng pagkain?',
+            'answer': 'I-type lang ang gusto mong pagkain sa search bar (hal. "pizza", "cansi", "milk tea") at pindutin ang Send. Awtomatikong hahanapin ng AI ang mga restaurant na may ganoong pagkain.',
+            'link': reverse('food_finder:home') + '#search',
+            'link_text': 'Pumunta sa Search Bar',
+        },
+        {
+            'question': 'Paano makita ang menu at presyo?',
+            'answer': 'I-click lang ang restaurant card na gusto mo. Lalabas ang buong menu, presyo, address, at mapa para madali mo silang mahanap.',
+            'link': reverse('food_finder:home') + '#restaurants',
+            'link_text': 'Tingnan ang mga Restaurant',
+        },
+        {
+            'question': 'Paano pumunta sa restaurant?',
+            'answer': 'Sa loob ng menu modal, may "Open in Maps" button. I-click lang iyon para direkta kang mapunta sa Google Maps at makita ang exact location.',
+            'link': reverse('food_finder:home') + '#restaurants',
+            'link_text': 'Pumili ng Restaurant',
+        },
+        {
+            'question': 'Paano mag-iwan ng review?',
+            'answer': 'Scroll down sa home page, hanapin ang "System Feedback" section. Isulat ang iyong pangalan, pumili ng rating, at i-type ang iyong komento. I-click ang Submit Feedback.',
+            'link': reverse('food_finder:home') + '#feedback',
+            'link_text': 'Mag-iwan ng Review',
+        },
+        {
+            'question': 'Kailangan mo pa ng tulong?',
+            'answer': 'Kung hindi pa rin nasagot ang tanong mo, makipag-ugnayan sa amin.',
+            'link': reverse('food_finder:contact'),
+            'link_text': 'Contact Us',
+        },
+    ]
+    return render(request, 'help.html', {'faqs': faqs})
 
 
-def login_user(request):
-    error = ""
-    if request.method == "POST":
-        user = authenticate(
-            request,
-            username=request.POST.get("username", "").strip(),
-            password=request.POST.get("password", ""),
-        )
-        if user is not None:
-            login(request, user)
-            next_url = request.POST.get("next") or request.GET.get("next")
-            if next_url and url_has_allowed_host_and_scheme(
-                next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()
-            ):
-                return redirect(next_url)
-            return redirect("food_finder:home")
-        error = "Invalid username or password."
-    return render(request, "login.html", {"error": error})
-
-
+# ============================================================
+# LOGOUT
+# ============================================================
 def logout_user(request):
     logout(request)
-    return redirect("food_finder:home")
+    return redirect('food_finder:home')
 
 
+# ============================================================
+# LOGIN
+# ============================================================
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('food_finder:home')
+        else:
+            return render(request, 'login.html', {'error': 'username or password is incorrect.'})
+    return render(request, 'login.html')
+
+
+# ============================================================
+# SUBMIT REVIEW (AJAX)
+# ============================================================
 @require_POST
 def submit_review(request):
-    name = request.POST.get("name", "").strip()
-    text = request.POST.get("text", "").strip()
-    try:
-        rating = int(request.POST.get("rating", ""))
-    except ValueError:
-        rating = 0
+    name = request.POST.get('name', '').strip()
+    rating = request.POST.get('rating', '5')
+    text = request.POST.get('text', '').strip()
 
-    if not name or not text or not 1 <= rating <= 5:
-        return JsonResponse({"ok": False, "error": "Invalid review."}, status=400)
+    if not name or not text:
+        return JsonResponse({'ok': False, 'error': 'Missing fields'}, status=400)
 
-    review = Review.objects.create(name=name[:100], rating=rating, text=text)
-    return JsonResponse(
-        {
-            "ok": True,
-            "name": escape(review.name),
-            "stars": review.stars_display,
-            "text": escape(review.text),
-            "date": review.created_at.strftime("%B %d, %Y"),
-        }
-    )
-
-def register_user(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('food_finder:login')
-    else:
-        form = UserCreationForm()
-
-    return render(request, 'register.html', {'form': form})
-
-# SUBMIT REVIEW - FIXED: isa lang ka #reviewForm
-def submit_review(request):
-    if request.method == 'POST':
-        name = request.POST.get('name', '').strip()
-        rating = request.POST.get('rating', '5')
-        text = request.POST.get('text', '').strip()
-        if name and text:
-            try:
-                rating_int = int(rating)
-            except:
-                rating_int = 5
-            Review.objects.create(name=name, rating=rating_int, text=text)
-            return redirect('/?submitted=1#reviewForm')
-    return redirect('/')
+    review = Review.objects.create(name=name, rating=int(rating), text=text)
+    return JsonResponse({
+        'ok': True,
+        'name': review.name,
+        'rating': review.rating,
+        'stars': review.stars_display,
+        'text': review.text,
+        'date': review.created_at.strftime('%B %d, %Y'),
+    })
