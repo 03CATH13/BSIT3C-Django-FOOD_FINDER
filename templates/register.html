@@ -94,9 +94,9 @@
   </div>
 
   <div class="card">
-    <div class="icon-box">🍽️</div>
+    <div class="icon-box">🍽</div>
     <h2>Create <span>Account</span></h2>
-    <p class="sub">Mag-register para makapag-review ka, makapili sang favorites, kag makakita sang trending sa Kabankalan.</p>
+    <p class="sub">Register to leave reviews, pick favorites, and see what's trending in Kabankalan.</p>
 
     <form method="POST">
       {% csrf_token %}
@@ -108,7 +108,7 @@
       <label for="id_password1">Password <i>*</i></label>
       {{ form.password1 }}
       {{ form.password1.errors }}
-      <span class="helptext">At least 8 characters. Bawal nga pure numbers lang.</span>
+      <span class="helptext">At least 8 characters. Cannot be numbers only.</span>
 
       <label for="id_password2">Confirm Password <i>*</i></label>
       {{ form.password2 }}
@@ -126,8 +126,8 @@
     <div class="divider">OR</div>
 
     <div class="links">
-      May account ka na? <a href="{% url 'food_finder:login' %}">Log in diri</a><br>
-      <a class="back" href="{% url 'food_finder:home' %}">← Balik sa Home</a>
+      Already have an account? <a href="{% url 'food_finder:login' %}">Log in here</a><br>
+      <a class="back" href="{% url 'food_finder:home' %}">← Back to Home</a>
     </div>
   </div>
 

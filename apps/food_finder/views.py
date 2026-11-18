@@ -910,16 +910,15 @@ def about(request):
         'title': 'About Kabankalan Eats',
         'description': 'Kabankalan Eats is your dedicated local food guide, exclusively covering the heart of Kabankalan City Proper. We built this platform to help locals and visitors easily discover the best local restaurants, hidden food gems, and trending cafes in the city.',
         'features': [
-            {'icon': '🔍', 'title': 'Discover Local Restaurants', 'desc': 'Makapangita ka sang mga kainan sa Kabankalan City Proper. Gikan sa mga local nga pagkaon pareho sang Cansi, fast-food, desserts, cafe and milk tea shops.'},
-            {'icon': '📂', 'title': 'Browse by Category', 'desc': 'Pwede ka magpili sang kategorya sang pagkaon nga gusto mo — halin sa Local Favorites, Fast Food, Cafe, Cansi tubtob sa Milk Tea shop.'},
-            {'icon': '🍽', 'title': 'View Full Menu & Prices', 'desc': 'Makita mo dayon ang menu, presyo, kag detalye sang kada pagkaon, para kabalo ka na kung ano orderon mo bag-o ka pa magkadto.'},
-            {'icon': '⭐', 'title': 'Ratings & Reviews', 'desc': 'Makabasa ka sang reviews sang iban, kag makahatag ka man sang imo kaugalingon nga rating kag review.'},
-            {'icon': '🔥', 'title': 'Trending Spots', 'desc': 'Makita mo kung ano ang pinaka-trending kag ginadagsa nga kalan-an subong sa Kabankalan.'},
-            {'icon': '📍', 'title': 'Map & Location', 'desc': 'May kompleto nga address kag map link ang kada restaurant, para dali mo gid sila makit-an kag indi ka na maglibog kung din ka magkadto.'},
+            {'icon': '🔍', 'title': 'Discover Local Restaurants', 'desc': 'You can find eateries in Kabankalan City Proper. From local dishes like Cansi, fast-food, desserts, cafe and milk tea shops.'},
+            {'icon': '📂', 'title': 'Browse by Category', 'desc': 'You can choose the food category you want — from Local Favorites, Fast Food, Cafe, Cansi up to Milk Tea shops.'},
+            {'icon': '🍽', 'title': 'View Full Menu & Prices', 'desc': 'You can immediately see the menu, prices, and details of each food, so you already know what to order before you even go there.'},
+            {'icon': '⭐', 'title': 'Ratings & Reviews', 'desc': 'You can read reviews from others, and you can also give your own rating and review.'},
+            {'icon': '🔥', 'title': 'Trending Spots', 'desc': 'You can see what are the most trending and most visited eateries right now in Kabankalan.'},
+            {'icon': '📍', 'title': 'Map & Location', 'desc': 'Each restaurant has a complete address and map link, so you can easily find them and you will not get lost on where to go.'},
         ]
     }
     return render(request, 'about.html', context)
-
 # ============================================================
 # CONTACT US
 # ============================================================
@@ -939,32 +938,32 @@ def contact(request):
 def help_page(request):
     faqs = [
         {
-            'question': 'Paano mag-search ng pagkain?',
-            'answer': 'I-type lang ang gusto mong pagkain sa search bar (hal. "pizza", "cansi", "milk tea") at pindutin ang Send. Awtomatikong hahanapin ng AI ang mga restaurant na may ganoong pagkain.',
+            'question': 'How to search for food?',
+            'answer': 'Just type the food you want in the search bar (e.g. "pizza", "cansi", "milk tea") and press Send. The AI will automatically find restaurants that have that food.',
             'link': reverse('food_finder:home') + '#search',
-            'link_text': 'Pumunta sa Search Bar',
+            'link_text': 'Go to Search Bar',
         },
         {
-            'question': 'Paano makita ang menu at presyo?',
-            'answer': 'I-click lang ang restaurant card na gusto mo. Lalabas ang buong menu, presyo, address, at mapa para madali mo silang mahanap.',
+            'question': 'How to view the menu and prices?',
+            'answer': 'Just click the restaurant card you want. The full menu, prices, address, and map will appear so you can easily find them.',
             'link': reverse('food_finder:home') + '#restaurants',
-            'link_text': 'Tingnan ang mga Restaurant',
+            'link_text': 'View Restaurants',
         },
         {
-            'question': 'Paano pumunta sa restaurant?',
-            'answer': 'Sa loob ng menu modal, may "Open in Maps" button. I-click lang iyon para direkta kang mapunta sa Google Maps at makita ang exact location.',
+            'question': 'How to go to the restaurant?',
+            'answer': 'Inside the menu modal, there is an "Open in Maps" button. Just click it to go directly to 【entity-Google Maps¦canonical_name=Google Maps】 and see the exact location.',
             'link': reverse('food_finder:home') + '#restaurants',
-            'link_text': 'Pumili ng Restaurant',
+            'link_text': 'Choose a Restaurant',
         },
         {
-            'question': 'Paano mag-iwan ng review?',
-            'answer': 'Scroll down sa home page, hanapin ang "System Feedback" section. Isulat ang iyong pangalan, pumili ng rating, at i-type ang iyong komento. I-click ang Submit Feedback.',
+            'question': 'How to leave a review?',
+            'answer': 'Scroll down on the home page and find the "System Feedback" section. Write your name, choose a rating, and type your comment. Click Submit Feedback.',
             'link': reverse('food_finder:home') + '#reviewForm',
-            'link_text': 'Mag-iwan ng Review',
+            'link_text': 'Leave a Review',
         },
         {
-            'question': 'Kailangan mo pa ng tulong?',
-            'answer': 'Kung hindi pa rin nasagot ang tanong mo, makipag-ugnayan sa amin.',
+            'question': 'Do you still need help?',
+            'answer': 'If your question is still not answered, please contact us.',
             'link': reverse('food_finder:contact'),
             'link_text': 'Contact Us',
         },
