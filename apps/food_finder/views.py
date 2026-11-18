@@ -978,3 +978,29 @@ def submit_review(request):
         'text': review.text,
         'date': review.created_at.strftime('%B %d, %Y'),
     })
+
+def register_user(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('food_finder:login')
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'register.html', {'form': form})
+
+# SUBMIT REVIEW - FIXED: isa lang ka #reviewForm
+def submit_review(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        rating = request.POST.get('rating', '5')
+        text = request.POST.get('text', '').strip()
+        if name and text:
+            try:
+                rating_int = int(rating)
+            except:
+                rating_int = 5
+            Review.objects.create(name=name, rating=rating_int, text=text)
+            return redirect('/?submitted=1#reviewForm')
+    return redirect('/')
