@@ -1,98 +1,30 @@
-{% extends "admin/base.html" %}
-{% load i18n static %}
-
-{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
-
-{% block branding %}
-<div id="site-name">
-    <a href="{% url 'admin:index' %}">KabankalanEats Admin</a>
-</div>
-{% endblock %}
-
-{% block nav-global %}
-<div id="kabankalan-topmenu">
-    <a href="/">🏠 Home</a>
-    <a href="/">👀 View Site</a>
-    <a href="/admin/food_finder/restaurant/">🍲 Restaurants</a>
-    <a href="/admin/food_finder/menuitem/">📋 Menu</a>
-</div>
-{% endblock %}
-
-{% block extrastyle %}
+{% extends "admin/base_site.html" %}
+{% block extrahead %}
 {{ block.super }}
 <style>
-/* ==========================================
-   FIX: KITAON GID ANG WORDS - DIREKTA DIRI
-   ========================================== */
-
-/* 1. IBABAW NGA BAR - PINK GID */
-#header, #site-name, .main-header, .navbar, header {
-    background: #6e485d !important;
-    background-color: #FF1493 !important;
-    background-image: none !important;
-    color: #FFFFFF !important;
-}
-
-/* 2. KabankalanEats Admin - PUTI, BOLD */
-#site-name a, #site-name, #branding h1, #branding h1 a {
-    color: #FFFFFF !important;
-    font-weight: 900 !important;
-    font-size: 22px !important;
-    text-decoration: none !important;
-}
-
-/* 3. TOP MENU - Home / View Site / Restaurants / Menu - PUTI, BOLD */
-#kabankalan-topmenu {
-    display: flex !important;
-    gap: 20px !important;
-    align-items: center !important;
-    padding: 10px 0 !important;
-    flex-wrap: wrap !important;
-}
-
-#kabankalan-topmenu a {
-    color: #FFFFFF !important;
-    font-weight: 800 !important;
-    font-size: 16px !important;
-    text-decoration: none !important;
-    background: rgba(0,0,0,0.20) !important;
-    padding: 8px 16px !important;
-    border-radius: 20px !important;
-    border: 1px solid #FFFFFF !important;
-    display: inline-block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-#kabankalan-topmenu a:hover {
-    background: #FFFFFF !important;
-    color: #FF1493 !important;
-}
-
-/* 4. TANAN NGA LINKS SA HEADER - PUTI */
-#header a, #header div, #user-tools, #user-tools a {
-    color: #FFFFFF !important;
-    font-weight: 700 !important;
-    opacity: 1 !important;
-}
-
-/* 5. JAZZMIN TOP NAV - KUNG JAZZMIN ANG GAGAMIT */
-.main-header .navbar-nav .nav-link,
-.main-header .navbar-nav .nav-link span,
-.navbar-nav .nav-link, .navbar-nav .nav-link span {
-    color: #FFFFFF !important;
-    -webkit-text-fill-color: #FFFFFF !important;
-    font-weight: 900 !important;
-    font-size: 17px !important;
-    opacity: 1 !important;
-}
-.main-header.navbar, .main-header {
-    background: #f0a9cf !important;
-    background-color: #FF1493 !important;
-}
-.brand-link, .brand-link span {
-    color: #FFFFFF !important;
-    font-weight: 900 !important;
-}
+/* PINK HEADER */
+#header { background: #ff2e88 !important; color: #fff !important; padding: 12px 20px !important; }
+#header a, #header a:link, #header a:visited { color: #fff !important; }
+#branding h1, #branding h1 a { color: #fff !important; font-weight: 700 !important; font-size: 20px !important; }
+#user-tools { color: #fff !important; font-size: 13px !important; }
+#user-tools a { color: #fff !important; border-bottom: 1px solid rgba(255,255,255,0.5) !important; }
+div.breadcrumbs { background: #ff5da2 !important; color: #fff !important; padding: 10px 20px !important; }
+div.breadcrumbs a { color: #fff !important; }
+.module h2, .module caption, .inline-group h2 { background: #ff2e88 !important; color: #fff !important; }
+a:link, a:visited { color: #ff2e88; }
+a:hover { color: #d61a6e; }
+.button, input[type=submit], input[type=button], .submit-row input, a.button { background: #ff2e88 !important; }
+/* ICONS - PUTI LANG */
+.addlink, .changelink, .deletelink, .viewlink { color: #fff !important; }
+.object-tools a { color: #fff !important; background: #ff2e88 !important; }
+/* TABLE HEADER - PINK NA TANAN, LABI NA ANG ADDRESS */
+#result_list thead th { background: #ff2e88 !important; color: #fff !important; }
+#result_list thead th a, #result_list thead th a:link, #result_list thead th a:visited { color: #fff !important; }
+#result_list thead th.sorted { background: #d61a6e !important; }
+#result_list thead th.field-address_with_space { background: #ff2e88 !important; color: #fff !important; }
+/* SPACE sa table */
+#result_list { background: #fff; border-radius: 12px; padding: 10px; }
+#result_list table { width: 100%; }
+#result_list table th, #result_list table td { padding: 14px 22px !important; white-space: nowrap; vertical-align: middle; }
 </style>
 {% endblock %}
