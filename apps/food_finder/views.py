@@ -2,11 +2,11 @@ import json
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate, login
 from django.urls import reverse
-from .models import Restaurant, Review
-
+from .models import Restaurant, Review, MenuItem
 
 # ============================================================
-# FOOD DATA
+# FOOD DATA - GINABILIN TA LANG INI PARA SA UNANG SEED
+# Kon blanko ang DB, amu ni ang i-copy sa Admin
 # ============================================================
 FOOD_DATA = {
     "fastfood": [
@@ -32,7 +32,7 @@ FOOD_DATA = {
             ],
         },
         {
-            "name": "McDonald's (Guanzon)",
+            "name": "【entity-McDonald's¦canonical_name=McDo】 (Guanzon)",
             "mapQuery": "McDonalds Guanzon St, Kabankalan City",
             "rating": "4.3",
             "price": "₱50–₱650",
@@ -43,7 +43,7 @@ FOOD_DATA = {
                 {"name": "Quarter Pounder with Cheese", "price": "₱209", "desc": "Quarter pound beef with cheese"},
                 {"name": "Double Cheeseburger", "price": "₱161", "desc": "Double patty with cheese"},
                 {"name": "Cheeseburger", "price": "₱104", "desc": "Classic cheeseburger"},
-                {"name": "Burger McDo", "price": "₱55", "desc": "Classic burger"},
+                {"name": "Burger 【entity-McDo¦canonical_name=McDo】", "price": "₱55", "desc": "Classic burger"},
                 {"name": "McSpicy", "price": "₱227", "desc": "Spicy chicken burger"},
                 {"name": "1-pc. Chicken McDo", "price": "₱104", "desc": "Crispy fried chicken"},
                 {"name": "2-pc. Chicken McDo", "price": "₱197", "desc": "Two-piece fried chicken"},
@@ -53,7 +53,7 @@ FOOD_DATA = {
                 {"name": "Large Fries", "price": "₱120", "desc": "Large french fries"},
                 {"name": "McFlurry with Oreo", "price": "₱79", "desc": "Oreo ice cream dessert"},
                 {"name": "Hot Fudge Sundae", "price": "₱62", "desc": "Vanilla sundae with fudge"},
-                {"name": "Coke Medium", "price": "₱77", "desc": "Medium Coke"},
+                {"name": "【entity-Coke¦canonical_name=Coke】 Medium", "price": "₱77", "desc": "Medium 【entity-Coke¦canonical_name=Coke】"},
                 {"name": "McCafé Iced Coffee Original Medium", "price": "₱68", "desc": "Creamy iced coffee"},
             ],
         },
@@ -145,8 +145,8 @@ FOOD_DATA = {
             ],
         },
         {
-            "name": "KFC (Gaisano)",
-            "mapQuery": "KFC Gaisano Grand Mall Kabankalan",
+            "name": "【entity-KFC¦canonical_name=KFC】 (Gaisano)",
+            "mapQuery": "【entity-KFC¦canonical_name=KFC】 Gaisano Grand Mall Kabankalan",
             "rating": "4.2",
             "price": "₱30–₱1,575",
             "img": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop",
@@ -797,37 +797,102 @@ TRENDING_NAMES = [
     ("milktea", "Sugar 'N Ice Milk Tea"),
 ]
 
-
-def get_trending_data():
+def get_trending_data(food_data=None):
+    if food_data is None:
+        food_data = FOOD_DATA
     trending = []
     for category, name in TRENDING_NAMES:
-        for item in FOOD_DATA.get(category, []):
+        for item in food_data.get(category, []):
             if item["name"] == name:
                 trending.append(item)
                 break
     return trending
 
+# ============================================================
+# SYNC: FOOD_DATA -> DATABASE (Admin)
+# Kon blanko ang DB, i-copy ang FOOD_DATA para mag-gwa sa Admin
+# ============================================================
+def sync_food_data_to_db():
+    # Indi ta mag-stop biskan may ara na - i-add lang ang kulang, indi mag-double
+    for category, items in FOOD_DATA.items():
+        for item in items:
+            is_trending = any(c == category and n == item["name"] for c, n in TRENDING_NAMES)
+            resto, _ = Restaurant.objects.get_or_create(
+                name=item["name"],
+                defaults={
+                    "category": category,
+                    "map_query": item.get("mapQuery", ""),
+                    "rating": str(item.get("rating", "4.5")),
+                    "price_range": item.get("price", ""),
+                    "img": item.get("img", ""),
+                    "address": item.get("address", ""),
+                    "is_trending": is_trending,
+                }
+            )
+            for m in item.get("menu", []):
+                MenuItem.objects.get_or_create(
+                    restaurant=resto,
+                    name=m["name"],
+                    defaults={
+                        "price": m.get("price", ""),
+                        "desc": m.get("desc", ""),
+                        "img": "",
+                    }
+                )
+
+def build_food_data_from_db():
+    # Himoon ta nga pareho format sa FOOD_DATA, pero halin sa DB
+    # Para ang homepage kag Admin isa lang gid ka source
+    data = {"fastfood": [], "carinderia": [], "cafe": [], "desserts": [], "milktea": []}
+    for resto in Restaurant.objects.all():
+        # Kuhaon ang menu sang kada resto
+        menu_qs = MenuItem.objects.filter(restaurant=resto)
+        menu = []
+        for mi in menu_qs:
+            menu.append({
+                "name": mi.name,
+                "price": getattr(mi, "price", ""),
+                "desc": getattr(mi, "desc", ""),
+            })
+        item = {
+            "name": resto.name,
+            "mapQuery": getattr(resto, "map_query", ""),
+            "rating": str(getattr(resto, "rating", "4.5")),
+            "price": getattr(resto, "price_range", ""),
+            "img": getattr(resto, "img", ""),
+            "address": getattr(resto, "address", ""),
+            "menu": menu,
+        }
+        cat = getattr(resto, "category", "fastfood") or "fastfood"
+        if cat not in data:
+            data[cat] = []
+        data[cat].append(item)
+    # Kon wala gid sulod ang DB, balik sa FOOD_DATA para indi blanko ang site
+    if not any(data.values()):
+        return FOOD_DATA
+    return data
 
 # ============================================================
-# HOME VIEW
+# HOME VIEW - SUBONG GA-BASA NA SA DB
 # ============================================================
 def home(request):
+    sync_food_data_to_db()
+    db_data = build_food_data_from_db()
     reviews = Review.objects.all().order_by('-created_at')
 
     all_names = []
-    for category, items in FOOD_DATA.items():
+    for category, items in db_data.items():
         for item in items:
             all_names.append(item['name'])
 
     context = {
-        'food_data': json.dumps(FOOD_DATA),
-        'trending_data': json.dumps(get_trending_data()),
+        'food_data': json.dumps(db_data),
+        'trending_data': json.dumps(get_trending_data(db_data)),
         'reviews': reviews,
         'total_restaurants': len(all_names),
         'verified_names': json.dumps(all_names),
     }
     return render(request, 'index.html', context)
-
 
 # ============================================================
 # ABOUT
@@ -839,14 +904,13 @@ def about(request):
         'features': [
             {'icon': '🔍', 'title': 'Discover Local Restaurants', 'desc': 'Makapangita ka sang mga kainan sa Kabankalan City Proper. Gikan sa mga local nga pagkaon pareho sang Cansi, fast-food, desserts, cafe and milk tea shops.'},
             {'icon': '📂', 'title': 'Browse by Category', 'desc': 'Pwede ka magpili sang kategorya sang pagkaon nga gusto mo — halin sa Local Favorites, Fast Food, Cafe, Cansi tubtob sa Milk Tea shop.'},
-            {'icon': '🍽️', 'title': 'View Full Menu & Prices', 'desc': 'Makita mo dayon ang menu, presyo, kag detalye sang kada pagkaon, para kabalo ka na kung ano orderon mo bag-o ka pa magkadto.'},
+            {'icon': '🍽', 'title': 'View Full Menu & Prices', 'desc': 'Makita mo dayon ang menu, presyo, kag detalye sang kada pagkaon, para kabalo ka na kung ano orderon mo bag-o ka pa magkadto.'},
             {'icon': '⭐', 'title': 'Ratings & Reviews', 'desc': 'Makabasa ka sang reviews sang iban, kag makahatag ka man sang imo kaugalingon nga rating kag review.'},
             {'icon': '🔥', 'title': 'Trending Spots', 'desc': 'Makita mo kung ano ang pinaka-trending kag ginadagsa nga kalan-an subong sa Kabankalan.'},
             {'icon': '📍', 'title': 'Map & Location', 'desc': 'May kompleto nga address kag map link ang kada restaurant, para dali mo gid sila makit-an kag indi ka na maglibog kung din ka magkadto.'},
         ]
     }
     return render(request, 'about.html', context)
-
 
 # ============================================================
 # CONTACT US
@@ -860,7 +924,6 @@ def contact(request):
         'instagram': 'https://instagram.com/kabankalaneats'
     }
     return render(request, 'contact.html', {'contact_details': contact_details})
-
 
 # ============================================================
 # HELP PAGE (with clickable links)
@@ -881,14 +944,14 @@ def help_page(request):
         },
         {
             'question': 'Paano pumunta sa restaurant?',
-            'answer': 'Sa loob ng menu modal, may "Open in Maps" button. I-click lang iyon para direkta kang mapunta sa Google Maps at makita ang exact location.',
+            'answer': 'Sa loob ng menu modal, may "Open in Maps" button. I-click lang iyon para direkta kang mapunta sa 【entity-Google Maps¦canonical_name=Google Maps】 at makita ang exact location.',
             'link': reverse('food_finder:home') + '#restaurants',
             'link_text': 'Pumili ng Restaurant',
         },
         {
             'question': 'Paano mag-iwan ng review?',
             'answer': 'Scroll down sa home page, hanapin ang "System Feedback" section. Isulat ang iyong pangalan, pumili ng rating, at i-type ang iyong komento. I-click ang Submit Feedback.',
-            'link': reverse('food_finder:home') + '#feedback',
+            'link': reverse('food_finder:home') + '#reviewForm',
             'link_text': 'Mag-iwan ng Review',
         },
         {
@@ -900,14 +963,12 @@ def help_page(request):
     ]
     return render(request, 'help.html', {'faqs': faqs})
 
-
 # ============================================================
 # LOGOUT
 # ============================================================
 def logout_user(request):
     logout(request)
     return redirect('food_finder:home')
-
 
 # ============================================================
 # LOGIN
@@ -924,8 +985,7 @@ def login_user(request):
             return render(request, 'login.html', {'error': 'username or password is incorrect.'})
     return render(request, 'login.html')
 
-
-# SUBMIT REVIEW - BAG-O NA
+# SUBMIT REVIEW - FIXED: isa lang ka #reviewForm
 def submit_review(request):
     if request.method == 'POST':
         name = request.POST.get('name', '').strip()
@@ -937,5 +997,5 @@ def submit_review(request):
             except:
                 rating_int = 5
             Review.objects.create(name=name, rating=rating_int, text=text)
-            return redirect('/?submitted=1#reviewForm#reviewForm')
+            return redirect('/?submitted=1#reviewForm')
     return redirect('/')
