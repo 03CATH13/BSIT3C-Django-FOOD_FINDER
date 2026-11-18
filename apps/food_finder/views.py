@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse
 from .models import Restaurant, Review, MenuItem
 
@@ -11,8 +12,8 @@ from .models import Restaurant, Review, MenuItem
 FOOD_DATA = {
     "fastfood": [
         {
-            "name": "Jollibee (Guanzon)",
-            "mapQuery": "Jollibee Guanzon St, Kabankalan City",
+            "name": "【entity-Jollibee¦canonical_name=Jollibee】 (Guanzon)",
+            "mapQuery": "【entity-Jollibee¦canonical_name=Jollibee】 Guanzon St, Kabankalan City",
             "rating": "4.5",
             "price": "₱50–₱250",
             "img": "https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop",
@@ -32,7 +33,7 @@ FOOD_DATA = {
             ],
         },
         {
-            "name": "【entity-McDonald's¦canonical_name=McDo】 (Guanzon)",
+            "name": "McDonald's (Guanzon)",
             "mapQuery": "McDonalds Guanzon St, Kabankalan City",
             "rating": "4.3",
             "price": "₱50–₱650",
@@ -43,7 +44,7 @@ FOOD_DATA = {
                 {"name": "Quarter Pounder with Cheese", "price": "₱209", "desc": "Quarter pound beef with cheese"},
                 {"name": "Double Cheeseburger", "price": "₱161", "desc": "Double patty with cheese"},
                 {"name": "Cheeseburger", "price": "₱104", "desc": "Classic cheeseburger"},
-                {"name": "Burger 【entity-McDo¦canonical_name=McDo】", "price": "₱55", "desc": "Classic burger"},
+                {"name": "Burger McDo", "price": "₱55", "desc": "Classic burger"},
                 {"name": "McSpicy", "price": "₱227", "desc": "Spicy chicken burger"},
                 {"name": "1-pc. Chicken McDo", "price": "₱104", "desc": "Crispy fried chicken"},
                 {"name": "2-pc. Chicken McDo", "price": "₱197", "desc": "Two-piece fried chicken"},
@@ -51,7 +52,7 @@ FOOD_DATA = {
                 {"name": "Regular Fries", "price": "₱74", "desc": "Golden french fries"},
                 {"name": "Medium Fries", "price": "₱100", "desc": "Medium french fries"},
                 {"name": "Large Fries", "price": "₱120", "desc": "Large french fries"},
-                {"name": "McFlurry with Oreo", "price": "₱79", "desc": "Oreo ice cream dessert"},
+                {"name": "McFlurry with 【entity-Oreo¦canonical_name=Oreo】", "price": "₱79", "desc": "【entity-Oreo¦canonical_name=Oreo】 ice cream dessert"},
                 {"name": "Hot Fudge Sundae", "price": "₱62", "desc": "Vanilla sundae with fudge"},
                 {"name": "【entity-Coke¦canonical_name=Coke】 Medium", "price": "₱77", "desc": "Medium 【entity-Coke¦canonical_name=Coke】"},
                 {"name": "McCafé Iced Coffee Original Medium", "price": "₱68", "desc": "Creamy iced coffee"},
@@ -145,8 +146,8 @@ FOOD_DATA = {
             ],
         },
         {
-            "name": "【entity-KFC¦canonical_name=KFC】 (Gaisano)",
-            "mapQuery": "【entity-KFC¦canonical_name=KFC】 Gaisano Grand Mall Kabankalan",
+            "name": "KFC (Gaisano)",
+            "mapQuery": "KFC Gaisano Grand Mall Kabankalan",
             "rating": "4.2",
             "price": "₱30–₱1,575",
             "img": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?q=80&w=800&auto=format&fit=crop",
@@ -801,23 +802,26 @@ def get_trending_data(food_data=None):
     if food_data is None:
         food_data = FOOD_DATA
     trending = []
+    seen = set()
     for category, name in TRENDING_NAMES:
+        if name in seen:
+            continue
         for item in food_data.get(category, []):
             if item["name"] == name:
                 trending.append(item)
+                seen.add(name)
                 break
     return trending
 
 # ============================================================
-# SYNC: FOOD_DATA -> DATABASE (Admin)
-# Kon blanko ang DB, i-copy ang FOOD_DATA para mag-gwa sa Admin
+# SYNC: FOOD_DATA -> DATABASE - FIXED, INDI NA MAG-DOUBLE
+# Gamit update_or_create, indi get_or_create
 # ============================================================
 def sync_food_data_to_db():
-    # Indi ta mag-stop biskan may ara na - i-add lang ang kulang, indi mag-double
     for category, items in FOOD_DATA.items():
         for item in items:
             is_trending = any(c == category and n == item["name"] for c, n in TRENDING_NAMES)
-            resto, _ = Restaurant.objects.get_or_create(
+            resto, _ = Restaurant.objects.update_or_create(
                 name=item["name"],
                 defaults={
                     "category": category,
@@ -830,7 +834,7 @@ def sync_food_data_to_db():
                 }
             )
             for m in item.get("menu", []):
-                MenuItem.objects.get_or_create(
+                MenuItem.objects.update_or_create(
                     restaurant=resto,
                     name=m["name"],
                     defaults={
@@ -841,14 +845,19 @@ def sync_food_data_to_db():
                 )
 
 def build_food_data_from_db():
-    # Himoon ta nga pareho format sa FOOD_DATA, pero halin sa DB
-    # Para ang homepage kag Admin isa lang gid ka source
     data = {"fastfood": [], "carinderia": [], "cafe": [], "desserts": [], "milktea": []}
-    for resto in Restaurant.objects.all():
-        # Kuhaon ang menu sang kada resto
+    seen_names = set()
+    for resto in Restaurant.objects.all().order_by('id'):
+        if resto.name in seen_names:
+            continue
+        seen_names.add(resto.name)
         menu_qs = MenuItem.objects.filter(restaurant=resto)
         menu = []
+        seen_menu = set()
         for mi in menu_qs:
+            if mi.name in seen_menu:
+                continue
+            seen_menu.add(mi.name)
             menu.append({
                 "name": mi.name,
                 "price": getattr(mi, "price", ""),
@@ -867,16 +876,15 @@ def build_food_data_from_db():
         if cat not in data:
             data[cat] = []
         data[cat].append(item)
-    # Kon wala gid sulod ang DB, balik sa FOOD_DATA para indi blanko ang site
     if not any(data.values()):
         return FOOD_DATA
     return data
 
 # ============================================================
-# HOME VIEW - SUBONG GA-BASA NA SA DB
+# HOME VIEW - FIXED: WALA NA SYNC KADA LOAD
+# Amu ni ang gapadamo sang Jollibee kada refresh
 # ============================================================
 def home(request):
-    sync_food_data_to_db()
     db_data = build_food_data_from_db()
     reviews = Review.objects.all().order_by('-created_at')
 
@@ -944,7 +952,7 @@ def help_page(request):
         },
         {
             'question': 'Paano pumunta sa restaurant?',
-            'answer': 'Sa loob ng menu modal, may "Open in Maps" button. I-click lang iyon para direkta kang mapunta sa 【entity-Google Maps¦canonical_name=Google Maps】 at makita ang exact location.',
+            'answer': 'Sa loob ng menu modal, may "Open in Maps" button. I-click lang iyon para direkta kang mapunta sa Google Maps at makita ang exact location.',
             'link': reverse('food_finder:home') + '#restaurants',
             'link_text': 'Pumili ng Restaurant',
         },
@@ -984,6 +992,20 @@ def login_user(request):
         else:
             return render(request, 'login.html', {'error': 'username or password is incorrect.'})
     return render(request, 'login.html')
+
+# ============================================================
+# REGISTER - FIXED: WALA NA ANG NAGAPABALIK SA HOME
+# ============================================================
+def register_user(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('food_finder:login')
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'register.html', {'form': form})
 
 # SUBMIT REVIEW - FIXED: isa lang ka #reviewForm
 def submit_review(request):

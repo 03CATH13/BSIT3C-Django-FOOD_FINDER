@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - Kabankalan Eats</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', Arial, sans-serif; }
+  body {
+    min-height: 100vh;
+    background: #0a0a0a;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(255,0,110,0.25) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(255,0,110,0.18) 0%, transparent 40%);
+    display: flex; justify-content: center; align-items: center;
+    padding: 20px;
+  }
+  .wrap { width: 100%; max-width: 440px; }
+  .top-logo { text-align: center; margin-bottom: 18px; }
+  .top-logo a { text-decoration: none; font-size: 24px; font-weight: 800; color: #ff006e; letter-spacing: -0.5px; }
+  .top-logo a span { color: white; }
+  .top-logo p { color: #888; font-size: 12px; margin-top: 4px; letter-spacing: 1.5px; text-transform: uppercase; }
+
+  .card {
+    background: #151515;
+    border: 1px solid #2a2a2a;
+    border-radius: 24px;
+    padding: 32px 28px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,0,110,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #ff006e, #ff4d00, #ff006e);
+  }
+  .icon-box {
+    width: 64px; height: 64px; margin: 0 auto 14px;
+    background: linear-gradient(135deg, #ff006e, #ff4d00);
+    border-radius: 18px; display: flex; align-items: center; justify-content: center;
+    font-size: 30px; box-shadow: 0 8px 25px rgba(255,0,110,0.4);
+  }
+  h2 { text-align: center; color: white; font-size: 26px; font-weight: 800; }
+  h2 span { color: #ff006e; }
+  .sub { text-align: center; color: #999; font-size: 13.5px; margin: 8px 0 22px; line-height: 1.5; }
+
+  label { color: #ddd; font-weight: 600; font-size: 13px; display: block; margin-top: 16px; margin-bottom: 6px; }
+  label i { color: #ff006e; font-style: normal; }
+
+  input {
+    width: 100%; padding: 13px 14px;
+    background: #1e1e1e; border: 1.5px solid #2e2e2e; border-radius: 12px;
+    color: white; font-size: 14.5px; outline: none; transition: 0.2s;
+  }
+  input:focus { border-color: #ff006e; background: #222; box-shadow: 0 0 0 3px rgba(255,0,110,0.15); }
+  input::placeholder { color: #666; }
+
+  .helptext { font-size: 11.5px; color: #777; display: block; margin-top: 6px; }
+  .errorlist { list-style: none; margin-top: 6px; }
+  .errorlist li { background: rgba(255,0,0,0.12); border: 1px solid rgba(255,0,0,0.3); color: #ff8a8a; font-size: 12.5px; padding: 8px 10px; border-radius: 10px; margin-bottom: 5px; }
+
+  button {
+    width: 100%; padding: 14px; margin-top: 22px;
+    background: linear-gradient(90deg, #ff006e, #ff2e7e);
+    color: white; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255,0,110,0.35);
+    transition: 0.2s;
+  }
+  button:hover { transform: translateY(-1px); box-shadow: 0 12px 25px rgba(255,0,110,0.5); }
+  button:active { transform: translateY(0); }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0 16px; color: #555; font-size: 12px; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #2a2a2a; }
+
+  .links { text-align: center; font-size: 13.5px; color: #999; line-height: 1.9; }
+  .links a { color: #ff006e; font-weight: 700; text-decoration: none; }
+  .links a:hover { text-decoration: underline; }
+  .back { display: inline-block; margin-top: 14px; color: #888 !important; font-weight: 600 !important; font-size: 13px; }
+
+  .badges { display: flex; justify-content: center; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+  .badges span { background: #1e1e1e; border: 1px solid #2a2a2a; color: #aaa; font-size: 11px; padding: 5px 10px; border-radius: 20px; }
+
+  @media (max-width: 480px) { .card { padding: 26px 20px; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top-logo">
+    <a href="/">⚡ Kabankalan <span>Eats</span></a>
+    <p>Kabankalan City Proper Only</p>
+  </div>
+
+  <div class="card">
+    <div class="icon-box">🍽️</div>
+    <h2>Create <span>Account</span></h2>
+    <p class="sub">Mag-register para makapag-review ka, makapili sang favorites, kag makakita sang trending sa Kabankalan.</p>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <label for="id_username">Username <i>*</i></label>
+      {{ form.username }}
+      {{ form.username.errors }}
+
+      <label for="id_password1">Password <i>*</i></label>
+      {{ form.password1 }}
+      {{ form.password1.errors }}
+      <span class="helptext">At least 8 characters. Bawal nga pure numbers lang.</span>
+
+      <label for="id_password2">Confirm Password <i>*</i></label>
+      {{ form.password2 }}
+      {{ form.password2.errors }}
+
+      {% if form.non_field_errors %}
+        <ul class="errorlist">
+          {% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+
+      <button type="submit">Create Account →</button>
+    </form>
+
+    <div class="divider">OR</div>
+
+    <div class="links">
+      May account ka na? <a href="{% url 'food_finder:login' %}">Log in diri</a><br>
+      <a class="back" href="{% url 'food_finder:home' %}">← Balik sa Home</a>
+    </div>
+  </div>
+
+  <div class="badges">
+    <span>📍 Kabankalan City Proper</span>
+    <span>⭐ Reviews & Ratings</span>
+    <span>🔥 Trending Spots</span>
+  </div>
+</div>
+
+</body>
+</html>

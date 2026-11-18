@@ -12,6 +12,7 @@ urlpatterns = [
     path('help/', views.help_page, name='help'),            # BAGONG DAGDAG
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
+    path('register/', views.register_user, name='register'),  # BAG-O NI - REGISTER
     path('submit-review/', views.submit_review, name='submit_review'),
 
     # FIX PARA MADULA ANG: Not Found: /favicon.ico 404
