@@ -1,6 +1,17 @@
+import copy
 import json
-from django.shortcuts import render, redirect
+from urllib.parse import quote
+
+from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.staticfiles import finders
 from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from django.templatetags.static import static
+from django.urls import reverse
+from django.utils.html import escape
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from django.contrib.auth import logout, authenticate, login
 from django.urls import reverse
@@ -13,8 +24,8 @@ from .models import Restaurant, Review
 FOOD_DATA = {
     "fastfood": [
         {
-            "name": "Jollibee (Guanzon)",
-            "mapQuery": "Jollibee Guanzon St, Kabankalan City",
+            "name": "【entity-Jollibee¦canonical_name=Jollibee】 (Guanzon)",
+            "mapQuery": "【entity-Jollibee¦canonical_name=Jollibee】 Guanzon St, Kabankalan City",
             "rating": "4.5",
             "price": "₱50–₱250",
             "img": "https://images.unsplash.com/photo-1562967914-608f82629710?q=80&w=800&auto=format&fit=crop",
@@ -805,202 +816,227 @@ FOOD_DATA = {
     ],
 }
 
-# ============================================================
-# TRENDING NAMES
-# ============================================================
+def _to_float(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return 0.0
+
+def _restaurant_to_dict(restaurant):
+    return {
+        "name": restaurant.name,
+        "mapQuery": restaurant.map_query or restaurant.name,
+        "rating": restaurant.rating,
+        "price": restaurant.price_range,
+        "img": restaurant.img,
+        "address": restaurant.address,
+        "menu": [
+            {"name": m.name, "price": m.price, "desc": m.desc}
+            for m in restaurant.menu_items.all()
+        ],
+    }
+
+CATEGORY_COLORS = {
+    "fastfood": ("#e8452c", "#f6a623"),
+    "carinderia": ("#2f7d4f", "#9bcf53"),
+    "cafe": ("#6b4226", "#c69c6d"),
+}
+
+def _placeholder_image(name, category):
+    c1, c2 = CATEGORY_COLORS.get(category, ("#555555", "#999999"))
+    label = escape((name or "Restaurant")[:28])
+    svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">'
+        f'<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
+        f'<stop offset="0" stop-color="{c1}"/><stop offset="1" stop-color="{c2}"/>'
+        "</linearGradient></defs>"
+        '<rect width="800" height="500" fill="url(#g)"/>'
+        '<text x="400" y="250" font-family="Arial, sans-serif" font-size="44" font-weight="bold" '
+        f'fill="#ffffff" text-anchor="middle" dominant-baseline="middle">{label}</text>'
+        "</svg>"
+    )
+    return "data:image/svg+xml;charset=utf-8," + quote(svg)
+
+def _resolve_image(item, category):
+    img = (item.get("img") or "").strip()
+    if img.startswith("http"):
+        return img
+    if img.startswith("/static/"):
+        rel = img[len("/static/"):]
+        if finders.find(rel):
+            return static(rel)
+        return _placeholder_image(item.get("name"), category)
+    if img:
+        return static(img)
+    return _placeholder_image(item.get("name"), category)
+
+def get_food_data():
+    data = copy.deepcopy(FOOD_DATA)
+    try:
+        for r in Restaurant.objects.prefetch_related("menu_items").all():
+            cat = (r.category or "carinderia").lower()
+            if cat not in data:
+                data[cat] = []
+            if not any(x["name"] == r.name for x in data[cat]):
+                data[cat].append(_restaurant_to_dict(r))
+    except Exception:
+        pass
+    for cat, items in data.items():
+        for item in items:
+            item["img"] = _resolve_image(item, cat)
+            if not item.get("rating"):
+                item["rating"] = "4.5"
+    return data
+
 TRENDING_NAMES = [
     ("fastfood", "Jollibee (Guanzon)"),
-    ("fastfood", "KFC (Gaisano)"),
-    ("fastfood", "Snackee (Mabini/Rizal)"),
-    ("grillhouse", "Rosalino's Chicken Inasal and Seafood"),
-    ("carinderia", "ALONSO's Cansi"),
-    ("carinderia", "Cansi ni Tatay Andoy"),
-    ("carinderia", "Castaño's Dine and Drink"),
-    ("carinderia", "Emilio's Bistro"),
-    ("cafe", "Taza La Bien"),
-    ("cafe", "The Coffee Project"),
+    ("fastfood", "Snackee Restaurant"),
+    ("carinderia", "ALONSO's Cansi & Sizzling House"),
+    ("carinderia", "Rosalino's Chicken Inasal and Seafood"),
     ("cafe", "Kape Centrale"),
-    ("cafe", "MOÍCA Pizzeria & Bar"),
-    ("desserts", "Bibingka Station"),
-    ("desserts", "Halo-Halo sa Plaza"),
-    ("milktea", "Chatime (City Mall)"),
-    ("milktea", "Macao Imperial Tea"),
-    ("milktea", "Dakasi (CityMall)"),
-    ("milktea", "Sugar 'N Ice Milk Tea"),
+    ("cafe", "Kalamay Artisan Patisserie & Cafe"),
 ]
 
-
 def get_trending_data():
+    data = get_food_data()
     trending = []
     for category, name in TRENDING_NAMES:
-        for item in FOOD_DATA.get(category, []):
+        for item in data.get(category, []):
             if item["name"] == name:
                 trending.append(item)
                 break
     return trending
 
-
 # ============================================================
-# HOME VIEW
+# HOME
 # ============================================================
 def home(request):
-    reviews = Review.objects.all().order_by('-created_at')
-
+    data = get_food_data()
+    reviews = Review.objects.all().order_by("-created_at")
     all_names = []
-    for category, items in FOOD_DATA.items():
+    for items in data.values():
         for item in items:
-            all_names.append(item['name'])
-
+            all_names.append(item["name"])
     context = {
-        'food_data': json.dumps(FOOD_DATA),
-        'trending_data': json.dumps(get_trending_data()),
-        'reviews': reviews,
-        'total_restaurants': len(all_names),
-        'verified_names': json.dumps(all_names),
+        "food_data": json.dumps(data),
+        "trending_data": json.dumps(get_trending_data()),
+        "reviews": reviews,
+        "total_restaurants": len(all_names),
+        "verified_names": json.dumps(all_names),
     }
     return render(request, 'index.html', context)
-
 
 # ============================================================
 # ABOUT
 # ============================================================
 def about(request):
     context = {
-        'title': 'About Kabankalan Eats',
-        'description': 'Kabankalan Eats is your dedicated local food guide, exclusively covering the heart of Kabankalan City Proper. We built this platform to help locals and visitors easily discover the best local restaurants, hidden food gems, and trending cafes in the city.',
-        'features': [
-            {'icon': '🔍', 'title': 'Discover Local Restaurants', 'desc': 'Makapangita ka sang mga kainan sa Kabankalan City Proper. Gikan sa mga local nga pagkaon pareho sang Cansi, fast-food, desserts, cafe and milk tea shops.'},
-            {'icon': '📂', 'title': 'Browse by Category', 'desc': 'Pwede ka magpili sang kategorya sang pagkaon nga gusto mo — halin sa Local Favorites, Fast Food, Cafe, Cansi tubtob sa Milk Tea shop.'},
-            {'icon': '🍽️', 'title': 'View Full Menu & Prices', 'desc': 'Makita mo dayon ang menu, presyo, kag detalye sang kada pagkaon, para kabalo ka na kung ano orderon mo bag-o ka pa magkadto.'},
-            {'icon': '⭐', 'title': 'Ratings & Reviews', 'desc': 'Makabasa ka sang reviews sang iban, kag makahatag ka man sang imo kaugalingon nga rating kag review.'},
-            {'icon': '🔥', 'title': 'Trending Spots', 'desc': 'Makita mo kung ano ang pinaka-trending kag ginadagsa nga kalan-an subong sa Kabankalan.'},
-            {'icon': '📍', 'title': 'Map & Location', 'desc': 'May kompleto nga address kag map link ang kada restaurant, para dali mo gid sila makit-an kag indi ka na maglibog kung din ka magkadto.'},
-        ]
+        "title": "About Kabankalan Eats",
+        "description": "Kabankalan Eats is your dedicated local food guide, exclusively covering the heart of Kabankalan City Proper.",
+        "features": [
+            {"icon": "🔍", "title": "Discover Local Restaurants", "desc": "Find restaurants in Kabankalan City Proper. From local dishes like Cansi, to fast food, desserts, cafes, and milk tea shops."},
+            {"icon": "🍽", "title": "View Menu & Prices", "desc": "See the full menu, prices, and details of each dish right away, so you already know what to order before you even go there."},
+            {"icon": "📍", "title": "Map & Location", "desc": "Every restaurant has a complete address and map link, so you can easily find them."},
+        ],
     }
-    return render(request, 'about.html', context)
-
+    return render(request, "about.html", context)
 
 # ============================================================
-# CONTACT US
+# CONTACT
 # ============================================================
 def contact(request):
     contact_details = {
-        'email': 'support@kabankalaneats.com',
-        'phone': '+63 912 345 6789',
-        'address': 'Kabankalan City Proper, Negros Occidental',
-        'facebook': 'https://facebook.com/kabankalaneats',
-        'instagram': 'https://instagram.com/kabankalaneats'
+        "email": "support@kabankalaneats.com",
+        "phone": "+63 912 345 6789",
+        "address": "Kabankalan City Proper, Negros Occidental",
+        "facebook": "https://facebook.com/kabankalaneats",
+        "instagram": "https://instagram.com/kabankalaneats",
     }
-    return render(request, 'contact.html', {'contact_details': contact_details})
-
+    return render(request, "contact.html", {"contact_details": contact_details})
 
 # ============================================================
-# HELP PAGE (with clickable links)
+# HELP
 # ============================================================
 def help_page(request):
     faqs = [
-        {
-            'question': 'Paano mag-search ng pagkain?',
-            'answer': 'I-type lang ang gusto mong pagkain sa search bar (hal. "pizza", "cansi", "milk tea") at pindutin ang Send. Awtomatikong hahanapin ng AI ang mga restaurant na may ganoong pagkain.',
-            'link': reverse('food_finder:home') + '#search',
-            'link_text': 'Pumunta sa Search Bar',
-        },
-        {
-            'question': 'Paano makita ang menu at presyo?',
-            'answer': 'I-click lang ang restaurant card na gusto mo. Lalabas ang buong menu, presyo, address, at mapa para madali mo silang mahanap.',
-            'link': reverse('food_finder:home') + '#restaurants',
-            'link_text': 'Tingnan ang mga Restaurant',
-        },
-        {
-            'question': 'Paano pumunta sa restaurant?',
-            'answer': 'Sa loob ng menu modal, may "Open in Maps" button. I-click lang iyon para direkta kang mapunta sa Google Maps at makita ang exact location.',
-            'link': reverse('food_finder:home') + '#restaurants',
-            'link_text': 'Pumili ng Restaurant',
-        },
-        {
-            'question': 'Paano mag-iwan ng review?',
-            'answer': 'Scroll down sa home page, hanapin ang "System Feedback" section. Isulat ang iyong pangalan, pumili ng rating, at i-type ang iyong komento. I-click ang Submit Feedback.',
-            'link': reverse('food_finder:home') + '#feedback',
-            'link_text': 'Mag-iwan ng Review',
-        },
-        {
-            'question': 'Kailangan mo pa ng tulong?',
-            'answer': 'Kung hindi pa rin nasagot ang tanong mo, makipag-ugnayan sa amin.',
-            'link': reverse('food_finder:contact'),
-            'link_text': 'Contact Us',
-        },
+        {"question": "How to search for food?", "answer": "Type what you want in the search bar (e.g. pizza, cansi, milk tea) and press Send.", "link": reverse("food_finder:home") + "#search", "link_text": "Go to Search Bar"},
+        {"question": "How to see menu and prices?", "answer": "Click the restaurant card you want. You will see the full menu, prices, address, and map.", "link": reverse("food_finder:home") + "#restaurants", "link_text": "View Restaurants"},
+        {"question": "How to go to the restaurant?", "answer": "Inside the menu modal, there is an Open in Maps button. Click it to go directly to 【entity-Google Maps¦canonical_name=Google Maps】.", "link": reverse("food_finder:home") + "#restaurants", "link_text": "Choose a Restaurant"},
+        {"question": "How to leave a review?", "answer": "Scroll down on home page, find the System Feedback section. Write your name, pick a rating, and type your comment.", "link": reverse("food_finder:home") + "#feedback", "link_text": "Leave a Review"},
+        {"question": "Need more help?", "answer": "If your question is still not answered, contact us.", "link": reverse("food_finder:contact"), "link_text": "Contact Us"},
     ]
-    return render(request, 'help.html', {'faqs': faqs})
-
+    return render(request, "help.html", {"faqs": faqs})
 
 # ============================================================
-# LOGOUT
+# AUTH - LOGOUT / LOGIN / REGISTER - FIXED
 # ============================================================
 def logout_user(request):
     logout(request)
     return redirect('food_finder:home')
 
-
-# ============================================================
-# LOGIN
-# ============================================================
 def login_user(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('food_finder:home')
+            return redirect("food_finder:home")
         else:
-            return render(request, 'login.html', {'error': 'username or password is incorrect.'})
-    return render(request, 'login.html')
-
-
-# ============================================================
-# SUBMIT REVIEW (AJAX)
-# ============================================================
-@require_POST
-def submit_review(request):
-    name = request.POST.get('name', '').strip()
-    rating = request.POST.get('rating', '5')
-    text = request.POST.get('text', '').strip()
-
-    if not name or not text:
-        return JsonResponse({'ok': False, 'error': 'Missing fields'}, status=400)
-
-    review = Review.objects.create(name=name, rating=int(rating), text=text)
-    return JsonResponse({
-        'ok': True,
-        'name': review.name,
-        'rating': review.rating,
-        'stars': review.stars_display,
-        'text': review.text,
-        'date': review.created_at.strftime('%B %d, %Y'),
-    })
+            return render(request, "login.html", {"error": "username or password is incorrect."})
+    return render(request, "login.html")
 
 def register_user(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('food_finder:login')
+            return redirect("food_finder:login")
     else:
         form = UserCreationForm()
+    return render(request, "register.html", {"form": form})
 
-    return render(request, 'register.html', {'form': form})
-
-# SUBMIT REVIEW - FIXED: isa lang ka #reviewForm
+# ============================================================
+# SUBMIT REVIEW - FIXED, TUMATANGGAP NG JSON AT FORM
+# ============================================================
+@require_POST
 def submit_review(request):
-    if request.method == 'POST':
-        name = request.POST.get('name', '').strip()
-        rating = request.POST.get('rating', '5')
-        text = request.POST.get('text', '').strip()
-        if name and text:
-            try:
-                rating_int = int(rating)
-            except:
-                rating_int = 5
-            Review.objects.create(name=name, rating=rating_int, text=text)
-            return redirect('/?submitted=1#reviewForm')
-    return redirect('/')
+    # 1. JSON man o Form, kaya basahon
+    if "application/json" in (request.content_type or ""):
+        try:
+            data = json.loads(request.body or b"{}")
+        except Exception:
+            data = {}
+        name = str(data.get("name", "") or "").strip()
+        rating = data.get("rating", 5)
+        text = str(data.get("text", "") or data.get("comment", "") or data.get("message", "") or "").strip()
+    else:
+        name = request.POST.get("name", "").strip()
+        rating = request.POST.get("rating", "5")
+        text = (request.POST.get("text", "") or request.POST.get("comment", "") or request.POST.get("message", "")).strip()
+
+    if not name or not text:
+        return JsonResponse({"ok": False, "success": False, "error": "Missing fields - need name and comment"}, status=400)
+
+    # 2. Rating: pwede "5" o "5 (Excellent)" o 5
+    try:
+        rating_int = int(str(rating).strip().split()[0])
+    except (ValueError, TypeError, IndexError):
+        rating_int = 5
+
+    if rating_int < 1:
+        rating_int = 1
+    if rating_int > 5:
+        rating_int = 5
+
+    review = Review.objects.create(name=name, rating=rating_int, text=text)
+    return JsonResponse({
+        "ok": True,
+        "success": True,
+        "name": review.name,
+        "rating": review.rating,
+        "stars": review.stars_display,
+        "text": review.text,
+        "comment": review.text,
+        "date": review.created_at.strftime("%B %d, %Y"),
+    })

@@ -1,175 +1,165 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>About Us - Kabankalan Eats</title>
     <style>
-        :root {
-            --bg-dark: #050505;
-            --card-bg: #111111;
-            --pink: #FF1493;
-            --pink-hover: #FF69B4;
-            --pink-glow: rgba(255, 20, 147, 0.4);
-            --text-light: #ffffff;
-            --text-muted: #a0a0a0;
-            --border-color: #2a2a2a;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        ::selection { background: var(--pink); color: white; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background: #000; color: white; min-height: 100vh; }
 
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1a0a12 0%, var(--bg-dark) 50%);
-            background-attachment: fixed;
-            color: var(--text-light);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-        a { text-decoration: none; color: inherit; }
+        /* NAVBAR */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; background: #000; border-bottom: 1px solid #222; }
+        .logo { color: #ff2d95; font-size: 22px; font-weight: 800; text-decoration: none; }
+        .logo span { color: #ff2d95; }
+        nav .links a { color: white; text-decoration: none; margin-left: 25px; font-weight: 600; font-size: 15px; }
+        nav .links a.active, nav .links a:hover { color: #ff2d95; }
 
-        .navbar {
-            background: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-        }
-        .navbar .brand { color: var(--pink); font-weight: 800; font-size: 1.5rem; text-shadow: 0 0 10px var(--pink-glow); }
-        .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { color: var(--text-light); font-weight: 500; transition: 0.3s; }
-        .nav-links a:hover, .nav-links a.active { color: var(--pink); }
+        /* HERO */
+        .hero { text-align: center; padding: 60px 20px 30px; max-width: 900px; margin: auto; }
+        .hero h1 { font-size: 32px; line-height: 1.4; }
+        .hero h1 span { color: #ff2d95; }
+        .hero p { color: #bbb; margin-top: 18px; font-size: 16px; line-height: 1.7; }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px 40px; }
+        /* 3 CARDS */
+        .cards { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; padding: 40px 20px; max-width: 1100px; margin: auto; }
+        .card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 30px 25px; width: 320px; text-align: center; transition: 0.3s; }
+        .card:hover { border-color: #ff2d95; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(255,45,149,0.25); }
+        .card .icon { font-size: 40px; margin-bottom: 15px; }
+        .card h3 { color: #ff2d95; margin-bottom: 10px; font-size: 19px; }
+        .card p { color: #ccc; font-size: 14.5px; line-height: 1.6; }
 
-        .hero { text-align: center; margin-bottom: 50px; }
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-            background: linear-gradient(90deg, var(--pink), #ff7f50, var(--pink));
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: gradientText 3s linear infinite;
-        }
-        @keyframes gradientText { to { background-position: 200% center; } }
-        .hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 800px; margin: 0 auto; }
+        /* PURPOSE SECTION */
+        .purpose { max-width: 900px; margin: 20px auto 40px; padding: 30px; background: #0d0d0d; border: 1px solid #222; border-radius: 16px; text-align: left; }
+        .purpose h2 { color: #ff2d95; margin-bottom: 15px; }
+        .purpose ul { list-style: none; }
+        .purpose li { padding: 10px 0; border-bottom: 1px solid #1a1a1a; color: #ddd; line-height: 1.6; }
+        .purpose li:last-child { border: none; }
+        .purpose li b { color: white; }
 
-        .purpose-title {
-            text-align: center;
-            font-size: 1.7rem;
-            font-weight: 700;
-            margin: 50px 0 35px;
-            color: var(--text-light);
-        }
-        .purpose-title span { color: var(--pink); }
+        /* SYSTEM FEEDBACK - BAGONG DAGDAG */
+        .feedback-wrap { max-width: 900px; margin: 0 auto 40px; padding: 0 20px; }
+        .feedback-box { background: #111; border: 1px solid #222; border-radius: 16px; padding: 35px 30px; text-align: center; }
+        .feedback-box h2 { font-size: 24px; margin-bottom: 8px; }
+        .feedback-box > p { color: #bbb; font-size: 15px; margin-bottom: 25px; }
+        .feedback-row { display: flex; gap: 15px; margin-bottom: 15px; }
+        .feedback-row input, .feedback-row select { flex: 1; background: #000; border: 1px solid #333; border-radius: 10px; color: white; padding: 14px 15px; font-size: 15px; outline: none; }
+        .feedback-row input:focus, .feedback-row select:focus, .feedback-box textarea:focus { border-color: #ff2d95; }
+        .feedback-box textarea { width: 100%; background: #000; border: 1px solid #333; border-radius: 10px; color: white; padding: 14px 15px; font-size: 15px; min-height: 110px; resize: vertical; outline: none; margin-bottom: 15px; }
+        .feedback-btn { width: 100%; background: #ff2d95; color: white; border: none; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; }
+        .feedback-btn:hover { background: #e01a7f; }
+        #reviewMessage { margin-top: 12px; font-size: 14px; min-height: 20px; }
+        @media (max-width: 600px) { .feedback-row { flex-direction: column; } }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-        }
-        @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .features-grid { grid-template-columns: 1fr; } .navbar { padding: 15px 20px; } .hero h1 { font-size: 2.2rem; } }
+        /* BUTTON */
+        .btn-wrap { text-align: center; padding-bottom: 60px; }
+        .btn { display: inline-block; background: #ff2d95; color: white; padding: 14px 30px; border-radius: 30px; text-decoration: none; font-weight: 700; box-shadow: 0 8px 25px rgba(255,45,149,0.5); }
+        .btn:hover { background: #e01a7f; }
 
-        .feature-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 35px 25px;
-            text-align: center;
-            transition: all 0.3s;
-        }
-        .feature-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--pink);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8), 0 0 20px var(--pink-glow);
-        }
-        .feature-icon { font-size: 2.5rem; margin-bottom: 15px; }
-        .feature-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; color: var(--text-light); }
-        .feature-card p { color: var(--text-muted); font-size: 0.95rem; }
-
-        .cta { text-align: center; margin-top: 55px; }
-        .btn-home {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 34px;
-            background: linear-gradient(135deg, var(--pink), #d10074);
-            color: white;
-            border-radius: 50px;
-            font-weight: 700;
-            box-shadow: 0 8px 25px var(--pink-glow);
-            transition: 0.3s;
-        }
-        .btn-home:hover { background: linear-gradient(135deg, var(--pink-hover), var(--pink)); transform: translateY(-3px); }
-
-        footer {
-            background: #000;
-            padding: 40px 20px;
-            text-align: center;
-            border-top: 1px solid var(--border-color);
-            margin-top: 60px;
-        }
-        .footer-links { display: flex; justify-content: center; gap: 40px; margin-bottom: 20px; flex-wrap: wrap; }
-        .footer-links a { color: var(--text-muted); transition: 0.3s; font-weight: 500; }
-        .footer-links a:hover { color: var(--pink); text-shadow: 0 0 10px var(--pink-glow); }
-        .copyright { color: #555; font-size: 0.9rem; }
+        /* FOOTER */
+        footer { border-top: 1px solid #222; text-align: center; padding: 25px; color: #888; font-size: 14px; }
+        footer a { color: #bbb; text-decoration: none; margin: 0 15px; }
+        footer a:hover { color: #ff2d95; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <span class="brand">⚡ Kabankalan Eats</span>
-        <div class="nav-links">
-            <a href="{% url 'food_finder:home' %}">Home</a>
-            <a href="{% url 'food_finder:about' %}" class="active">About</a>
-            <a href="{% url 'food_finder:contact' %}">Contact</a>
-            <a href="{% url 'food_finder:help' %}">Help</a>
+    <nav>
+        <a href="/" class="logo">⚡ Kabankalan Eats</a>
+        <div class="links">
+            <a href="/">Home</a>
+            <a href="/about/" class="active">About</a>
+            <a href="/contact/">Contact</a>
+            <a href="/help/">Help</a>
         </div>
     </nav>
 
-    <main class="container">
-        <section class="hero">
-            <h1>{{ title }}</h1>
-            <p>{{ description }}</p>
-        </section>
+    <div class="hero">
+        <h1>What is the purpose of <span>Kabankalan Eats</span> / Food Finder system?</h1>
+        <p>
+            <b style="color:white;">Kabankalan Eats</b> was created to help the people of Kabankalan and visitors
+            easily find delicious, affordable, and ready-to-eat food — without having to wander around the city.
+            From <b style="color:white;">Cansi, Inasal, Fast Food, Cafes, Milk Tea, to Desserts</b>, everything is in one place.
+        </p>
+    </div>
 
-        <h2 class="purpose-title">Ang purpose sang <span>Kabankalan Eats</span> / Food_finder nga system namon?</h2>
-
-        <section class="features-grid">
-            {% for feature in features %}
-            <div class="feature-card">
-                <div class="feature-icon">{{ feature.icon }}</div>
-                <h3>{{ feature.title }}</h3>
-                <p>{{ feature.desc }}</p>
-            </div>
-            {% endfor %}
-        </section>
-
-        <div class="cta">
-            <a href="{% url 'food_finder:home' %}" class="btn-home">← Balik sa Home</a>
+    <!-- 3 CARDS -->
+    <div class="cards">
+        <div class="card">
+            <div class="icon">🔍</div>
+            <h3>Discover Local Restaurants</h3>
+            <p>Find restaurants in Kabankalan City Proper. From local dishes like Cansi, to fast food, desserts, cafes, and milk tea shops.</p>
         </div>
-    </main>
+        <div class="card">
+            <div class="icon">🍽</div>
+            <h3>View Menu & Prices</h3>
+            <p>See the full menu, prices, and details of each dish right away, so you already know what to order before you even go there.</p>
+        </div>
+        <div class="card">
+            <div class="icon">📍</div>
+            <h3>Map & Location</h3>
+            <p>Every restaurant has a complete address and map link, so you can easily find them and you won't get lost.</p>
+        </div>
+    </div>
+
+    <!-- PURPOSE LIST -->
+    <div class="purpose">
+        <h2>🎯 What is the goal of this system?</h2>
+        <ul>
+            <li><b>1. For students and workers</b> — who want to eat but don't have time to search. Just search, and you'll find it right away.</li>
+            <li><b>2. For tourists and visitors</b> — who don't know where to eat delicious food in Kabankalan. We have ratings and reviews to guide you.</li>
+            <li><b>3. For local businesses</b> — so they can be seen online, even small carinderias or cafes.</li>
+            <li><b>4. To promote Kabankalan's food</b> — especially our famous Cansi, Inasal, and Batchoy that we are proud of.</li>
+        </ul>
+    </div>
+
+    <div class="btn-wrap">
+        <a href="/" class="btn">← Back to Home</a>
+    </div>
 
     <footer>
-        <div class="footer-links">
-            <a href="{% url 'food_finder:about' %}">About Us</a>
-            <a href="{% url 'food_finder:contact' %}">Contact Us</a>
-            <a href="{% url 'food_finder:help' %}">Help</a>
-        </div>
-        <p class="copyright">&copy; 2026 Kabankalan Eats. All rights reserved.</p>
+        <a href="/about/">About Us</a>
+        <a href="/contact/">Contact Us</a>
+        <a href="/help/">Help</a>
+        <p style="margin-top:12px;">© 2026 Kabankalan Eats. All rights reserved.</p>
     </footer>
+
+<script>
+document.getElementById('reviewForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const name = document.getElementById('reviewName').value;
+    const rating = document.getElementById('reviewRating').value;
+    const comment = document.getElementById('reviewComment').value;
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const msg = document.getElementById('reviewMessage');
+
+    try {
+        const response = await fetch('/api/review/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
+            },
+            body: JSON.stringify({ name: name, rating: rating, text: comment, comment: comment })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && (data.ok || data.success)) {
+            msg.textContent = 'Salamat! Na-save na yung review mo!';
+            msg.style.color = '#4ade80';
+            document.getElementById('reviewForm').reset();
+        } else {
+            msg.textContent = 'Error: ' + (data.error || 'Hindi na-save - Status ' + response.status);
+            msg.style.color = '#ff2d95';
+        }
+    } catch (error) {
+        msg.textContent = 'Hindi maka-konekta sa server. Check mo kung naka-run yung runserver.';
+        msg.style.color = '#ff2d95';
+        console.error(error);
+    }
+});
+</script>
 
 </body>
 </html>
