@@ -1,4 +1,4 @@
- WHOLE 700
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -892,16 +892,7 @@ gap: 10px;
                 <p style="color: var(--text-muted); margin-bottom: 5px;">AI System Check Results – <strong style="color:#f1c40f;">Kabankalan City Proper ONLY</strong></p>
                 <p style="color:#888; font-size:.82rem;">Tap the card to see the Menu + Location just like a normal restaurant.</p>
                 <input type="text" id="aiGuideSearch" placeholder="Search in the guide: e.g. cansi, pizza, coffee, milktea, nilaga, homecooked meals, adobo..." style="width:100%; padding:12px 15px; background:#000; border:1px solid var(--border-color); border-radius:10px; color:white; margin: 15px 0 20px 0; outline:none;">
-                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;" id="aiGuideFilters">
-                    <button class="cat-btn active" data-guide-filter="all" style="padding:8px 15px; font-size:.8rem;">All Proper</button>
-                    <button class="cat-btn" data-guide-filter="lutongbahay" style="padding:8px 15px; font-size:.8rem;">🍲 Homecooked Meals</button>
-                    <button class="cat-btn" data-guide-filter="cansi" style="padding:8px 15px; font-size:.8rem;">Cansi / Local</button>
-                    <button class="cat-btn" data-guide-filter="cafe" style="padding:8px 15px; font-size:.8rem;">Cafe</button>
-                    <button class="cat-btn" data-guide-filter="pizza" style="padding:8px 15px; font-size:.8rem;">Pizza</button>
-                    <button class="cat-btn" data-guide-filter="milktea" style="padding:8px 15px; font-size:.8rem;">Milk Tea</button>
-                    <button class="cat-btn" data-guide-filter="seafood" style="padding:8px 15px; font-size:.8rem;">Seafood</button>
-                    <button class="cat-btn" data-guide-filter="unli" style="padding:8px 15px; font-size:.8rem;">Unli / Samgyup</button>
-                </div>
+                
                 <ul id="aiVerifiedList" style="list-style-type: none; padding: 0; display: flex; flex-direction: column; gap: 6px;"></ul>
             </div>
         </div>
@@ -987,16 +978,35 @@ if (!verifiedNames || verifiedNames.length === 0) return true;
 const g = (guideName || '').toLowerCase().trim();
 return !verifiedNames.some(v => (v || '').toLowerCase().trim() === g);
 }
-        function guideImage(cat) {
-const imgs = {
-lutongbahay: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600', cansi: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600', seafood: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600', pizza: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600', cafe: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600', milktea: 'https://images.unsplash.com/photo-1553787499-6f9133860278?w=600', unli: 'https://images.unsplash.com/photo-1598514211370-a023f8a0a8a9?w=600' }
-;
-return imgs[cat] || 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600';
+        function guideImage(cat, name, foods) {
+  const n = (name || '').toLowerCase();
+  let h = 0; for (const c of n) h += c.charCodeAt(0);
+  const pick = (arr) => arr[h % arr.length];
+  // UNLI - may sarili na, samgyup / wings - meat pic na sure
+  if (n.includes('unli') || n.includes('samgyup') || n.includes('wings') || cat === 'unli') {
+    return pick([
+      'https://images.unsplash.com/photo-1598514211370-a023f8a0a8a9?w=600',
+      'https://images.unsplash.com/photo-1544025162-d76694265947?w=600',
+      'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600'
+    ]);
+  }
+  if (n.includes('cafe') || n.includes('kalamay') || n.includes('coffee') || cat === 'cafe') return 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600';
+  if (n.includes('pizza') || cat === 'pizza') return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600';
+  if (n.includes('seafood') || cat === 'seafood') return 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600';
+  if (n.includes('cansi') || n.includes('sizzling') || n.includes('bulalo') || cat === 'cansi') return pick(['https://images.unsplash.com/photo-1544025162-d76694265947?w=600','https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600']);
+  if (n.includes('inasal') || n.includes('chicken')) return 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600';
+  // LUTONG BAHAY - 3 LANG na SURE, iba-iba per name pero sure na gumagana
+  const lutong = [
+    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600',
+    'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600',
+    'https://images.unsplash.com/photo-1544025162-d76694265947?w=600'
+  ];
+  return lutong[h % lutong.length];
 }
         function guideChips(foods) { if (!foods) return ''; return foods.split(',').slice(0,5).map(f => `<span class="guide-chip">${f.trim()}</span>`).join(''); }
         function guideCardHTML(item) {
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name + " " + item.address + ", Kabankalan City Proper")}`;
-return `<div class="guide-card" onclick="openGuideModal('${escapeQuote(item.name)}')"><div class="guide-card-img" style="background-image:url('${guideImage(item.cat)}');"><span class="guide-badge">✦ AI GUIDE</span><span class="guide-proper">✓ PROPER</span></div><div class="guide-body"><div class="guide-title">${item.name} <span style="font-size:.7rem; color:#aaa; font-weight:600;">— Tap for details →</span></div><div class="guide-tag">${item.tag}</div><div class="guide-foods">${guideChips(item.foods)}</div><div class="guide-addr"><i class="fas fa-map-marker-alt" style="color:var(--pink);"></i> ${item.address}</div><p class="guide-desc">${item.desc}</p><a href="${mapsUrl}" target="_blank" onclick="event.stopPropagation();" class="guide-btn"><i class="fas fa-location-arrow"></i> VIEW SA MAPS</a><p style="text-align:center; color:#777; font-size:.72rem; margin-top:2px;">Tap card para makita Menu + Location</p></div></div>`;
+return `<div class="guide-card" onclick="openGuideModal('${escapeQuote(item.name)}')"><div class="guide-card-img" style="background-image:url('${guideImage(item.cat, item.name, item.foods)}');"><span class="guide-badge">✦ AI GUIDE</span><span class="guide-proper">✓ PROPER</span></div><div class="guide-body"><div class="guide-title">${item.name} <span style="font-size:.7rem; color:#aaa; font-weight:600;">— Tap for details →</span></div><div class="guide-tag">${item.tag}</div><div class="guide-price" style="color:#f1c40f; font-weight:800; font-size:.9rem; margin:4px 0;">${item.price || ({pizza:'P150 - P350', cafe:'P80 - P180', milktea:'P60 - P120', carinderia:'P50 - P150', fastfood:'P50 - P250', desserts:'P40 - P150', grillhouse:'P50 - P300', seafood:'P100 - P250', unli:'P299', lutongbahay:'P50 - P120'}[item.cat] || 'P50 - P250')}</div><div class="guide-foods">${guideChips(item.foods)}</div><div class="guide-addr"><i class="fas fa-map-marker-alt" style="color:var(--pink);"></i> ${item.address}</div><p class="guide-desc">${item.desc}</p><a href="${mapsUrl}" target="_blank" onclick="event.stopPropagation();" class="guide-btn"><i class="fas fa-location-arrow"></i> VIEW SA MAPS</a><p style="text-align:center; color:#777; font-size:.72rem; margin-top:2px;">Tap card para makita Menu + Location</p></div></div>`;
 }
 
         const _G = [
@@ -1308,7 +1318,7 @@ foods.forEach(f => {
 const div = document.createElement('div');
 div.className = 'menu-item';
 const niceName = f.charAt(0).toUpperCase() + f.slice(1);
-div.innerHTML = `<div class="menu-item-details" style="flex:1;"><div class="menu-item-info"><h5>${niceName}</h5><p>${foodDesc[f.toLowerCase()] || item.tag + ' • Available sa ' + item.name}</p></div></div><div class="menu-item-price" style="font-size:.85rem; color:#aaa;">Ask in store</div>`;
+div.innerHTML = `<div class="menu-item-details" style="flex:1;"><div class="menu-item-info"><h5>${niceName}</h5><p>${foodDesc[f.toLowerCase()] || item.tag + ' • Available sa ' + item.name}</p></div></div><div class="menu-item-price" style="font-size:.85rem; color:#aaa;">${getGuidePrice(f)}</div>`;
 modalMenuList.appendChild(div);
 }
 );
@@ -1442,7 +1452,7 @@ voiceBtn.addEventListener('click', () => {
 try {
 recognition.start();
 voiceBtn.classList.add('listening');
-showToast("Nagapamati... magsulti na!", "fa-microphone");
+showToast("Listening... speak now!", "fa-microphone");
 }
 catch (e) {
 }
@@ -1457,8 +1467,8 @@ handleSearch(spoken);
 recognition.onend = () => voiceBtn.classList.remove('listening');
 recognition.onerror = (e) => {
 voiceBtn.classList.remove('listening');
-if (e.error === 'not-allowed') showToast("I-allow ang microphone sa browser.", "fa-microphone-slash");
-else if (e.error === 'no-speech') showToast("Wala ko mabatian. Subukan liwat.", "fa-exclamation-circle");
+if (e.error === 'not-allowed') showToast("Allow the microphone in the browser.", "fa-microphone-slash");
+else if (e.error === 'no-speech') showToast("I didn't hear anything. Please try again", "fa-exclamation-circle");
 else showToast("Voice error: " + e.error, "fa-exclamation-circle");
 }
 ;
@@ -1488,11 +1498,11 @@ reviewForm.reset();
 showToast("Salamat sa feedback mo!", 'fa-star');
 }
 else {
-showToast("May error sa pag-submit. Subukan muli.", 'fa-exclamation-circle');
+showToast("There was an error submitting. Please try again.", 'fa-exclamation-circle');
 }
 }
 catch (error) {
-showToast("Hindi maka-konekta sa server.", 'fa-exclamation-circle');
+showToast("Cannot connect to the server.", 'fa-exclamation-circle');
 }
 }
 );
@@ -1540,6 +1550,10 @@ setTimeout(() => toast.remove(), 300);
 <div id="contactModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center;"><div style="background:#111; color:#fff; width:90%; max-width:480px; border-radius:14px; padding:22px; border:1px solid #ff2e88;"><div style="display:flex; justify-content:space-between; align-items:center;"><h3 style="margin:0;">Contact Us</h3><button onclick="document.getElementById('contactModal').style.display='none'" style="background:none; border:none; color:#fff; font-size:22px; cursor:pointer;">&times;</button></div><p style="color:#ccc; margin-top:10px;">Kabankalan Eats - Kabankalan City Proper Only</p><p><b>Address:</b> Kabankalan City Proper, Negros Occidental, Philippines</p><p><b>Email:</b> kabankalaneats@gmail.com </p><p><b>Phone:</b> 0912-345-6789 </p><p><b>Hours:</b> 8:00 AM - 8:00 PM, Daily</p></div></div><script>document.addEventListener('DOMContentLoaded', function(){var btns=[...document.querySelectorAll('a,button')].filter(function(e){return e.textContent.trim().toLowerCase()==='contact us';});btns.forEach(function(b){b.addEventListener('click',function(ev){ev.preventDefault();var m=document.getElementById('contactModal');m.style.display='flex';});});var modal=document.getElementById('contactModal');modal.addEventListener('click',function(e){if(e.target===modal) modal.style.display='none';});document.addEventListener('keydown',function(e){if(e.key==='Escape') modal.style.display='none';});});</script>
 
 
+
+
+
+<script>const GUIDE_PRICES = {'lutong bahay':'P70','nilaga':'P120','tinola':'P110','sinigang':'P120','adobo':'P95','kare-kare':'P120','sisig':'P110','lechon':'P150','cansi':'P130','batchoy':getGuidePrice(f),'pancit':getGuidePrice(f),'lomi':'P90','pizza':'P199','burger':'P75','milktea':getGuidePrice(f),'coffee':'P100','halo-halo':'P99','cake':'P120'}; function guidePrice(name){ const k = name.toLowerCase(); for(const key in GUIDE_PRICES){ if(k.includes(key)) return GUIDE_PRICES[key]; } return getGuidePrice(f); }</script><script>const GUIDE_PRICE_MAP = {'lutong bahay':70,'nilaga':120,'tinola':110,'sinigang':120,'adobo':95,'kare-kare':130,'sisig':115,'lechon kawali':150,'cansi':130,'bulalo':250,'batchoy':85,'pancit':85,'lomi':90,'pizza':199,'burger':75,'fries':80,'milktea':85,'coffee':100,'halo-halo':99,'cake':120,'siomai':50,'sisig rice':115,'pares':90,'silog':95,'lumpia':60,'bbq':100,'inasal':110,'spaghetti':85}; function getGuidePrice(n){ n=(n||"").toLowerCase(); if(n.includes("lutong bahay")) return "P70"; if(n.includes("nilaga")) return "P120"; if(n.includes("tinola")) return "P110"; if(n.includes("sinigang")) return "P120"; if(n.includes("adobo")) return "P95"; if(n.includes("cansi")) return "P130"; if(n.includes("bulalo")) return "P250"; if(n.includes("batchoy")) return "P85"; if(n.includes("pancit")) return "P85"; if(n.includes("lomi")) return "P90"; if(n.includes("pizza")) return "P199"; if(n.includes("burger")) return "P75"; if(n.includes("halo-halo")) return "P99"; if(n.includes("coffee")) return "P100"; if(n.includes("milktea")) return "P85"; return "P95"; }</script>
 
 
 
