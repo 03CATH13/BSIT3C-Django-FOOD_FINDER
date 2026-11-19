@@ -24,8 +24,8 @@ from .models import Restaurant, Review
 FOOD_DATA = {
     "fastfood": [
         {
-            "name": "【entity-Jollibee¦canonical_name=Jollibee】 (Guanzon)",
-            "mapQuery": "【entity-Jollibee¦canonical_name=Jollibee】 Guanzon St, Kabankalan City",
+            "name": "Jollibee (Guanzon)",
+            "mapQuery": "Jollibee CityMall Kabankalan, Kabankalan City, Negros Occidental",
             "rating": "4.5",
             "price": "₱50–₱250",
             "img": "https://commons.wikimedia.org/wiki/Special:FilePath/Jollibee_branch_(bagong_silang,_caloocan)(2015-08-23).jpg?width=800",
