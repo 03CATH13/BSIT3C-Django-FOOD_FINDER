@@ -1475,7 +1475,7 @@ formData.append('rating', document.getElementById('reviewRating').value);
 formData.append('text', reviewText.value);
 formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
 try {
-const res = await fetch('/food_finder/api/review/', {
+const res = await fetch('/api/review/', {
 method: 'POST', body: formData }
 );
 const data = await res.json();
